@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import { Provider } from 'react-redux';
+import FlashMessage from 'react-native-flash-message';
 
 import AppNavigator from './navigation/AppNavigator';
 import store from './store';
@@ -30,6 +31,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <AppNavigator />
+      <FlashMessage position="top" />
     </Provider>
   );
 };
