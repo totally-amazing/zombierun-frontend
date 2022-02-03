@@ -16,38 +16,17 @@ const MainStackNavigator = createStackNavigator();
 const MainNavigator = () => {
   return (
     <MainStackNavigator.Navigator>
+      <MainStackNavigator.Screen name="Main" component={MainScreen} />
+      <MainStackNavigator.Screen name="MyPage" component={MyPageScreen} />
+      <MainStackNavigator.Screen name="OneOnOne" component={OneOnOneScreen} />
       <MainStackNavigator.Screen
-        name='Main'
-        component={MainScreen}
-      />
-      <MainStackNavigator.Screen
-        name='MyPage'
-        component={MyPageScreen}
-      />
-      <MainStackNavigator.Screen
-        name='OneOnOne'
-        component={OneOnOneScreen}
-      />
-      <MainStackNavigator.Screen
-        name='PreviousResult'
+        name="PreviousResult"
         component={PreviousResultScreen}
       />
-      <MainStackNavigator.Screen
-        name='Result'
-        component={ResultScreen}
-      />
-      <MainStackNavigator.Screen
-        name='Room'
-        component={RoomScreen}
-      />
-      <MainStackNavigator.Screen
-        name='RoomList'
-        component={RoomListScreen}
-      />
-      <MainStackNavigator.Screen
-        name="Running"
-        component={RunningScreen}
-      />
+      <MainStackNavigator.Screen name="Result" component={ResultScreen} />
+      <MainStackNavigator.Screen name="Room" component={RoomScreen} />
+      <MainStackNavigator.Screen name="RoomList" component={RoomListScreen} />
+      <MainStackNavigator.Screen name="Running" component={RunningScreen} />
     </MainStackNavigator.Navigator>
   );
 };

@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 const SoloScreen = (props) => {
   return (
     <View>
-      <Text>AuthScreen</Text>
+      <Text>SoloScreen</Text>
     </View>
   );
 };
