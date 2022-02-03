@@ -5,8 +5,8 @@ import FONT_SIZE from '../../../common/constants/FONT_SIZE';
 
 const OneOnOneScreen = (props) => {
   return (
-    <View>
-      <Text>OneOnOneScreen</Text>
+    <View style={styles.screen}>
+      <Text style={styles.text}>OneOnOneScreen</Text>
     </View>
   );
 };

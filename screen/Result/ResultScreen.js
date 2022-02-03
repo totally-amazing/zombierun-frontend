@@ -6,8 +6,8 @@ import FONT_SIZE from '../../common/constants/FONT_SIZE';
 
 const ResultScreen = (props) => {
   return (
-    <View>
-      <Text>ResultScreen</Text>
+    <View style={styles.screen}>
+      <Text style={styles.text}>ResultScreen</Text>
     </View>
   );
 };

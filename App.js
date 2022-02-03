@@ -4,7 +4,7 @@ import * as Font from 'expo-font';
 import { Provider } from 'react-redux';
 
 import AppNavigator from './navigation/AppNavigator';
-import store from './store/index';
+import store from './store';
 
 const fetchFonts = () => {
   return Font.loadAsync({
