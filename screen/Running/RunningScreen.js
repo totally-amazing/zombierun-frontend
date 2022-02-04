@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT_SIZE from '../../common/constants/FONT_SIZE';
