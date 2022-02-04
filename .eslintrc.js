@@ -23,7 +23,6 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-use-before-define': 'off',
     'import/no-unresolved': 'off',
-    'react/require-default-props': 'off',
     'react/jsx-filename-extension': [
       1,
       {

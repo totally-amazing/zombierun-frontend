@@ -3,7 +3,11 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import * as Google from 'expo-auth-session/providers/google';
 import { useDispatch } from 'react-redux';
-import { EXPO_CLIENT_ID, IOS_CLIENT_ID, ANDROID_CLIENT_ID } from '@env';
+import {
+  GOOGLE_EXPO_CLIENT_ID,
+  GOOGLE_IOS_CLIENT_ID,
+  GOOGLE_ANDROID_CLIENT_ID,
+} from '@env';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT_SIZE from '../../common/constants/FONT_SIZE';
@@ -14,9 +18,9 @@ const AuthScreen = () => {
   const dispatch = useDispatch();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: EXPO_CLIENT_ID,
-    iosClientId: IOS_CLIENT_ID,
-    androidClientId: ANDROID_CLIENT_ID,
+    expoClientId: GOOGLE_EXPO_CLIENT_ID,
+    iosClientId: GOOGLE_IOS_CLIENT_ID,
+    androidClientId: GOOGLE_ANDROID_CLIENT_ID,
     responseType: 'id_token',
   });
 
@@ -24,7 +28,7 @@ const AuthScreen = () => {
     if (response?.type === 'success') {
       dispatch(sendUserId(response.params.id_token));
     }
-  }, [response]);
+  }, [response, dispatch]);
 
   return (
     <View style={styles.screen}>
@@ -45,6 +49,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingBottom: 50,
     backgroundColor: COLORS.BLACK,
   },
   title: {

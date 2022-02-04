@@ -4,7 +4,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     isAuth: false,
-    user: { id: null, url: null, nickName: null },
+    user: { id: null, nickname: null, token: null },
   },
   reducers: {
     checkAuth(state, action) {
@@ -12,8 +12,8 @@ const authSlice = createSlice({
     },
     setUser(state, action) {
       state.user.id = action.payload.user.id;
-      state.user.url = action.payload.user.url;
-      state.user.nickName = action.payload.user.nickName;
+      state.user.nickname = action.payload.user.nickname;
+      state.user.token = action.payload.user.token;
     },
   },
 });
