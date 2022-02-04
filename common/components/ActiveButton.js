@@ -8,8 +8,9 @@ import FONT_SIZE from '../constants/FONT_SIZE';
 
 const ActiveButton = ({ message, disabled, onPress, style }) => {
   const proveUserHandler = () => {
-    onPress();
+    return onPress();
   };
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -31,13 +32,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
+    marginBottom: 50,
+    borderRadius: BUTTON_SIZE.BUTTON_ROUND,
     width: BUTTON_SIZE.BUTTON_WIDTH,
     fontSize: FONT_SIZE.LARGE,
     color: COLORS.WHITE,
     backgroundColor: COLORS.RED,
     textAlign: 'center',
-    borderRadius: BUTTON_SIZE.BUTTON_ROUND,
-    marginBottom: 50,
   },
 });
 

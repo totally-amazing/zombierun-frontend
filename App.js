@@ -10,7 +10,7 @@ import HttpClient from './service/http';
 import AuthService from './service/auth';
 import showErrorMessage from './common/components/ErrorMessage';
 
-const httpClient = new HttpClient(process.env.REACT_APP_BASE_URL);
+const httpClient = new HttpClient();
 const authService = new AuthService(httpClient);
 
 const fetchFonts = () => {
