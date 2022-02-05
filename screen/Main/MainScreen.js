@@ -18,18 +18,10 @@ const MainScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <Text
-        testID="single-button"
-        style={styles.text}
-        onPress={handleSingleText}
-      >
+      <Text style={styles.text} onPress={handleSingleText}>
         Solo
       </Text>
-      <Text
-        testID="together-button"
-        style={styles.text}
-        onPress={handleTogetherText}
-      >
+      <Text style={styles.text} onPress={handleTogetherText}>
         Together
       </Text>
     </View>
