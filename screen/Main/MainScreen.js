@@ -41,7 +41,7 @@ export const screenOption = (navData) => {
       return (
         <HeaderButtons HeaderButtonComponent={ProfileButton}>
           <Item
-            title="Menu"
+            title="Profile"
             iconName="user-circle-o"
             onPress={pressProfileButtonHandler}
           />
