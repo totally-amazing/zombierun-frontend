@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import FONT from '../constants/FONT';
 import COLORS from '../constants/COLORS';
 
-const TitleText = ({ children }) => {
-  return <Text style={styles.title}>{children}</Text>;
+const TitleText = ({ children, style }) => {
+  return <Text style={{ ...styles.title, ...style }}>{children}</Text>;
 };
 
 export default TitleText;
@@ -19,9 +19,10 @@ const styles = StyleSheet.create({
 });
 
 TitleText.propTypes = {
-  children: PropTypes.string,
+  children: PropTypes.string.isRequired,
+  style: PropTypes.objectOf(PropTypes.objectOf),
 };
 
 TitleText.defaultProps = {
-  children: '',
+  style: {},
 };

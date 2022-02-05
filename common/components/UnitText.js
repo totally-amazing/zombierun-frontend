@@ -5,23 +5,24 @@ import PropTypes from 'prop-types';
 import FONT from '../constants/FONT';
 import COLORS from '../constants/COLORS';
 
-const UnitText = ({ children }) => {
-  return <Text style={styles.unit}>{children}</Text>;
+const UnitText = ({ children, style }) => {
+  return <Text style={{ ...styles.unitText, ...style }}>{children}</Text>;
 };
 
 export default UnitText;
 
 const styles = StyleSheet.create({
-  unit: {
+  unitText: {
     fontSize: FONT.X_SMALL,
     color: COLORS.WHITE,
   },
 });
 
 UnitText.propTypes = {
-  children: PropTypes.string,
+  children: PropTypes.string.isRequired,
+  style: PropTypes.objectOf(PropTypes.objectOf),
 };
 
 UnitText.defaultProps = {
-  children: '',
+  style: {},
 };

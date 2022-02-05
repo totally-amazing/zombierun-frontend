@@ -1,5 +1,5 @@
 import { checkAuth, setUser } from './authSlice';
-import showErrorMessage from '../common/components/ErrorMessage';
+import ErrorMessage from '../common/components/ErrorMessage';
 
 const sendUserId = (idToken) => {
   return async (dispatch) => {
@@ -13,7 +13,7 @@ const sendUserId = (idToken) => {
       dispatch(checkAuth(true));
       dispatch(setUser(user));
     } catch (err) {
-      showErrorMessage(err.message);
+      ErrorMessage(err.message);
     }
   };
 };

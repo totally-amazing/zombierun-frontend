@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.BLACK,
     opacity: 0.8,
+    backgroundColor: COLORS.BLACK,
   },
 
   blankSpace: {
@@ -47,14 +47,15 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 35,
     borderRadius: 20,
-    backgroundColor: COLORS.BLACK,
     alignItems: 'center',
+    backgroundColor: COLORS.BLACK,
   },
   button: {
     left: 115,
     bottom: 20,
     borderRadius: 20,
     elevation: 2,
+    backgroundColor: COLORS.BLACK,
   },
   closeCircleo: {
     fontSize: FONT.MEDIUM,
@@ -65,9 +66,5 @@ const styles = StyleSheet.create({
 StandardModal.propTypes = {
   modalVisible: PropTypes.bool.isRequired,
   setModalVisible: PropTypes.func.isRequired,
-  children: PropTypes.objectOf(PropTypes.object),
-};
-
-StandardModal.defaultProps = {
-  children: {},
+  children: PropTypes.element.isRequired,
 };
