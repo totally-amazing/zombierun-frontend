@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
-import ProfileButton from './ProfileButton';
+import Profile from '../../common/components/Profile';
 
 const MainScreen = ({ navigation }) => {
   const pressSingleTextHandler = () => {
@@ -18,10 +18,18 @@ const MainScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <Text style={styles.text} onPress={pressSingleTextHandler}>
+      <Text
+        testID="single-button"
+        style={styles.text}
+        onPress={pressSingleTextHandler}
+      >
         Solo
       </Text>
-      <Text style={styles.text} onPress={pressTogetherTextHandler}>
+      <Text
+        testID="together-button"
+        style={styles.text}
+        onPress={pressTogetherTextHandler}
+      >
         Together
       </Text>
     </View>
@@ -39,13 +47,11 @@ export const screenOption = (navData) => {
     headerTitle: '',
     headerLeft: () => {
       return (
-        <HeaderButtons HeaderButtonComponent={ProfileButton}>
-          <Item
-            title="Profile"
-            iconName="user-circle-o"
-            onPress={pressProfileButtonHandler}
-          />
-        </HeaderButtons>
+        <View style={styles.buttonContainer}>
+          <HeaderButtons HeaderButtonComponent={Profile}>
+            <Item size="small" onPress={pressProfileButtonHandler} />
+          </HeaderButtons>
+        </View>
       );
     },
   };
@@ -64,12 +70,11 @@ const styles = StyleSheet.create({
     color: COLORS.DEEP_RED,
     fontFamily: FONT.BLOOD_FONT,
   },
+  buttonContainer: {
+    marginLeft: 40,
+  },
 });
 
 MainScreen.propTypes = {
-  navigation: PropTypes.objectOf(PropTypes.func),
-};
-
-MainScreen.defaultProps = {
-  navigation: PropTypes.objectOf(PropTypes.func),
+  navigation: PropTypes.objectOf(PropTypes.func).isRequired,
 };
