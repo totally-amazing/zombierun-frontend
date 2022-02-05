@@ -18,7 +18,6 @@ module.exports = {
   },
   plugins: ['react', 'prettier', 'react-native'],
   rules: {
-    'no-param-reassign': [2, { props: false }],
     'global-require': 0,
     'no-unused-vars': 'off',
     'no-use-before-define': 'off',
@@ -39,7 +38,6 @@ module.exports = {
     'prettier/prettier': [
       'error',
       {
-        endOfLine: 'auto',
         trailingComma: 'all',
         singleQuote: true,
         printWidth: 80,

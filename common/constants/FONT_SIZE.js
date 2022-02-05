@@ -5,5 +5,4 @@ export default {
   SMALL: 20,
   X_SMALL: 14,
   ICON: 16,
-  BLOOD_FONT: 'nosifer-regular',
 };

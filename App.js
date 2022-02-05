@@ -2,16 +2,9 @@ import React, { useState } from 'react';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import { Provider } from 'react-redux';
-import FlashMessage from 'react-native-flash-message';
 
 import AppNavigator from './navigation/AppNavigator';
 import store from './store';
-import HttpClient from './service/http';
-import AuthService from './service/auth';
-import showErrorMessage from './common/components/ErrorMessage';
-
-const httpClient = new HttpClient();
-const authService = new AuthService(httpClient);
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -29,15 +22,14 @@ const App = () => {
         onFinish={() => {
           setFontLoaded(true);
         }}
-        onError={showErrorMessage}
+        onError={(error) => console.log(error)}
       />
     );
   }
 
   return (
     <Provider store={store}>
-      <AppNavigator authService={authService} />
-      <FlashMessage position="top" />
+      <AppNavigator />
     </Provider>
   );
 };

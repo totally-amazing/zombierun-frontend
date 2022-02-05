@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 
 import COLORS from '../../common/constants/COLORS';
-import FONT from '../../common/constants/FONT';
+import FONT_SIZE from '../../common/constants/FONT_SIZE';
 
 const RunningScreen = (props) => {
   return (
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: FONT.X_LARGE,
+    fontSize: FONT_SIZE.X_LARGE,
     color: COLORS.DEEP_RED,
     fontFamily: 'nosifer-regular',
   },
