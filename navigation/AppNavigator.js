@@ -10,9 +10,8 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer>
-      {/* {!isAuth && <AuthScreen />} */}
-      {/* {isAuth && <MainNavigator />} */}
-      <MainNavigator />
+      {!isAuth && <AuthScreen />}
+      {isAuth && <MainNavigator />}
     </NavigationContainer>
   );
 };
