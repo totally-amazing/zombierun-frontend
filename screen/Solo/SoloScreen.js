@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
-import FONT_SIZE from '../../common/constants/FONT_SIZE';
+import FONT_SIZE from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 
 const SoloScreen = (props) => {
