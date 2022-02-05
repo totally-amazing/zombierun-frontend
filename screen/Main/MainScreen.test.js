@@ -1,6 +1,5 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { render, fireEvent } from '@testing-library/react-native';
 
 import MainScreen from './MainScreen';
 
@@ -8,7 +7,7 @@ const navigation = {
   foo: jest.fn(),
 };
 
-it('renders correcntly', () => {
+it('renders corrcetly', () => {
   const tree = renderer.create(<MainScreen navigation={navigation} />).toJSON();
   expect(tree).toMatchSnapshot();
 });

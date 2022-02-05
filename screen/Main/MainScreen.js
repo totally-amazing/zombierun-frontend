@@ -8,11 +8,11 @@ import COLORS from '../../common/constants/COLORS';
 import Profile from '../../common/components/Profile';
 
 const MainScreen = ({ navigation }) => {
-  const pressSingleTextHandler = () => {
+  const handleSingleText = () => {
     navigation.navigate('Solo');
   };
 
-  const pressTogetherTextHandler = () => {
+  const handleTogetherText = () => {
     navigation.navigate('RoomList');
   };
 
@@ -21,14 +21,14 @@ const MainScreen = ({ navigation }) => {
       <Text
         testID="single-button"
         style={styles.text}
-        onPress={pressSingleTextHandler}
+        onPress={handleSingleText}
       >
         Solo
       </Text>
       <Text
         testID="together-button"
         style={styles.text}
-        onPress={pressTogetherTextHandler}
+        onPress={handleTogetherText}
       >
         Together
       </Text>
@@ -39,7 +39,7 @@ const MainScreen = ({ navigation }) => {
 export default MainScreen;
 
 export const screenOption = (navData) => {
-  const pressProfileButtonHandler = () => {
+  const handleProfileButton = () => {
     navData.navigation.navigate('MyPage');
   };
 
@@ -49,7 +49,7 @@ export const screenOption = (navData) => {
       return (
         <View style={styles.buttonContainer}>
           <HeaderButtons HeaderButtonComponent={Profile}>
-            <Item size="small" onPress={pressProfileButtonHandler} />
+            <Item size="small" onPress={handleProfileButton} />
           </HeaderButtons>
         </View>
       );
