@@ -17,7 +17,7 @@ const MainStackNavigator = createStackNavigator();
 
 const defaultNavOptions = {
   headerStyle: {
-    backgroundColor: 'black',
+    backgroundColor: COLORS.BLACK,
     elevation: 0,
     shadowOpacity: 0,
     borderBottomWidth: 0,
