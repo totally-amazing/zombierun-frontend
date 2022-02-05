@@ -9,6 +9,7 @@ import PROFILE_SIZE from '../../common/constants/PROFILE_SIZE';
 const ProfileButton = ({ iconName, onPress, title, renderButtonElement }) => {
   return (
     <HeaderButton
+      testID="Profile-button"
       onPress={onPress}
       title={title}
       renderButtonElement={renderButtonElement}
