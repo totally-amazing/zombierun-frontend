@@ -6,6 +6,7 @@ import COLORS from '../constants/COLORS';
 import FONT_SIZE from '../constants/FONT';
 
 const BUTTON_WIDTH = 300;
+const BUTTON_HEIGHT = 60;
 const BUTTON_ROUND = 24;
 
 const ActiveButton = ({ message, disabled, onPress, style }) => {
@@ -28,11 +29,13 @@ export default ActiveButton;
 const styles = StyleSheet.create({
   loginButton: {
     width: BUTTON_WIDTH,
-    fontSize: FONT_SIZE.LARGE,
+    height: BUTTON_HEIGHT,
+    borderRadius: BUTTON_ROUND,
+    lineHeight: BUTTON_HEIGHT,
+    fontSize: FONT_SIZE.SMALL,
     textAlign: 'center',
     color: COLORS.WHITE,
     backgroundColor: COLORS.RED,
-    borderRadius: BUTTON_ROUND,
   },
 });
 
