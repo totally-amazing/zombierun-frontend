@@ -10,7 +10,7 @@ import {
 } from '@env';
 
 import COLORS from '../../common/constants/COLORS';
-import FONT_SIZE from '../../common/constants/FONT_SIZE';
+import FONT from '../../common/constants/FONT';
 import sendUserId from '../../store/authActions';
 import ActiveButton from '../../common/components/ActiveButton';
 
@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 20,
-    fontFamily: FONT_SIZE.BLOOD_FONT,
-    fontSize: FONT_SIZE.X_LARGE,
+    fontFamily: FONT.BLOOD_FONT,
+    fontSize: FONT.X_LARGE,
     color: COLORS.DEEP_RED,
   },
 });

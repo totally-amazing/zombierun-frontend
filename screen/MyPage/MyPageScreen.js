@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import COLORS from '../../common/constants/COLORS';
-import FONT_SIZE from '../../common/constants/FONT_SIZE';
+import FONT from '../../common/constants/FONT';
 
 const MyPageScreen = (props) => {
   return (
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: FONT_SIZE.X_LARGE,
+    fontSize: FONT.X_LARGE,
     color: COLORS.DEEP_RED,
     fontFamily: 'nosifer-regular',
   },

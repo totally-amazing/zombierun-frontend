@@ -3,13 +3,12 @@ import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import PropTypes from 'prop-types';
 
 import COLORS from '../constants/COLORS';
-import FONT_SIZE from '../constants/FONT_SIZE';
+import FONT_SIZE from '../constants/FONT';
 
 const BUTTON_WIDTH = 300;
 const BUTTON_ROUND = 24;
 
 const ActiveButton = ({ message, disabled, onPress, style }) => {
-  console.log(style);
   const proveUserHandler = () => {
     onPress();
   };
