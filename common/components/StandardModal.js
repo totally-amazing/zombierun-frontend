@@ -1,21 +1,33 @@
 import React from 'react';
 
-import { Modal, StyleSheet, View, Pressable, Text } from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  View,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
 import COLORS from '../constants/COLORS';
 import FONT from '../constants/FONT';
 
-const StandardModal = ({ modalVisible, setModalVisible, children }) => {
+const StandardModal = ({ isVisible, setIsVisible, children }) => {
   const closeModalHandler = () => {
-    setModalVisible(false);
+    setIsVisible(false);
   };
 
   return (
-    <View>
-      <Modal animationType="fade" transparent visible={modalVisible}>
-        <View style={styles.backSpace}>
+    <Modal animationType="fade" transparent visible={isVisible}>
+      <TouchableOpacity
+        style={styles.backSpace}
+        activeOpacity={1}
+        onPress={closeModalHandler}
+      >
+        <TouchableWithoutFeedback>
           <View style={styles.blankSpace}>
             <Pressable style={styles.button} onPress={closeModalHandler}>
               <Text>
@@ -24,9 +36,9 @@ const StandardModal = ({ modalVisible, setModalVisible, children }) => {
             </Pressable>
             {children}
           </View>
-        </View>
-      </Modal>
-    </View>
+        </TouchableWithoutFeedback>
+      </TouchableOpacity>
+    </Modal>
   );
 };
 
@@ -47,6 +59,7 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 35,
     borderRadius: 20,
+    elevation: 20,
     alignItems: 'center',
     backgroundColor: COLORS.BLACK,
   },
@@ -64,7 +77,7 @@ const styles = StyleSheet.create({
 });
 
 StandardModal.propTypes = {
-  modalVisible: PropTypes.bool.isRequired,
-  setModalVisible: PropTypes.func.isRequired,
+  isVisible: PropTypes.bool.isRequired,
+  setIsVisible: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
 };

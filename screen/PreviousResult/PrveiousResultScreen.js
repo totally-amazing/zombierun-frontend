@@ -10,17 +10,17 @@ import {
 import StandardModal from '../../common/components/StandardModal';
 import TitleText from '../../common/components/TilteText';
 import UnitText from '../../common/components/UnitText';
-import ErrorMessage from '../../common/components/ErrorMessage';
+import ShowErrorMessage from '../../common/components/ShowErrorMessage';
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 
 const SURVIVED = "YOU'RE SURVIVED";
 const FAILED = 'YOU WERE INFECTED';
 const KILOMETER = 'km';
-const TIME = 'm';
+const MINUTE = 'm';
 
 const PreviousResultScreen = () => {
-  const [modalVisible, setModalVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   let record = {
@@ -33,21 +33,23 @@ const PreviousResultScreen = () => {
   };
 
   const openModalHandler = async () => {
-    setModalVisible(true);
+    setIsError(false);
+    setIsLoading(true);
+
     try {
       const response = await fetch('backendAddress', {
         method: 'GET',
       });
 
-      setIsLoading(true);
-      record = response.json();
-      setIsLoading(false);
-      setIsError(true);
+      record = await response.json();
 
+      setIsError(true);
+      setIsLoading(false);
+      setIsVisible(true);
       return record;
     } catch (error) {
       setIsLoading(false);
-      return ErrorMessage(error.message);
+      return ShowErrorMessage(error.message);
     }
   };
 
@@ -65,7 +67,7 @@ const PreviousResultScreen = () => {
           <TitleText>최근 러닝 타임</TitleText>
           <View style={styles.title}>
             <Text style={styles.value}>{record.time}</Text>
-            <UnitText style={styles.unit}>{TIME}</UnitText>
+            <UnitText style={styles.unit}>{MINUTE}</UnitText>
           </View>
         </View>
         <View style={styles.header}>
@@ -88,17 +90,8 @@ const PreviousResultScreen = () => {
 
   return (
     <View style={styles.screen}>
-      <Button
-        color={COLORS.BLACK}
-        disable={false}
-        title="이전기록보기"
-        onPress={openModalHandler}
-      />
       {isError && (
-        <StandardModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-        >
+        <StandardModal isVisible={isVisible} setIsVisible={setIsVisible}>
           <View>{previousResult}</View>
         </StandardModal>
       )}

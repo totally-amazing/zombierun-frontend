@@ -1,4 +1,4 @@
-import ErrorMessage from '../common/components/ErrorMessage';
+import ShowErrorMessage from '../common/components/ShowErrorMessage';
 
 class AuthService {
   constructor(httpClient) {
@@ -14,7 +14,7 @@ class AuthService {
 
       return result;
     } catch (err) {
-      return ErrorMessage(err.message);
+      return ShowErrorMessage(err.message);
     }
   };
 }
