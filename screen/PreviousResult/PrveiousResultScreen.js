@@ -1,13 +1,35 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, Button, View } from 'react-native';
 
-import COLORS from '../../common/constants/COLORS';
-import FONT from '../../common/constants/FONT';
+import StandardModal from '../../common/components/StandardModal';
 
-const PreviousResultScreen = (props) => {
+const PreviousResultScreen = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModalHandler = () => {
+    setModalVisible(true);
+  };
+
+  const testElement = (
+    <View>
+      <Text style={styles.testss}>user1</Text>
+      <Text style={styles.testss}>user2</Text>
+    </View>
+  );
+
   return (
     <View style={styles.screen}>
-      <Text style={styles.text}>PreviousResultScreen</Text>
+      <StandardModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      >
+        {testElement}
+      </StandardModal>
+      <Button
+        disable={false}
+        title="이전기록보기"
+        onPress={openModalHandler} // 모달창 띄우기
+      />
     </View>
   );
 };
@@ -16,13 +38,10 @@ export default PreviousResultScreen;
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
-    fontSize: FONT.X_LARGE,
-    color: COLORS.DEEP_RED,
-    fontFamily: 'nosifer-regular',
+  testss: {
+    color: 'white',
   },
 });
