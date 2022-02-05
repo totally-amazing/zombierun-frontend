@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import * as Google from 'expo-auth-session/providers/google';
+import { useAuthRequest } from 'expo-auth-session/providers/google';
 import { useDispatch } from 'react-redux';
 import {
   GOOGLE_EXPO_CLIENT_ID,
@@ -17,7 +17,7 @@ import ActiveButton from '../../common/components/ActiveButton';
 const AuthScreen = () => {
   const dispatch = useDispatch();
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
+  const [request, response, promptAsync] = useAuthRequest({
     expoClientId: GOOGLE_EXPO_CLIENT_ID,
     iosClientId: GOOGLE_IOS_CLIENT_ID,
     androidClientId: GOOGLE_ANDROID_CLIENT_ID,
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 20,
-    fontFamily: 'nosifer-regular',
+    fontFamily: FONT_SIZE.BLOOD_FONT,
     fontSize: FONT_SIZE.X_LARGE,
     color: COLORS.DEEP_RED,
   },

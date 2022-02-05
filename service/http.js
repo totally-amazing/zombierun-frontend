@@ -5,15 +5,15 @@ class HttpClient {
     this.baseUrl = baseUrl;
 
     this.client = axios.create({
-      baseUrl: this.baseUrl,
+      baseURL: this.baseUrl,
     });
   }
 
-  async fetch(req) {
+  fetch = async (req) => {
     const res = await this.client(req);
 
     return res.data;
-  }
+  };
 }
 
 export default HttpClient;
