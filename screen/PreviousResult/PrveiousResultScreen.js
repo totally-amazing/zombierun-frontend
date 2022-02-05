@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet,
+  View,
   Text,
   Button,
-  View,
   ActivityIndicator,
+  StyleSheet,
 } from 'react-native';
 
 import StandardModal from '../../common/components/StandardModal';
