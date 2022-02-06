@@ -12,6 +12,7 @@ const ActiveButton = ({ message, disabled, onPress, style }) => {
   const proveUserHandler = () => {
     onPress();
   };
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}

@@ -8,7 +8,7 @@ import AppNavigator from './navigation/AppNavigator';
 import store from './store';
 import HttpClient from './service/http';
 import AuthService from './service/auth';
-import showErrorMessage from './common/components/ErrorMessage';
+import ShowErrorMessage from './common/components/ShowErrorMessage';
 
 const httpClient = new HttpClient();
 const authService = new AuthService(httpClient);
@@ -29,7 +29,7 @@ const App = () => {
         onFinish={() => {
           setFontLoaded(true);
         }}
-        onError={showErrorMessage}
+        onError={ShowErrorMessage}
       />
     );
   }
