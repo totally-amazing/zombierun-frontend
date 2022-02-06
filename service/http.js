@@ -17,7 +17,7 @@ class HttpClient {
       showErrorMessage(err.message);
     }
 
-    return res.data;
+    return res?.data;
   };
 }
 
