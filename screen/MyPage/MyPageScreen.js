@@ -2,18 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+
+import { BASE_URL } from '@env';
 import COLORS from '../../common/constants/COLORS';
-import Profile from '../../common/components/Profile';
 import FONT from '../../common/constants/FONT';
+import GameService from '../../service/game';
+import Profile from '../../common/components/Profile';
 import PROFILE from '../../common/constants/PROFILE';
 import showErrorMessage from '../../common/components/ErrorMessage';
-import GameService from '../../service/game';
 import TitleText from '../../common/components/TitleText';
 import UnitText from '../../common/components/UnitText';
 import TextChunk from '../../common/components/TextChunk';
 import LineWithText from './components/LineWithText';
+import HttpClient from '../../service/http';
 
-const MyPageScreen = ({ gameService }) => {
+const httpClient = new HttpClient(BASE_URL);
+const gameService = new GameService(httpClient);
+
+const MyPageScreen = () => {
   const [record, setRecord] = useState({
     distance: 0,
     time: {
@@ -32,11 +38,11 @@ const MyPageScreen = ({ gameService }) => {
       isWinner: 0,
     },
   });
-  const userId = useSelector(({ user }) => user.id); // TODO: 전역 상태에 user.id 데이터 있나 확인
+  const { id, nickname } = useSelector((state) => state.user); // TODO: 전역 상태에 user.id 데이터 있나 확인
 
   useEffect(() => {
     gameService
-      .getTotalRecord(userId)
+      .getTotalRecord(id)
       .then((totalRecord) => {
         setRecord({
           ...totalRecord,
@@ -55,7 +61,7 @@ const MyPageScreen = ({ gameService }) => {
     <View style={styles.screen}>
       <View style={styles.row}>
         <Profile size="medium" />
-        <Text style={styles.nickname}>nickname</Text>
+        <Text style={styles.nickname}>{nickname}</Text>
       </View>
       <View style={styles.row}>
         <TextChunk title="총 거리" value={String(record.distance)} unit="km" />
@@ -107,7 +113,3 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
 });
-
-MyPageScreen.propTypes = {
-  gameService: PropTypes.instanceOf(GameService).isRequired,
-};

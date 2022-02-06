@@ -8,9 +8,11 @@ const userSlice = createSlice({
     imageUrl: null,
   },
   reducers: {
-    setUser(state, action) {
-      const { id, nickname, imageUrl } = action.payload.user;
-      state.user = { id, nickname, imageUrl };
+    setUser: (state, action) => {
+      const { id, nickname, imageUrl } = action.payload;
+      state.id = id;
+      state.nickname = nickname;
+      state.imageUrl = imageUrl;
     },
   },
 });

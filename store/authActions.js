@@ -1,16 +1,20 @@
+import axios from 'axios';
+import { BASE_URL } from '@env';
+
 import { checkAuth } from './authSlice';
 import { setUser } from './userSlice';
+import HttpClient from '../service/http';
+import AuthService from '../service/auth';
 import showErrorMessage from '../common/components/ErrorMessage';
+
+const httpClient = new HttpClient(BASE_URL);
+const authService = new AuthService(httpClient);
 
 const sendUserId = (idToken) => {
   return async (dispatch) => {
     try {
-      const response = await fetch('backendAddress', {
-        method: 'POST',
-        body: idToken,
-      });
+      const user = await authService.signIn(idToken);
 
-      const user = response.json();
       dispatch(checkAuth(true));
       dispatch(setUser(user));
     } catch (err) {

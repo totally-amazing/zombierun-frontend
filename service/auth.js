@@ -1,14 +1,13 @@
-import showErrorMessage from '../common/components/ErrorMessage';
-
 class AuthService {
   constructor(httpClient) {
     this.httpClient = httpClient;
   }
 
-  signIn = async () => {
+  signIn = async (idToken) => {
     const result = await this.httpClient.fetch({
       url: '/auth/signin',
       method: 'post',
+      data: { idToken },
     });
 
     return result;
