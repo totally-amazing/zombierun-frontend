@@ -6,16 +6,12 @@ class AuthService {
   }
 
   signIn = async () => {
-    try {
-      const result = await this.httpClient.fetch({
-        url: '/auth/signin',
-        method: 'post',
-      });
+    const result = await this.httpClient.fetch({
+      url: '/auth/signin',
+      method: 'post',
+    });
 
-      return result;
-    } catch (err) {
-      return showErrorMessage(err.message);
-    }
+    return result;
   };
 }
 

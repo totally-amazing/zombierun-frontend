@@ -1,16 +1,21 @@
 import axios from 'axios';
+import showErrorMessage from '../common/components/ErrorMessage';
 
 class HttpClient {
-  constructor(baseUrl) {
-    this.baseUrl = baseUrl;
-
+  constructor(baseURL) {
     this.client = axios.create({
-      baseURL: this.baseUrl,
+      baseURL,
     });
   }
 
   fetch = async (req) => {
-    const res = await this.client(req);
+    let res;
+
+    try {
+      res = await this.client(req);
+    } catch (err) {
+      showErrorMessage(err.message);
+    }
 
     return res.data;
   };
