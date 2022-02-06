@@ -1,4 +1,5 @@
-import { checkAuth, setUser } from './authSlice';
+import { checkAuth } from './authSlice';
+import { setUser } from './userSlice';
 import showErrorMessage from '../common/components/ErrorMessage';
 
 const sendUserId = (idToken) => {
