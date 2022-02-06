@@ -12,7 +12,9 @@ const Profile = ({ size, onPress }) => {
   return (
     <Pressable onPress={onPress}>
       <Image
-        source={imageUrl || require('../../assets/avatar.jpeg')}
+        source={
+          imageUrl ? { uri: imageUrl } : require('../../assets/avatar.jpeg')
+        }
         style={styles[size]}
       />
     </Pressable>

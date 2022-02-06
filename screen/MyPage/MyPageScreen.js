@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 import { BASE_URL } from '@env';
@@ -38,7 +37,7 @@ const MyPageScreen = () => {
       isWinner: 0,
     },
   });
-  const { id, nickname } = useSelector((state) => state.user); // TODO: 전역 상태에 user.id 데이터 있나 확인
+  const { id, nickname } = useSelector((state) => state.user);
 
   useEffect(() => {
     gameService
