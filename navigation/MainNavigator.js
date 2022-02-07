@@ -9,7 +9,9 @@ import PreviousResultScreen from '../screen/PreviousResult/PrveiousResultScreen'
 import RoomScreen from '../screen/Room/RoomScreen';
 import RoomListScreen from '../screen/RoomList/RoomListScreen';
 import RunningScreen from '../screen/Running/RunningScreen';
-import SoloScreen from '../screen/Solo/SoloScreen';
+import SoloScreen, {
+  screenOption as SoloHeaderOption,
+} from '../screen/Solo/SoloScreen';
 import SettingScreen from '../screen/Setting/SettingScreen';
 import COLORS from '../common/constants/COLORS';
 
@@ -34,7 +36,11 @@ const MainNavigator = () => {
         options={Profile}
       />
       <MainStackNavigator.Screen name="MyPage" component={MyPageScreen} />
-      <MainStackNavigator.Screen name="Solo" component={SoloScreen} />
+      <MainStackNavigator.Screen
+        name="Solo"
+        component={SoloScreen}
+        options={SoloHeaderOption}
+      />
       <MainStackNavigator.Screen name="OneOnOne" component={OneOnOneScreen} />
       <MainStackNavigator.Screen
         name="PreviousResult"

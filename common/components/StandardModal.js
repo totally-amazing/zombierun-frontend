@@ -10,14 +10,19 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import COLORS from '../constants/COLORS';
 import FONT from '../constants/FONT';
+import { showModal } from '../../store/uiSlice';
 
-const StandardModal = ({ isVisible, setIsVisible, children }) => {
-  const closeModalHandler = () => {
-    setIsVisible(false);
+const StandardModal = ({ children }) => {
+  const dispatch = useDispatch();
+  const isVisible = useSelector((state) => state.ui.isVisible);
+
+  const handleCloseButton = () => {
+    dispatch(showModal());
   };
 
   return (
@@ -25,11 +30,11 @@ const StandardModal = ({ isVisible, setIsVisible, children }) => {
       <TouchableOpacity
         style={styles.backSpace}
         activeOpacity={1}
-        onPress={closeModalHandler}
+        onPress={handleCloseButton}
       >
         <TouchableWithoutFeedback>
           <View style={styles.blankSpace}>
-            <Pressable style={styles.button} onPress={closeModalHandler}>
+            <Pressable style={styles.button} onPress={handleCloseButton}>
               <Text>
                 <AntDesign name="closecircleo" style={styles.closeCircleo} />
               </Text>
@@ -77,7 +82,5 @@ const styles = StyleSheet.create({
 });
 
 StandardModal.propTypes = {
-  isVisible: PropTypes.bool.isRequired,
-  setIsVisible: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
 };

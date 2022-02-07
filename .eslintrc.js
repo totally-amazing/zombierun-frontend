@@ -20,6 +20,12 @@ module.exports = {
   plugins: ['react', 'prettier', 'react-native'],
   rules: {
     'no-param-reassign': [2, { props: false }],
+    'no-restricted-syntax': [
+      'error',
+      'ForInStatement',
+      'LabeledStatement',
+      'WithStatement',
+    ],
     'global-require': 0,
     'no-unused-vars': 'off',
     'no-use-before-define': 'off',
