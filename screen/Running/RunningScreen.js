@@ -1,12 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { View, Text, StyleSheet } from 'react-native';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
+import SettingScreen from '../Setting/SettingScreen';
 
-const RunningScreen = (props) => {
+const RunningScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
+      <SettingScreen navigation={navigation} />
       <Text style={styles.text}>RunningScreen</Text>
     </View>
   );
@@ -23,6 +27,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: FONT.X_LARGE,
     color: COLORS.DEEP_RED,
-    fontFamily: 'nosifer-regular',
+    fontFamily: FONT.BLOOD_FONT,
   },
 });
+
+RunningScreen.propTypes = {
+  navigation: PropTypes.objectOf(PropTypes.func).isRequired,
+};
