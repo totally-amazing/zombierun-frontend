@@ -15,30 +15,30 @@ import Profile from '../../common/components/Profile';
 import { addGameSetting } from '../../store/gameSlice';
 import PreviousResultScreen from '../PreviousResult/PrveiousResultScreen';
 import ShowErrorMessage from '../../common/components/ShowErrorMessage';
-import { showModal } from '../../store/uiSlice';
+import { toggleModal } from '../../store/uiSlice';
 
 const INVALID_FORM_ERROR_MESSAGE = '잘못된 입력값이 존재합니다';
 const FORM_UPDATE = 'FORM_UPDATE';
 
 const formReducer = (state, action) => {
   if (action.type === FORM_UPDATE) {
-    const updateValues = {
+    const updatedValues = {
       ...state.inputValues,
       [action.input]: action.value,
     };
-    const updateValidation = {
+    const updatedValidation = {
       ...state.inputValidation,
       [action.input]: action.isValid,
     };
     let updatedFormValidation = true;
 
-    for (const value of Object.values(updateValidation)) {
+    for (const value of Object.values(updatedValidation)) {
       updatedFormValidation = updatedFormValidation && value;
     }
 
     return {
-      inputValues: updateValues,
-      inputValidation: updateValidation,
+      inputValues: updatedValues,
+      inputValidation: updatedValidation,
       formIsValid: updatedFormValidation,
     };
   }
@@ -48,7 +48,7 @@ const formReducer = (state, action) => {
 
 const SoloScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const isVisible = useSelector((state) => state.ui.isVisible);
+  const isModalVisible = useSelector((state) => state.ui.isModalVisible);
   const [formState, dispatchForm] = useReducer(formReducer, {
     inputValues: {},
     inputValidation: {},
@@ -66,7 +66,7 @@ const SoloScreen = ({ navigation }) => {
   const handleArrowButton = () => {
     navigation.navigate('Main');
   };
-  const inputChangeHandler = useCallback(
+  const handleInputChange = useCallback(
     (inputIdentifier, inputValue, inputValidation) => {
       dispatchForm({
         type: FORM_UPDATE,
@@ -80,7 +80,7 @@ const SoloScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      {isVisible && <PreviousResultScreen />}
+      {isModalVisible && <PreviousResultScreen />}
       <Difficulty speed={formState.inputValues.speed} />
       <View>
         <Input
@@ -92,7 +92,7 @@ const SoloScreen = ({ navigation }) => {
           min={1}
           max={20}
           unit="km/h"
-          onInputChange={inputChangeHandler}
+          onInputChange={handleInputChange}
         />
         <Input
           id="time"
@@ -103,7 +103,7 @@ const SoloScreen = ({ navigation }) => {
           min={30}
           max={2000}
           unit="분"
-          onInputChange={inputChangeHandler}
+          onInputChange={handleInputChange}
         />
       </View>
       <View>
@@ -148,7 +148,7 @@ export const screenOption = (navData) => {
     headerRight: () => {
       const dispatch = useDispatch();
       const handlePreviouseText = () => {
-        dispatch(showModal());
+        dispatch(toggleModal());
       };
       return (
         <View style={styles.buttonContainer}>

@@ -3,14 +3,14 @@ import { createSlice } from '@reduxjs/toolkit';
 const uiSlice = createSlice({
   name: 'ui',
   initialState: {
-    isVisible: false,
+    isModalVisible: false,
   },
   reducers: {
-    showModal: (state, action) => {
-      state.isVisible = !state.isVisible;
+    toggleModal: (state, action) => {
+      state.isModalVisible = !state.isModalVisible;
     },
   },
 });
 
-export const { showModal } = uiSlice.actions;
+export const { toggleModal } = uiSlice.actions;
 export default uiSlice.reducer;

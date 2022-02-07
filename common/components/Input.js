@@ -30,7 +30,6 @@ const inputReducer = (state, action) => {
 const Input = ({
   initialValue,
   initiallyValid,
-  required,
   type,
   min,
   max,
@@ -52,26 +51,22 @@ const Input = ({
   });
 
   const inputChangeHandler = (value) => {
-    let isValid = true;
-
-    if (required && !value) {
-      isValid = false;
-    }
+    let isValidedInput = true;
 
     if (type === 'number') {
       const valueNum = Number(value);
       if (Number.isNaN(valueNum)) {
-        isValid = false;
+        isValidedInput = false;
         setErrorMessage(DEFAULT_ERROR_MESSAGE);
       }
       if (min && Number(value) < min) {
-        isValid = false;
+        isValidedInput = false;
         const MIN_ERROR_MESSAGE = `최소 값은 ${min}${unit} 입니다`;
         setErrorMessage(MIN_ERROR_MESSAGE);
       }
 
       if (max && Number(value) > max) {
-        isValid = false;
+        isValidedInput = false;
         const MAX_ERROR_MESSAGE = `최대 값은 ${max}${unit} 입니다`;
         setErrorMessage(MAX_ERROR_MESSAGE);
       }
@@ -80,22 +75,22 @@ const Input = ({
     if (type === 'string') {
       const trimedString = value.trim();
       if (!trimedString) {
-        isValid = false;
+        isValidedInput = false;
         setErrorMessage(DEFAULT_ERROR_MESSAGE);
       }
       if (minLength && trimedString < minLength) {
-        isValid = false;
+        isValidedInput = false;
         const MIN_LENGTH_ERROR_MESSAGE = `최소 ${minLength}자 이상 입력해주세요`;
         setErrorMessage(MIN_LENGTH_ERROR_MESSAGE);
       }
       if (maxLength && trimedString > maxLength) {
-        isValid = false;
+        isValidedInput = false;
         const MAX_LENGTH_ERROR_MESSAGE = `최대 ${maxLength}자 까지만 입력 가능합니다`;
         setErrorMessage(MAX_LENGTH_ERROR_MESSAGE);
       }
     }
 
-    dispatch({ type: INPUT_CHANGE, value, isValid });
+    dispatch({ type: INPUT_CHANGE, value, isValid: isValidedInput });
   };
 
   const lostFocusHandler = () => {
@@ -113,7 +108,6 @@ const Input = ({
         <TextInput
           style={style.input}
           autoCorrect={autoCorrect}
-          required={required}
           placeholder={placeholder}
           placeholderTextColor={COLORS.LIGHT_GRAY}
           keyboardType={keyboardType}
@@ -167,7 +161,6 @@ const style = StyleSheet.create({
 Input.propTypes = {
   initialValue: propType.string,
   initiallyValid: propType.bool,
-  required: propType.bool,
   type: propType.string,
   min: propType.number,
   max: propType.number,
@@ -185,7 +178,6 @@ Input.propTypes = {
 Input.defaultProps = {
   initialValue: null,
   initiallyValid: null,
-  required: null,
   type: null,
   min: null,
   max: null,
