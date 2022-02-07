@@ -15,7 +15,7 @@ const MINUTE = 'm';
 
 const PreviousResultScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [hasError, setHasError] = useState(false);
   let record = {
     distance: 0,
     time: 0,
@@ -39,12 +39,12 @@ const PreviousResultScreen = () => {
       }
 
       setIsLoading(false);
-      setIsError(false);
+      setHasError(false);
       record = responseData;
       return record;
     } catch (error) {
       setIsLoading(false);
-      setIsError(true);
+      setHasError(true);
       return ShowErrorMessage(error.message);
     }
   });
@@ -87,7 +87,7 @@ const PreviousResultScreen = () => {
   return (
     <StandardModal>
       {isLoading && <ActivityIndicator size="large" color={COLORS.RED} />}
-      {!isLoading && !isError && <View>{previousResult}</View>}
+      {!isLoading && !hasError && <View>{previousResult}</View>}
     </StandardModal>
   );
 };
