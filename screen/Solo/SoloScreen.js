@@ -153,7 +153,7 @@ export const screenOption = (navData) => {
       return (
         <View style={styles.buttonContainer}>
           <Text style={styles.text} onPress={handlePreviouseText}>
-            저번 기록 보기
+            이전 기록 보기
           </Text>
         </View>
       );
