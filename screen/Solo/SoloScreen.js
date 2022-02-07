@@ -1,5 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
 import React, { useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
