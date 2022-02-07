@@ -3,27 +3,27 @@ import { createSlice } from '@reduxjs/toolkit';
 const settingSlice = createSlice({
   name: 'setting',
   initialState: {
-    isStop: false,
-    isEffect: true,
-    isSound: true,
-    isExit: false,
+    shouldStopGame: false,
+    canHearingEffect: true,
+    canHearingBGMusic: true,
+    shouldExitGame: false,
   },
   reducers: {
-    checkStop: (state, action) => {
-      state.isStop = action.payload;
+    showSetting: (state, action) => {
+      state.shouldStopGame = action.payload;
     },
-    checkEffect: (state) => {
-      state.isEffect = !state.isEffect;
+    toggleEffect: (state) => {
+      state.canHearingEffect = !state.canHearingEffect;
     },
-    checkSound: (state) => {
-      state.isSound = !state.isSound;
+    toggleSound: (state) => {
+      state.canHearingBGMusic = !state.canHearingBGMusic;
     },
-    checkIsExit: (state, action) => {
-      state.isExit = action.payload;
+    checkExit: (state, action) => {
+      state.shouldExitGame = action.payload;
     },
   },
 });
 
-export const { checkStop, checkEffect, checkSound, checkIsExit } =
+export const { showSetting, toggleEffect, toggleSound, checkExit } =
   settingSlice.actions;
 export default settingSlice.reducer;

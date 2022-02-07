@@ -1,95 +1,87 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
 import {
-  checkStop,
-  checkEffect,
-  checkSound,
-  checkIsExit,
+  showSetting,
+  toggleEffect,
+  toggleSound,
+  checkExit,
 } from '../../store/settingSlice';
 import StandardModal from '../../common/components/StandardModal';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import ActiveButton from '../../common/components/ActiveButton';
+import WindowWithText from './components/WindowWithText';
 
-const SettingScreen = ({ navigation }) => {
+const SettingScreen = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
-  const switchModal = useSelector((state) => state.setting.isStop);
-  const switchSoundEffect = useSelector((state) => state.setting.isEffect);
-  const switchBackgroundMusic = useSelector((state) => state.setting.isSound);
-  const switchExit = useSelector((state) => state.setting.isExit);
 
-  const stopGameHandler = () => {
-    dispatch(checkStop(true));
+  const isOnModal = useSelector((state) => state.setting.shouldStopGame);
+  const isSwitchEffect = useSelector((state) => state.setting.canHearingEffect);
+  const isSwitchSound = useSelector((state) => state.setting.canHearingBGMusic);
+  const isOffGame = useSelector((state) => state.setting.shouldExitGame);
+
+  const soundEffect = isSwitchEffect ? '효과음 켜기' : '효과음 끄기';
+  const backgroundMusic = isSwitchSound ? '배경음악 켜기' : '배경음악 끄기';
+  const settingButton = <Feather name="settings" size={24} color="black" />;
+
+  const stopGame = () => {
+    dispatch(showSetting(true));
   };
 
-  const startAgainHandler = (close) => {
-    dispatch(checkStop(close));
-    dispatch(checkIsExit(false));
+  const restartHandler = (close) => {
+    dispatch(showSetting(close));
+    dispatch(checkExit(false));
   };
 
-  const changeSoundEffectHandler = () => {
-    dispatch(checkEffect());
+  const toggleSoundEffect = () => {
+    dispatch(toggleEffect());
   };
 
-  const changeBackgroundMusciHandler = () => {
-    dispatch(checkSound());
+  const toggleBackgroundMusic = () => {
+    dispatch(toggleSound());
   };
 
-  const confirmExitHandler = () => {
-    dispatch(checkIsExit(true));
+  const confirmExit = () => {
+    dispatch(checkExit(true));
   };
 
-  const pressFinishHandler = () => {
-    dispatch(checkIsExit(false));
-    dispatch(checkStop(false));
-
+  const pressExitHandler = () => {
+    dispatch(checkExit(false));
+    dispatch(showSetting(false));
     navigation.goBack();
   };
 
   return (
     <View>
-      <Pressable onPress={stopGameHandler}>
-        <Text>
-          <Feather name="settings" size={24} color="black" />
-        </Text>
-      </Pressable>
-      {switchModal && (
-        <StandardModal isVisible={switchModal} setIsVisible={startAgainHandler}>
-          {!switchExit && (
-            <View style={styles.screen}>
-              <Text>hello</Text>
-              <Pressable onPress={changeSoundEffectHandler}>
-                <Text style={styles.text}>
-                  {switchSoundEffect ? '효과음 켜기' : '효과음 끄기'}
-                </Text>
-              </Pressable>
-              <Pressable onPress={changeBackgroundMusciHandler}>
-                <Text style={styles.text}>
-                  {switchBackgroundMusic ? '배경음악 켜기' : '배경음악 끄기'}
-                </Text>
-              </Pressable>
-              <Pressable onPress={confirmExitHandler}>
-                <Text style={styles.text}>러닝 종료</Text>
-              </Pressable>
-            </View>
-          )}
-          {switchExit && (
-            <View style={styles.screen}>
-              <Text style={styles.text}>러닝을 종료하시겠습니까?</Text>
-              <ActiveButton
-                onPress={pressFinishHandler}
-                message="종료"
-                style={styles.exitButton}
-                disabled={false}
-              />
-            </View>
-          )}
-        </StandardModal>
-      )}
+      <WindowWithText onPress={stopGame} message={settingButton} />
+      <StandardModal isVisible={isOnModal} setIsVisible={restartHandler}>
+        {!isOffGame && (
+          <View style={styles.screen}>
+            <WindowWithText onPress={toggleSoundEffect} message={soundEffect} />
+            <WindowWithText
+              onPress={toggleBackgroundMusic}
+              message={backgroundMusic}
+            />
+            <WindowWithText onPress={confirmExit} message="러닝 종료" />
+          </View>
+        )}
+        {isOffGame && (
+          <View style={styles.screen}>
+            <Text style={styles.text}>러닝을 종료하시겠습니까?</Text>
+            <ActiveButton
+              onPress={pressExitHandler}
+              message="종료"
+              style={styles.exitButton}
+              disabled={false}
+            />
+          </View>
+        )}
+      </StandardModal>
     </View>
   );
 };
@@ -113,7 +105,3 @@ const styles = StyleSheet.create({
     fontSize: FONT.MEDIUM,
   },
 });
-
-SettingScreen.propTypes = {
-  navigation: PropTypes.objectOf(PropTypes.func).isRequired,
-};

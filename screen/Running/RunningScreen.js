@@ -7,10 +7,10 @@ import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import SettingScreen from '../Setting/SettingScreen';
 
-const RunningScreen = ({ navigation }) => {
+const RunningScreen = () => {
   return (
     <View style={styles.screen}>
-      <SettingScreen navigation={navigation} />
+      <SettingScreen />
       <Text style={styles.text}>RunningScreen</Text>
     </View>
   );
@@ -30,7 +30,3 @@ const styles = StyleSheet.create({
     fontFamily: FONT.BLOOD_FONT,
   },
 });
-
-RunningScreen.propTypes = {
-  navigation: PropTypes.objectOf(PropTypes.func).isRequired,
-};
