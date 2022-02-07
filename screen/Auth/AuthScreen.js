@@ -32,7 +32,7 @@ const AuthScreen = () => {
 
   return (
     <View style={styles.screen}>
-      <Text style={styles.title}>ZOOMIE RUN</Text>
+      <Text style={styles.title}>ZOMBIE RUN</Text>
       <ActiveButton
         message="Google Sign In"
         disabled={!request}
@@ -53,9 +53,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.BLACK,
   },
   title: {
-    marginTop: 20,
+    marginTop: 60,
     fontFamily: FONT.BLOOD_FONT,
     fontSize: FONT.X_LARGE,
-    color: COLORS.DEEP_RED,
+    color: COLORS.RED,
   },
 });

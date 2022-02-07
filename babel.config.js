@@ -9,7 +9,7 @@ module.exports = (api) => {
           moduleName: '@env',
           path: '.env',
           safe: true,
-          allowUndefined: true,
+          allowUndefined: false,
         },
       ],
     ],

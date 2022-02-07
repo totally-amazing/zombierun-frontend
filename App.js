@@ -6,12 +6,7 @@ import FlashMessage from 'react-native-flash-message';
 
 import AppNavigator from './navigation/AppNavigator';
 import store from './store';
-import HttpClient from './service/http';
-import AuthService from './service/auth';
-import ShowErrorMessage from './common/components/ShowErrorMessage';
-
-const httpClient = new HttpClient();
-const authService = new AuthService(httpClient);
+import showErrorMessage from './common/components/ShowErrorMessage';
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -29,14 +24,14 @@ const App = () => {
         onFinish={() => {
           setFontLoaded(true);
         }}
-        onError={ShowErrorMessage}
+        onError={showErrorMessage}
       />
     );
   }
 
   return (
     <Provider store={store}>
-      <AppNavigator authService={authService} />
+      <AppNavigator />
       <FlashMessage position="top" />
     </Provider>
   );
