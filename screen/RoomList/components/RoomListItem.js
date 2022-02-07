@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Pressable, StyleSheet, Text } from 'react-native';
+
 import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
 
@@ -28,18 +29,6 @@ const RoomListItem = ({ onPress, item }) => {
 };
 
 export default RoomListItem;
-
-RoomListItem.propTypes = {
-  onPress: PropTypes.func.isRequired,
-  item: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    mode: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    time: PropTypes.number,
-    speed: PropTypes.number,
-    participants: PropTypes.arrayOf(PropTypes.number), // TODO: String으로 수정
-  }).isRequired,
-};
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -82,3 +71,15 @@ const styles = StyleSheet.create({
     color: COLORS.RED,
   },
 });
+
+RoomListItem.propTypes = {
+  onPress: PropTypes.func.isRequired,
+  item: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    mode: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    time: PropTypes.number,
+    speed: PropTypes.number,
+    participants: PropTypes.arrayOf(PropTypes.number),
+  }).isRequired,
+};

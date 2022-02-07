@@ -60,9 +60,6 @@ const styles = StyleSheet.create({
     fontSize: FONT.X_LARGE,
     color: COLORS.RED,
   },
-  room: {
-    color: COLORS.WHITE,
-  },
 });
 
 RoomListScreen.propTypes = {
