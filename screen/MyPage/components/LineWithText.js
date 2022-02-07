@@ -12,10 +12,6 @@ const LineWithText = ({ text }) => {
   );
 };
 
-LineWithText.propTypes = {
-  text: PropTypes.string.isRequired,
-};
-
 export default LineWithText;
 
 const styles = StyleSheet.create({
@@ -33,3 +29,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.BLACK,
   },
 });
+
+LineWithText.propTypes = {
+  text: PropTypes.string.isRequired,
+};
