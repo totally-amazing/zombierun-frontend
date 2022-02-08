@@ -7,6 +7,8 @@ import FONT from '../constants/FONT';
 
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const INPUT_BLUR = 'INPUT_BLUR';
+const dotIndex = -1;
+const eqaulLength = 2;
 
 const inputReducer = (state, action) => {
   switch (action.type) {
@@ -68,6 +70,13 @@ const Input = ({
       if (max && Number(value) > max) {
         inputIsValid = false;
         setErrorMessage(`최대 값은 ${max}${unit} 입니다`);
+      }
+
+      if (value.indexOf('.') > dotIndex) {
+        if (value.indexOf('.') + eqaulLength !== value.length) {
+          inputIsValid = false;
+          setErrorMessage(`소수점은 한 자리까지만 가능합니다`);
+        }
       }
     }
 

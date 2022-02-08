@@ -4,7 +4,7 @@ import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import StandardModal from '../../common/components/StandardModal';
 import TitleText from '../../common/components/TilteText';
 import UnitText from '../../common/components/UnitText';
-import ShowErrorMessage from '../../common/components/ShowErrorMessage';
+import showErrorMessage from '../../common/utils/showErrorMessage';
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 
@@ -45,7 +45,7 @@ const PreviousResultScreen = () => {
     } catch (error) {
       setIsLoading(false);
       setHasError(true);
-      return ShowErrorMessage(error.message);
+      return showErrorMessage(error.message);
     }
   });
 

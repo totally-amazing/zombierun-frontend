@@ -1,17 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import COLORS from '../../../common/constants/COLORS';
-import FONT from '../../../common/constants/FONT';
+import COLORS from '../../common/constants/COLORS';
+import FONT from '../../common/constants/FONT';
 
-const OneOnOneScreen = (props) => {
+const ServivalScreen = (props) => {
   return (
-    <View style={styles.screen}>
-      <Text style={styles.text}>OneOnOneScreen</Text>
+    <View>
+      <Text>ServivalScreen</Text>
     </View>
   );
 };
 
-export default OneOnOneScreen;
+export default ServivalScreen;
 
 const styles = StyleSheet.create({
   screen: {

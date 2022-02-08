@@ -6,7 +6,7 @@ import FlashMessage from 'react-native-flash-message';
 
 import AppNavigator from './navigation/AppNavigator';
 import store from './store';
-import showErrorMessage from './common/components/ShowErrorMessage';
+import showErrorMessage from './common/utils/showErrorMessage';
 
 const fetchFonts = () => {
   return Font.loadAsync({

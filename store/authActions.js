@@ -5,7 +5,7 @@ import { checkAuth } from './authSlice';
 import { setUser } from './userSlice';
 import HttpClient from '../service/http';
 import AuthService from '../service/auth';
-import showErrorMessage from '../common/components/ShowErrorMessage';
+import showErrorMessage from '../common/utils/showErrorMessage';
 
 const httpClient = new HttpClient(BASE_URL);
 const authService = new AuthService(httpClient);

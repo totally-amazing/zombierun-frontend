@@ -1,5 +1,5 @@
 import axios from 'axios';
-import showErrorMessage from '../common/components/ShowErrorMessage';
+import showErrorMessage from '../common/utils/showErrorMessage';
 
 class HttpClient {
   constructor(baseURL) {

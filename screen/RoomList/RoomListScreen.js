@@ -3,13 +3,13 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import { BASE_URL } from '@env';
 
-import ActiveButton from '../../common/components/ActiveButton';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import RoomListItem from './components/RoomListItem';
 import RoomService from '../../service/room';
 import HttpClient from '../../service/http';
-import showErrorMessage from '../../common/components/ShowErrorMessage';
+import showErrorMessage from '../../common/utils/showErrorMessage';
+import RoomMakerScreen from '../RoomMaker/RoomMakerScreen';
 
 const httpClient = new HttpClient(BASE_URL);
 const roomService = new RoomService(httpClient);
@@ -37,11 +37,7 @@ const RoomListScreen = ({ navigation }) => {
         )}
         keyExtractor={(item) => String(item.id)}
       />
-      <ActiveButton
-        message="방 만들기"
-        onPress={() => navigation.push('RoomMaker')}
-        disabled={false}
-      />
+      <RoomMakerScreen />
     </View>
   );
 };

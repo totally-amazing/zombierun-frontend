@@ -44,7 +44,11 @@ ActiveButton.propTypes = {
   message: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   onPress: PropTypes.func.isRequired,
-  style: PropTypes.objectOf(PropTypes.string),
+  style: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.object,
+  ]),
 };
 
 ActiveButton.defaultProps = {
