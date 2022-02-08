@@ -49,7 +49,7 @@ const Input = ({
     isTouched: false,
   });
 
-  const inputChangeHandler = (value) => {
+  const handleInputChange = (value) => {
     let inputIsValid = true;
 
     if (type === 'number') {
@@ -93,7 +93,7 @@ const Input = ({
     dispatch({ type: INPUT_CHANGE, value, inputIsValid });
   };
 
-  const lostFocusHandler = () => {
+  const handleLostFocus = () => {
     dispatch({ type: INPUT_BLUR });
   };
 
@@ -112,8 +112,8 @@ const Input = ({
           placeholderTextColor={COLORS.LIGHT_GRAY}
           keyboardType={keyboardType}
           value={inputState.value}
-          onBlur={lostFocusHandler}
-          onChangeText={inputChangeHandler}
+          onBlur={handleLostFocus}
+          onChangeText={handleInputChange}
         />
         <Text style={style.unit}>{unit}</Text>
       </View>
