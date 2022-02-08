@@ -16,6 +16,7 @@ import SoloScreen, {
 } from '../screen/Solo/SoloScreen';
 import SettingScreen from '../screen/Setting/SettingScreen';
 import COLORS from '../common/constants/COLORS';
+import RoomMakerScreen from '../screen/RoomMaker/RoomMakerScreen';
 
 const MainStackNavigator = createStackNavigator();
 
@@ -50,6 +51,7 @@ const MainNavigator = () => {
       />
       <MainStackNavigator.Screen name="Result" component={ResultScreen} />
       <MainStackNavigator.Screen name="Room" component={RoomScreen} />
+      <MainStackNavigator.Screen name="RoomMaker" component={RoomMakerScreen} />
       <MainStackNavigator.Screen name="RoomList" component={RoomListScreen} />
       <MainStackNavigator.Screen name="Running" component={RunningScreen} />
     </MainStackNavigator.Navigator>
