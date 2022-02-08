@@ -1,26 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
 import { View, Text, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import SettingScreen from '../Setting/SettingScreen';
 
-const RunningScreen = (props) => {
-  const speed = useSelector((state) => state.game.speed);
-  const time = useSelector((state) => state.game.time);
-
+const RoomMakerScreen = (props) => {
   return (
     <View style={styles.screen}>
-      <SettingScreen />
-      <Text style={styles.text}>RunningScreen</Text>
+      <Text style={styles.text}>RoomMakerScreen</Text>
     </View>
   );
 };
 
-export default RunningScreen;
+export default RoomMakerScreen;
 
 const styles = StyleSheet.create({
   screen: {
@@ -31,6 +23,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: FONT.X_LARGE,
     color: COLORS.DEEP_RED,
-    fontFamily: FONT.BLOOD_FONT,
+    fontFamily: 'nosifer-regular',
   },
 });
