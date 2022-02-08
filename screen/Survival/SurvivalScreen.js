@@ -3,15 +3,15 @@ import { View, Text, StyleSheet } from 'react-native';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 
-const ServivalScreen = (props) => {
+const SurvivalScreen = (props) => {
   return (
     <View>
-      <Text>ServivalScreen</Text>
+      <Text>SurvivalScreen</Text>
     </View>
   );
 };
 
-export default ServivalScreen;
+export default SurvivalScreen;
 
 const styles = StyleSheet.create({
   screen: {

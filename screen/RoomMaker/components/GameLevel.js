@@ -9,7 +9,7 @@ const GameLevel = ({ onInputChange, mode }) => {
 
   useEffect(() => {
     if (mode !== 'servival') {
-      setIsSwitched(!isSwitched);
+      setIsSwitched((prevState) => !prevState);
     }
   }, [mode]);
 

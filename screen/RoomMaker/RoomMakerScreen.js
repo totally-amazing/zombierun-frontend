@@ -19,14 +19,14 @@ import { toggleModal } from '../../store/uiSlice';
 const httpClient = new HttpClient(BASE_URL);
 const roomService = new RoomService(httpClient);
 
-const roomReducer = (state, action) => {
-  if (action.type === 'GAME_CHOICE') {
-    const switchMode = action.gameMode;
+const formReducer = (state, action) => {
+  if (action.type === 'INPUT_CHANGE') {
+    const { gameMode } = action;
     const updatedValue = action.input;
     const updatedValidation = action.isValidValue;
 
     return {
-      modeValue: switchMode,
+      modeValue: gameMode,
       inputValue: updatedValue,
       isValid: updatedValidation,
     };
@@ -56,7 +56,7 @@ const RoomMakerScreen = () => {
     dispatch(toggleModal());
   };
 
-  const [formState, dispatchForm] = useReducer(roomReducer, {
+  const [formState, dispatchForm] = useReducer(formReducer, {
     modeValue: {},
     inputValue: {},
     isValid: {},
@@ -65,7 +65,7 @@ const RoomMakerScreen = () => {
   const handleInputChange = useCallback(
     (modeValue, inputValue, isValid) => {
       dispatchForm({
-        type: 'GAME_CHOICE',
+        type: 'INPUT_CHANGE',
         gameMode: modeValue,
         input: inputValue,
         isValidValue: isValid,
@@ -87,10 +87,10 @@ const RoomMakerScreen = () => {
       return;
     }
 
-    handleCreateRoom(inputValue, modeValue);
+    handleCreateRoomButton(inputValue, modeValue);
   };
 
-  const handleCreateRoom = (inputValue, modeValue) => {
+  const handleCreateRoomButton = (inputValue, modeValue) => {
     setTitle('');
     const speed = modeValue === 'survival' ? inputValue : null;
     const time = modeValue === 'survival' ? null : inputValue;
