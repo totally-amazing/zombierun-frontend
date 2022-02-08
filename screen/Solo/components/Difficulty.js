@@ -3,35 +3,39 @@ import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 import FONT from '../../../common/constants/FONT';
-import Message from './Message';
 import COLORS from '../../../common/constants/COLORS';
 
 const Difficulty = ({ speed }) => {
   const [diffcutlyTitle, setDiffcultyTitle] = useState('');
-  const convertSpeed = Number(speed);
+  const [message, setMessage] = useState('');
+  const convertedSpeed = Number(speed);
 
   useEffect(() => {
-    if (convertSpeed === 0 || Number.isNaN(convertSpeed)) {
+    if (convertedSpeed === 0 || Number.isNaN(convertedSpeed)) {
       setDiffcultyTitle('');
+      setMessage('');
     }
 
-    if (convertSpeed > 0 && convertSpeed <= 5) {
+    if (convertedSpeed > 0 && convertedSpeed <= 5) {
       setDiffcultyTitle('Easy');
+      setMessage('느림보 좀비를 만났습니다');
     }
 
-    if (convertSpeed > 5 && convertSpeed < 10) {
+    if (convertedSpeed > 5 && convertedSpeed < 10) {
       setDiffcultyTitle('Normal');
+      setMessage('평범한 좀비를 만났습니다');
     }
 
-    if (convertSpeed >= 10) {
+    if (convertedSpeed >= 10) {
       setDiffcultyTitle('Hard');
+      setMessage('이 좀비는 좀 다릅니다.!!!');
     }
-  }, [convertSpeed]);
+  }, [convertedSpeed]);
 
   return (
-    <View style={styles.textContainer}>
+    <View>
       <Text style={styles.title}>{diffcutlyTitle}</Text>
-      <Message speed={convertSpeed} />
+      <Text style={styles.text}>{message}</Text>
     </View>
   );
 };
@@ -47,6 +51,11 @@ const styles = StyleSheet.create({
     color: COLORS.WHITE,
     textAlign: 'center',
     marginVertical: 15,
+  },
+  text: {
+    textAlign: 'center',
+    color: COLORS.WHITE,
+    fontSize: FONT.MEDIUM,
   },
 });
 

@@ -1,11 +1,10 @@
 import React, { useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { AntDesign } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
-import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 import Input from '../../common/components/Input';
@@ -28,7 +27,7 @@ const formReducer = (state, action) => {
     };
     const updatedValidation = {
       ...state.inputValidation,
-      [action.input]: action.isValid,
+      [action.input]: action.hasValidInput,
     };
     let updatedFormValidation = true;
 
@@ -54,12 +53,13 @@ const SoloScreen = ({ navigation }) => {
     inputValidation: {},
     formIsValid: false,
   });
-  const handlePressStartButton = () => {
+  const handlePressdStartButton = () => {
     const { inputValues, formIsValid } = formState;
     if (!formIsValid) {
       ShowErrorMessage(INVALID_FORM_ERROR_MESSAGE);
       return;
     }
+
     dispatch(addGameSetting(inputValues));
     navigation.navigate('Running');
   };
@@ -71,7 +71,7 @@ const SoloScreen = ({ navigation }) => {
       dispatchForm({
         type: FORM_UPDATE,
         value: inputValue,
-        isValid: inputValidation,
+        hasValidInput: inputValidation,
         input: inputIdentifier,
       });
     },
@@ -111,17 +111,14 @@ const SoloScreen = ({ navigation }) => {
           message="START TO SURVIVE"
           style={styles.button}
           disabled={false}
-          onPress={handlePressStartButton}
+          onPress={handlePressdStartButton}
         />
       </View>
       <View style={styles.navButtonContainer}>
-        <TouchableNativeFeedback
-          style={styles.navButton}
-          onPress={handleArrowButton}
-        >
+        <Pressable style={styles.navButton} onPress={handleArrowButton}>
           <AntDesign name="arrowleft" size={20} color={COLORS.DEEP_RED} />
           <Text style={styles.text}>To the Main</Text>
-        </TouchableNativeFeedback>
+        </Pressable>
       </View>
     </View>
   );
@@ -147,12 +144,12 @@ export const screenOption = (navData) => {
     },
     headerRight: () => {
       const dispatch = useDispatch();
-      const handlePreviouseText = () => {
+      const handlePreviousText = () => {
         dispatch(toggleModal());
       };
       return (
         <View style={styles.buttonContainer}>
-          <Text style={styles.text} onPress={handlePreviouseText}>
+          <Text style={styles.text} onPress={handlePreviousText}>
             이전 기록 보기
           </Text>
         </View>

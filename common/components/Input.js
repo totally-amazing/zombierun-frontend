@@ -7,7 +7,6 @@ import FONT from '../constants/FONT';
 
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const INPUT_BLUR = 'INPUT_BLUR';
-const DEFAULT_ERROR_MESSAGE = '잘못된 입력 값 입니다';
 
 const inputReducer = (state, action) => {
   switch (action.type) {
@@ -15,7 +14,7 @@ const inputReducer = (state, action) => {
       return {
         ...state,
         value: action.value,
-        isValid: action.isValid,
+        inputIsValid: action.inputIsValid,
       };
     case INPUT_BLUR:
       return {
@@ -43,54 +42,55 @@ const Input = ({
   onInputChange,
   autoCorrect,
 }) => {
-  const [errorMessage, setErrorMessage] = useState(DEFAULT_ERROR_MESSAGE);
+  const [errorMessage, setErrorMessage] = useState('잘못된 입력 값 입니다');
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: initialValue || '',
-    isValid: initiallyValid,
+    inputIsValid: initiallyValid,
     isTouched: false,
   });
 
   const inputChangeHandler = (value) => {
-    let isValidedInput = true;
+    let inputIsValid = true;
 
     if (type === 'number') {
       const valueNum = Number(value);
+
       if (Number.isNaN(valueNum)) {
-        isValidedInput = false;
-        setErrorMessage(DEFAULT_ERROR_MESSAGE);
+        inputIsValid = false;
+        setErrorMessage('잘못된 입력 값 입니다');
       }
+
       if (min && Number(value) < min) {
-        isValidedInput = false;
-        const MIN_ERROR_MESSAGE = `최소 값은 ${min}${unit} 입니다`;
-        setErrorMessage(MIN_ERROR_MESSAGE);
+        inputIsValid = false;
+        setErrorMessage(`최소 값은 ${min}${unit} 입니다`);
       }
 
       if (max && Number(value) > max) {
-        isValidedInput = false;
-        const MAX_ERROR_MESSAGE = `최대 값은 ${max}${unit} 입니다`;
-        setErrorMessage(MAX_ERROR_MESSAGE);
+        inputIsValid = false;
+        setErrorMessage(`최대 값은 ${max}${unit} 입니다`);
       }
     }
 
     if (type === 'string') {
       const trimedString = value.trim();
+
       if (!trimedString) {
-        isValidedInput = false;
-        setErrorMessage(DEFAULT_ERROR_MESSAGE);
+        inputIsValid = false;
+        setErrorMessage('잘못된 입력 값 입니다');
       }
+
       if (minLength && trimedString < minLength) {
-        isValidedInput = false;
-        const MIN_LENGTH_ERROR_MESSAGE = `최소 ${minLength}자 이상 입력해주세요`;
-        setErrorMessage(MIN_LENGTH_ERROR_MESSAGE);
+        inputIsValid = false;
+        setErrorMessage(`최소 ${minLength}자 이상 입력해주세요`);
       }
+
       if (maxLength && trimedString > maxLength) {
-        isValidedInput = false;
-        const MAX_LENGTH_ERROR_MESSAGE = `최대 ${maxLength}자 까지만 입력 가능합니다`;
-        setErrorMessage(MAX_LENGTH_ERROR_MESSAGE);
+        inputIsValid = false;
+        setErrorMessage(`최대 ${maxLength}자 까지만 입력 가능합니다`);
       }
     }
 
-    dispatch({ type: INPUT_CHANGE, value, isValid: isValidedInput });
+    dispatch({ type: INPUT_CHANGE, value, inputIsValid });
   };
 
   const lostFocusHandler = () => {
@@ -98,8 +98,8 @@ const Input = ({
   };
 
   useEffect(() => {
-    onInputChange(id, inputState.value, inputState.isValid);
-  }, [id, inputState.value, inputState.isValid]);
+    onInputChange(id, inputState.value, inputState.inputIsValid);
+  }, [id, inputState.value, inputState.inputIsValid]);
 
   return (
     <View style={style.inputControl}>
@@ -117,7 +117,7 @@ const Input = ({
         />
         <Text style={style.unit}>{unit}</Text>
       </View>
-      {inputState.isTouched && !inputState.isValid && (
+      {inputState.isTouched && !inputState.inputIsValid && (
         <View>
           <Text style={style.errorText}>{errorMessage}</Text>
         </View>

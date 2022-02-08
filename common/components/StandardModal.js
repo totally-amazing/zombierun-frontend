@@ -15,14 +15,14 @@ import PropTypes from 'prop-types';
 
 import COLORS from '../constants/COLORS';
 import FONT from '../constants/FONT';
-import { showModal } from '../../store/uiSlice';
+import { toggleModal } from '../../store/uiSlice';
 
 const StandardModal = ({ children }) => {
   const dispatch = useDispatch();
   const isVisible = useSelector((state) => state.ui.isVisible);
 
   const handleCloseButton = () => {
-    dispatch(showModal());
+    dispatch(toggleModal());
   };
 
   return (
