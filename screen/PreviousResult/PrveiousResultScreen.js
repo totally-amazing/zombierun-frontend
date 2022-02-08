@@ -1,11 +1,5 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  Button,
-  ActivityIndicator,
-  StyleSheet,
-} from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 
 import StandardModal from '../../common/components/StandardModal';
 import TitleText from '../../common/components/TilteText';
@@ -20,9 +14,8 @@ const KILOMETER = 'km';
 const MINUTE = 'm';
 
 const PreviousResultScreen = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
   let record = {
     distance: 0,
     time: 0,
@@ -32,26 +25,33 @@ const PreviousResultScreen = () => {
     },
   };
 
-  const openModalHandler = async () => {
-    setIsError(false);
+  const fetchData = useCallback(async () => {
     setIsLoading(true);
-
     try {
       const response = await fetch('backendAddress', {
         method: 'GET',
       });
 
-      record = await response.json();
+      const responseData = await response.json();
 
-      setIsError(true);
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
+
       setIsLoading(false);
-      setIsVisible(true);
+      setHasError(false);
+      record = responseData;
       return record;
     } catch (error) {
       setIsLoading(false);
+      setHasError(true);
       return ShowErrorMessage(error.message);
     }
-  };
+  });
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const previousResult = (
     <View>
@@ -84,18 +84,11 @@ const PreviousResultScreen = () => {
     </View>
   );
 
-  if (isLoading) {
-    return <ActivityIndicator size="large" color={COLORS.RED} />;
-  }
-
   return (
-    <View style={styles.screen}>
-      {isError && (
-        <StandardModal isVisible={isVisible} setIsVisible={setIsVisible}>
-          <View>{previousResult}</View>
-        </StandardModal>
-      )}
-    </View>
+    <StandardModal>
+      {isLoading && <ActivityIndicator size="large" color={COLORS.RED} />}
+      {!isLoading && !hasError && previousResult}
+    </StandardModal>
   );
 };
 

@@ -2,12 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { View, Text, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import SettingScreen from '../Setting/SettingScreen';
 
-const RunningScreen = () => {
+const RunningScreen = (props) => {
+  const speed = useSelector((state) => state.game.speed);
+  const time = useSelector((state) => state.game.time);
+
   return (
     <View style={styles.screen}>
       <SettingScreen />
