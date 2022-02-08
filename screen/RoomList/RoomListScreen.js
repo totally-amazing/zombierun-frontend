@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import { BASE_URL } from '@env';
@@ -17,7 +17,7 @@ const roomService = new RoomService(httpClient);
 const RoomListScreen = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
 
-  useState(() => {
+  useEffect(() => {
     roomService
       .getRooms()
       .then(setRooms)
