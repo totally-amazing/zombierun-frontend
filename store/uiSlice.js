@@ -18,12 +18,12 @@ const uiSlice = createSlice({
     toggleSound: (state) => {
       state.canHearingBGMusic = !state.canHearingBGMusic;
     },
-    checkExit: (state, action) => {
+    checkExitGame: (state, action) => {
       state.shouldExitGame = action.payload;
     },
   },
 });
 
-export const { toggleModal, toggleEffect, toggleSound, checkExit } =
+export const { toggleModal, toggleEffect, toggleSound, checkExitGame } =
   uiSlice.actions;
 export default uiSlice.reducer;

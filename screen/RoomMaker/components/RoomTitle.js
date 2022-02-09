@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
 
-const RoomTitle = ({ value, onChangeText }) => {
+const RoomTitle = ({ value, onInputChange }) => {
   return (
     <View>
       <TextInput
         placeholder="방제를 입력하세요"
         placeholderTextColor={COLORS.WHITE}
         style={styles.text}
-        onChangeText={onChangeText}
+        onChangeText={onInputChange}
         value={value}
       />
     </View>
@@ -33,5 +33,5 @@ const styles = StyleSheet.create({
 
 RoomTitle.propTypes = {
   value: PropTypes.string.isRequired,
-  onChangeText: PropTypes.func.isRequired,
+  onInputChange: PropTypes.func.isRequired,
 };

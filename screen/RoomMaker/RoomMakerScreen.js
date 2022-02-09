@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { BASE_URL } from '@env';
 import RoomTitle from './components/RoomTitle';
-import GameLevel from './components/GameLevel';
+import GameModeInput from './components/GameModeInput';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import showErrorMessage from '../../common/utils/showErrorMessage';
@@ -48,7 +48,7 @@ const RoomMakerScreen = () => {
     { label: '1 : 1', value: 'oneOnOne' },
   ]);
 
-  const handlePressedButton = () => {
+  const handlePressButton = () => {
     if (!isModalVisible) {
       setMode('survival');
     }
@@ -90,42 +90,44 @@ const RoomMakerScreen = () => {
     handleCreateRoomButton(inputValue, modeValue);
   };
 
-  const handleCreateRoomButton = (inputValue, modeValue) => {
+  const handleCreateRoomButton = async (inputValue, modeValue) => {
     setTitle('');
     const speed = modeValue === 'survival' ? inputValue : null;
     const time = modeValue === 'survival' ? null : inputValue;
 
-    const roomInform = {
+    const roomInfo = {
       mode: modeValue,
       title: title.trim(),
       speed,
       time,
     };
 
-    roomService
-      .createRoom(roomInform)
-      .then(({ id }) => {
-        if (mode === 'oneOnOne') {
-          navigation.navigate('OneOnOne', {
-            roomdId: id,
-          });
-        }
+    try {
+      const { id } = await roomService.createRoom(roomInfo);
 
-        if (mode === 'survival') {
-          navigation.navigate('Survival', {
-            roomId: id,
-          });
-        }
-        dispatch(toggleModal());
-      })
-      .catch((error) => showErrorMessage(error.message));
+      if (mode === 'oneOnOne') {
+        navigation.navigate('OneOnOne', {
+          roomdId: id,
+        });
+      }
+
+      if (mode === 'survival') {
+        navigation.navigate('Survival', {
+          roomId: id,
+        });
+      }
+    } catch (error) {
+      showErrorMessage(error.message);
+    }
+
+    dispatch(toggleModal());
   };
 
   return (
     <View>
       <ActiveButton
         message="방 만들기"
-        onPress={handlePressedButton}
+        onPress={handlePressButton}
         disabled={false}
       />
       {isModalVisible && (
@@ -142,8 +144,8 @@ const RoomMakerScreen = () => {
               style={styles.selectedBox}
               containerStyle={{ width: 120 }}
             />
-            <RoomTitle value={title} onChangeText={setTitle} />
-            <GameLevel onInputChange={handleInputChange} mode={mode} />
+            <RoomTitle value={title} onInputChange={setTitle} />
+            <GameModeInput onInputChange={handleInputChange} mode={mode} />
             <ActiveButton
               style={styles.createButton}
               message="생성"

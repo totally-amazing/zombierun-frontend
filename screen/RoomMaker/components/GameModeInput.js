@@ -4,20 +4,20 @@ import PropTypes from 'prop-types';
 
 import Input from '../../../common/components/Input';
 
-const GameLevel = ({ onInputChange, mode }) => {
-  const [isSwitched, setIsSwitched] = useState(false);
+const GameModeInput = ({ onInputChange, mode }) => {
+  const [modeName, setModeName] = useState('survival');
 
   useEffect(() => {
-    if (mode !== 'servival') {
-      setIsSwitched((prevState) => !prevState);
+    if (modeName !== mode) {
+      setModeName(mode);
     }
   }, [mode]);
 
   return (
     <View>
-      {isSwitched && (
+      {modeName === 'survival' && (
         <Input
-          id="servival"
+          id="survival"
           type="number"
           label="좀비속도"
           placeholder="0"
@@ -28,7 +28,7 @@ const GameLevel = ({ onInputChange, mode }) => {
           onInputChange={onInputChange}
         />
       )}
-      {!isSwitched && (
+      {modeName !== 'survival' && (
         <Input
           id="oneOnOne"
           type="number"
@@ -45,9 +45,9 @@ const GameLevel = ({ onInputChange, mode }) => {
   );
 };
 
-export default GameLevel;
+export default GameModeInput;
 
-GameLevel.propTypes = {
+GameModeInput.propTypes = {
   onInputChange: PropTypes.func.isRequired,
   mode: PropTypes.string.isRequired,
 };

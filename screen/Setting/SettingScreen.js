@@ -8,7 +8,7 @@ import {
   toggleModal,
   toggleEffect,
   toggleSound,
-  checkExit,
+  checkExitGame,
 } from '../../store/uiSlice';
 import StandardModal from '../../common/components/StandardModal';
 import COLORS from '../../common/constants/COLORS';
@@ -30,7 +30,7 @@ const SettingScreen = () => {
   const settingButton = <Feather name="settings" size={24} color="white" />;
 
   const stopGame = () => {
-    dispatch(checkExit(false));
+    dispatch(checkExitGame(false));
     dispatch(toggleModal());
   };
 
@@ -43,12 +43,12 @@ const SettingScreen = () => {
   };
 
   const confirmExit = () => {
-    dispatch(checkExit(true));
+    dispatch(checkExitGame(true));
   };
 
   const HandlePressExit = () => {
     dispatch(toggleModal());
-    dispatch(checkExit(false));
+    dispatch(checkExitGame(false));
 
     navigation.goBack();
   };
