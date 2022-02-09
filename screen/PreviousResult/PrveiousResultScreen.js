@@ -64,7 +64,7 @@ const PreviousResultScreen = () => {
   return (
     <StandardModal>
       {isLoading && <ActivityIndicator size="large" color={COLORS.RED} />}
-      {!isLoading && !hasError && record && previousResult}
+      {!isLoading && !hasError && previousResult}
     </StandardModal>
   );
 };
