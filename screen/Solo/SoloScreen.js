@@ -2,7 +2,7 @@ import React, { useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import PropTypes from 'prop-types';
+import { useNavigation } from '@react-navigation/native';
 
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
@@ -44,8 +44,10 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const SoloScreen = ({ navigation }) => {
+const SoloScreen = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+
   const isModalVisible = useSelector((state) => state.ui.isModalVisible);
   const [formState, dispatchForm] = useReducer(formReducer, {
     inputValues: {},
@@ -164,7 +166,3 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
-
-SoloScreen.propTypes = {
-  navigation: PropTypes.objectOf(PropTypes.func).isRequired,
-};
