@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 
 import StandardModal from '../../common/components/StandardModal';
@@ -7,6 +7,8 @@ import UnitText from '../../common/components/UnitText';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
+import { useRecentGameRecord } from '../../common/hooks/useGame';
+import useUser from '../../common/hooks/useUser';
 
 const SURVIVED = "YOU'RE SURVIVED";
 const FAILED = 'YOU WERE INFECTED';
@@ -16,42 +18,19 @@ const MINUTE = 'm';
 const PreviousResultScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  let record = {
+  const [record, setRecord] = useState({
     distance: 0,
     time: 0,
     speed: 0,
-    solo: {
-      isWinner: false,
-    },
-  };
-
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('backendAddress', {
-        method: 'GET',
-      });
-
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(responseData.message);
-      }
-
-      setIsLoading(false);
-      setHasError(false);
-      record = responseData;
-      return record;
-    } catch (error) {
-      setIsLoading(false);
-      setHasError(true);
-      return showErrorMessage(error.message);
-    }
+    isWinner: false,
   });
+  const { id } = useUser();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useRecentGameRecord(id, setRecord, (error) => {
+    setIsLoading(false);
+    setHasError(true);
+    showErrorMessage(error.message);
+  });
 
   const previousResult = (
     <View>
@@ -78,16 +57,14 @@ const PreviousResultScreen = () => {
           </View>
         </View>
       </View>
-      <Text style={styles.result}>
-        {record.solo.isWinner ? SURVIVED : FAILED}
-      </Text>
+      <Text style={styles.result}>{record.isWinner ? SURVIVED : FAILED}</Text>
     </View>
   );
 
   return (
     <StandardModal>
       {isLoading && <ActivityIndicator size="large" color={COLORS.RED} />}
-      {!isLoading && !hasError && previousResult}
+      {!isLoading && !hasError && record && previousResult}
     </StandardModal>
   );
 };
