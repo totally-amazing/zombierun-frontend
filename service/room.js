@@ -12,14 +12,15 @@ class RoomService {
     return result;
   };
 
-  createRoom = async () => {
+  createRoom = async (room) => {
     const result = await this.httpClient.fetch({
       url: '/room',
       method: 'post',
+      data: room,
     });
 
     if (!result) {
-      throw new Error('roomId가 존재하지 않습니다');
+      throw new Error('에러가 발생했습니다 다시 시도해주세요');
     }
 
     return result;

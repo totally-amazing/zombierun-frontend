@@ -87,7 +87,7 @@ const RoomMakerScreen = () => {
       return;
     }
 
-    handleCreateRoomButton(inputValue, modeValue);
+    handleCreateRoomButton(Number(inputValue), modeValue);
   };
 
   const handleCreateRoomButton = async (inputValue, modeValue) => {
