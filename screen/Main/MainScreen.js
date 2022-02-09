@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import PropTypes from 'prop-types';
+import { useNavigation } from '@react-navigation/native';
+import * as Location from 'expo-location';
 
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
+import ShowErrorMessage from '../../common/components/ShowErrorMessage';
 import Profile from '../../common/components/Profile';
 
-const MainScreen = ({ navigation }) => {
+const MainScreen = () => {
+  const navigation = useNavigation();
   const handleSingleText = () => {
     navigation.navigate('Solo');
   };
@@ -15,6 +18,16 @@ const MainScreen = ({ navigation }) => {
   const handleTogetherText = () => {
     navigation.navigate('RoomList');
   };
+
+  useEffect(() => {
+    const getLocationPermission = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        ShowErrorMessage('권한이 허가 되지 않았습니다');
+      }
+    };
+    getLocationPermission();
+  }, []);
 
   return (
     <View style={styles.screen}>
@@ -66,7 +79,3 @@ const styles = StyleSheet.create({
     marginLeft: 40,
   },
 });
-
-MainScreen.propTypes = {
-  navigation: PropTypes.objectOf(PropTypes.func).isRequired,
-};

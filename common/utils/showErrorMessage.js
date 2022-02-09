@@ -12,6 +12,7 @@ const showErrorMessage = (message) => {
       alignItems: 'center',
       backgroundColor: COLORS.DEEP_RED,
       color: COLORS.WHITE,
+      elevation: 30,
     },
   });
 };
