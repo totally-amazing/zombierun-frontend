@@ -1,28 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
-import { BASE_URL } from '@env';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import RoomListItem from './components/RoomListItem';
-import RoomService from '../../service/room';
-import HttpClient from '../../service/http';
-import showErrorMessage from '../../common/utils/showErrorMessage';
 import RoomMakerScreen from '../RoomMaker/RoomMakerScreen';
-
-const httpClient = new HttpClient(BASE_URL);
-const roomService = new RoomService(httpClient);
+import useRoomList from '../../common/hooks/useRoom';
 
 const RoomListScreen = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
 
-  useEffect(() => {
-    roomService
-      .getRooms()
-      .then(setRooms)
-      .catch((error) => showErrorMessage(error.message));
-  }, [roomService]);
+  useRoomList(setRooms);
 
   return (
     <View style={styles.screen}>
