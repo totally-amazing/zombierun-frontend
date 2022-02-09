@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import COLORS from '../../../common/constants/COLORS';
-import FONT from '../../../common/constants/FONT';
+import COLORS from '../../common/constants/COLORS';
+import FONT from '../../common/constants/FONT';
 
 const OneOnOneScreen = (props) => {
   return (

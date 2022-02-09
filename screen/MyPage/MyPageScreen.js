@@ -8,7 +8,7 @@ import FONT from '../../common/constants/FONT';
 import GameService from '../../service/game';
 import Profile from '../../common/components/Profile';
 import PROFILE from '../../common/constants/PROFILE';
-import showErrorMessage from '../../common/components/ShowErrorMessage';
+import showErrorMessage from '../../common/utils/showErrorMessage';
 import TitleText from '../../common/components/TitleText';
 import UnitText from '../../common/components/UnitText';
 import TextChunk from '../../common/components/TextChunk';

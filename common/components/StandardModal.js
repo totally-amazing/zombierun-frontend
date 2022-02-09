@@ -82,5 +82,8 @@ const styles = StyleSheet.create({
 });
 
 StandardModal.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
 };

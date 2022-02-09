@@ -69,6 +69,13 @@ const Input = ({
         inputIsValid = false;
         setErrorMessage(`최대 값은 ${max}${unit} 입니다`);
       }
+
+      if (value.includes('.')) {
+        if (value.indexOf('.') + 2 < value.length) {
+          inputIsValid = false;
+          setErrorMessage(`소수점은 한 자리까지만 가능합니다`);
+        }
+      }
     }
 
     if (type === 'string') {

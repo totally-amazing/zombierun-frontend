@@ -4,7 +4,7 @@ import COLORS from '../constants/COLORS';
 
 const DURATION = 3000;
 
-const ShowErrorMessage = (message) => {
+const showErrorMessage = (message) => {
   showMessage({
     message,
     duration: DURATION,
@@ -16,4 +16,4 @@ const ShowErrorMessage = (message) => {
   });
 };
 
-export default ShowErrorMessage;
+export default showErrorMessage;

@@ -5,10 +5,10 @@ import MainScreen, {
   screenOption as mainHeaderOption,
 } from '../screen/Main/MainScreen';
 import MyPageScreen from '../screen/MyPage/MyPageScreen';
-import OneOnOneScreen from '../screen/Room/components/OneOnOneScreen';
 import ResultScreen from '../screen/Result/ResultScreen';
 import PreviousResultScreen from '../screen/PreviousResult/PrveiousResultScreen';
-import RoomScreen from '../screen/Room/RoomScreen';
+import SurvivalScreen from '../screen/Survival/SurvivalScreen';
+import OneOnOneScreen from '../screen/OneOnOne/OneOnOneScreen';
 import RoomListScreen from '../screen/RoomList/RoomListScreen';
 import RunningScreen from '../screen/Running/RunningScreen';
 import SoloScreen, {
@@ -50,7 +50,7 @@ const MainNavigator = () => {
         component={PreviousResultScreen}
       />
       <MainStackNavigator.Screen name="Result" component={ResultScreen} />
-      <MainStackNavigator.Screen name="Room" component={RoomScreen} />
+      <MainStackNavigator.Screen name="Survival" component={SurvivalScreen} />
       <MainStackNavigator.Screen name="RoomMaker" component={RoomMakerScreen} />
       <MainStackNavigator.Screen name="RoomList" component={RoomListScreen} />
       <MainStackNavigator.Screen name="Running" component={RunningScreen} />
