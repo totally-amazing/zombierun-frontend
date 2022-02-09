@@ -3,8 +3,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-
 import { BASE_URL } from '@env';
+
 import RoomTitle from './components/RoomTitle';
 import GameModeInput from './components/GameModeInput';
 import COLORS from '../../common/constants/COLORS';
@@ -102,22 +102,18 @@ const RoomMakerScreen = () => {
       time,
     };
 
-    try {
-      const { id } = await roomService.createRoom(roomInfo);
+    const { id } = await roomService.createRoom(roomInfo);
 
-      if (mode === 'oneOnOne') {
-        navigation.navigate('OneOnOne', {
-          roomdId: id,
-        });
-      }
+    if (mode === 'oneOnOne') {
+      navigation.navigate('OneOnOne', {
+        roomdId: id,
+      });
+    }
 
-      if (mode === 'survival') {
-        navigation.navigate('Survival', {
-          roomId: id,
-        });
-      }
-    } catch (error) {
-      showErrorMessage(error.message);
+    if (mode === 'survival') {
+      navigation.navigate('Survival', {
+        roomId: id,
+      });
     }
 
     dispatch(toggleModal());

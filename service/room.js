@@ -20,7 +20,7 @@ class RoomService {
     });
 
     if (!result) {
-      throw new Error('에러가 발생했습니다 다시 시도해주세요');
+      throw new Error('room id가 없습니다');
     }
 
     return result;
