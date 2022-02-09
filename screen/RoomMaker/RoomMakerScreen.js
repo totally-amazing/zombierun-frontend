@@ -12,7 +12,7 @@ import FONT from '../../common/constants/FONT';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import StandardModal from '../../common/components/StandardModal';
 import ActiveButton from '../../common/components/ActiveButton';
-import HttpClient from '../../service/http';
+import HttpClient from '../../network/http';
 import RoomService from '../../service/room';
 import { toggleModal } from '../../store/uiSlice';
 

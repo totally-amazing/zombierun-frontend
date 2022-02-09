@@ -1,9 +1,8 @@
-import axios from 'axios';
 import { BASE_URL } from '@env';
 
 import { checkAuth } from './authSlice';
 import { setUser } from './userSlice';
-import HttpClient from '../service/http';
+import HttpClient from '../network/http';
 import AuthService from '../service/auth';
 import showErrorMessage from '../common/utils/showErrorMessage';
 
