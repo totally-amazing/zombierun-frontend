@@ -13,7 +13,7 @@ import Difficulty from './components/Difficulty';
 import Profile from '../../common/components/Profile';
 import { addGameSetting } from '../../store/gameSlice';
 import PreviousResultScreen from '../PreviousResult/PrveiousResultScreen';
-import ShowErrorMessage from '../../common/components/ShowErrorMessage';
+import showErrorMessage from '../../common/utils/showErrorMessage';
 import { toggleModal } from '../../store/uiSlice';
 
 const INVALID_FORM_ERROR_MESSAGE = '잘못된 입력값이 존재합니다';
@@ -58,7 +58,7 @@ const SoloScreen = () => {
   const handlePressdStartButton = () => {
     const { inputValues, formIsValid } = formState;
     if (!formIsValid) {
-      ShowErrorMessage(INVALID_FORM_ERROR_MESSAGE);
+      showErrorMessage(INVALID_FORM_ERROR_MESSAGE);
       return;
     }
 

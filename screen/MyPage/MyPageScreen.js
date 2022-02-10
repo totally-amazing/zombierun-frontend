@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
 
-import { BASE_URL } from '@env';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import GameService from '../../service/game';
 import Profile from '../../common/components/Profile';
 import PROFILE from '../../common/constants/PROFILE';
 import showErrorMessage from '../../common/utils/showErrorMessage';
@@ -13,10 +10,8 @@ import TitleText from '../../common/components/TitleText';
 import UnitText from '../../common/components/UnitText';
 import TextChunk from '../../common/components/TextChunk';
 import LineWithText from './components/LineWithText';
-import HttpClient from '../../service/http';
-
-const httpClient = new HttpClient(BASE_URL);
-const gameService = new GameService(httpClient);
+import useUser from '../../common/hooks/useUser';
+import { useTotalGameRecord } from '../../common/hooks/useGame';
 
 const MyPageScreen = () => {
   const [record, setRecord] = useState({
@@ -37,24 +32,17 @@ const MyPageScreen = () => {
       isWinner: 0,
     },
   });
-  const { id, nickname } = useSelector((state) => state.user);
+  const { id, nickname } = useUser();
 
-  useEffect(() => {
-    gameService
-      .getTotalRecord(id)
-      .then((totalRecord) => {
-        setRecord({
-          ...totalRecord,
-          time: {
-            hour: totalRecord.time && Math.floor(totalRecord.time / 60),
-            minute: totalRecord.time && totalRecord.time % 60,
-          },
-        });
-      })
-      .catch((error) => {
-        showErrorMessage(error.message);
-      });
-  }, [gameService]);
+  useTotalGameRecord(id, (totalRecord) => {
+    setRecord({
+      ...totalRecord,
+      time: {
+        hour: totalRecord.time && Math.floor(totalRecord.time / 60),
+        minute: totalRecord.time && totalRecord.time % 60,
+      },
+    });
+  });
 
   return (
     <View style={styles.screen}>

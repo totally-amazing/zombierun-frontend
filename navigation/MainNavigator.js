@@ -14,7 +14,6 @@ import RunningScreen from '../screen/Running/RunningScreen';
 import SoloScreen, {
   screenOption as soloHeaderOption,
 } from '../screen/Solo/SoloScreen';
-import SettingScreen from '../screen/Setting/SettingScreen';
 import COLORS from '../common/constants/COLORS';
 import RoomMakerScreen from '../screen/RoomMaker/RoomMakerScreen';
 

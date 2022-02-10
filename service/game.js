@@ -13,6 +13,17 @@ class GameService {
 
     return result;
   };
+
+  getRecentRecord = async (userId) => {
+    const result = await this.httpClient.fetch(
+      `/game/recent/?userId=${userId}`,
+      {
+        method: 'get',
+      },
+    );
+
+    return result;
+  };
 }
 
 export default GameService;

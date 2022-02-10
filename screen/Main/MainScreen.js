@@ -6,7 +6,7 @@ import * as Location from 'expo-location';
 
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
-import ShowErrorMessage from '../../common/components/ShowErrorMessage';
+import showErrorMessage from '../../common/utils/showErrorMessage';
 import Profile from '../../common/components/Profile';
 
 const MainScreen = () => {
@@ -23,7 +23,7 @@ const MainScreen = () => {
     const getLocationPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        ShowErrorMessage('권한이 허가 되지 않았습니다');
+        showErrorMessage('권한이 허가 되지 않았습니다');
       }
     };
     getLocationPermission();
