@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import StandardModal from '../../common/components/StandardModal';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 import { useRecentGameRecord } from '../../common/hooks/useGame';
-import useUser from '../../common/hooks/useUser';
 import TextChunk from '../../common/components/TextChunk';
 import getResultMessage from '../../common/utils/getResultMessage';
 
@@ -25,7 +25,7 @@ const PreviousResultScreen = () => {
     role: 'human',
     mode: 'solo',
   });
-  const { id } = useUser();
+  const { id } = useSelector((state) => state.user);
 
   useRecentGameRecord(id, setRecord, (error) => {
     setIsLoading(false);

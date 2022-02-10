@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
@@ -9,7 +10,6 @@ import TinyTitle from '../../common/components/TinyTitle';
 import ValueWithUnit from '../../common/components/ValueWithUnit';
 import TextChunk from '../../common/components/TextChunk';
 import LineWithText from './components/LineWithText';
-import useUser from '../../common/hooks/useUser';
 import { useTotalGameRecord } from '../../common/hooks/useGame';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 
@@ -32,7 +32,7 @@ const MyPageScreen = () => {
       isWinner: 0,
     },
   });
-  const { id, nickname } = useUser();
+  const { id, nickname } = useSelector((state) => state.user);
 
   useTotalGameRecord(
     id,
