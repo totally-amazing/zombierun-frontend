@@ -11,7 +11,7 @@ import {
 
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import sendUserId from '../../store/authActions';
+import { fetchUserByIdToken } from '../../store/userSlice';
 import ActiveButton from '../../common/components/ActiveButton';
 
 const AuthScreen = () => {
@@ -26,7 +26,7 @@ const AuthScreen = () => {
 
   useEffect(() => {
     if (response?.type === 'success') {
-      dispatch(sendUserId(response.params.id_token));
+      dispatch(fetchUserByIdToken(response.params.id_token));
     }
   }, [response, dispatch]);
 
