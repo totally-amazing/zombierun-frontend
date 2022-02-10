@@ -5,7 +5,6 @@ import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import Profile from '../../common/components/Profile';
 import PROFILE from '../../common/constants/PROFILE';
-import showErrorMessage from '../../common/utils/showErrorMessage';
 import TitleText from '../../common/components/TitleText';
 import UnitText from '../../common/components/UnitText';
 import TextChunk from '../../common/components/TextChunk';

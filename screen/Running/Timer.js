@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import COLORS from '../../common/constants/COLORS';
 
 // eslint-disable-next-line react/prop-types
-const Timer = ({ time, start }) => {
+const Timer = ({ time, start, onTimeout }) => {
   const [minutes, setMinutes] = useState(time);
   const [seconds, setSeconds] = useState(0);
+  const [timeWatchId, setTimeWatchId] = useState();
+  let timeWatch;
 
   useEffect(() => {
     const setTimeWatch = () => {
@@ -14,7 +17,8 @@ const Timer = ({ time, start }) => {
       }
 
       if (seconds === 0 && minutes === 0) {
-        clearInterval(setTimeWatch);
+        onTimeout();
+        clearInterval(timeWatchId);
         return;
       }
 
@@ -22,23 +26,19 @@ const Timer = ({ time, start }) => {
       setSeconds(59);
     };
 
-    let startTimer;
-
-    if (!start) {
-      startTimer = setTimeout(() => {
-        setTimeWatch();
-      }, 5000);
+    if (start) {
+      timeWatch = setInterval(setTimeWatch, 1000);
+      setTimeWatchId(timeWatch);
     }
 
     return () => {
-      clearTimeout(startTimer);
-      clearInterval(setTimeWatch);
+      clearInterval(timeWatch);
     };
   }, [minutes, seconds, start]);
 
   return (
     <View>
-      <Text>
+      <Text style={styles.timer}>
         {minutes}: {seconds < 10 ? `0${seconds}` : seconds}
       </Text>
     </View>
@@ -46,3 +46,9 @@ const Timer = ({ time, start }) => {
 };
 
 export default Timer;
+
+const styles = StyleSheet.create({
+  timer: {
+    color: COLORS.WHITE,
+  },
+});

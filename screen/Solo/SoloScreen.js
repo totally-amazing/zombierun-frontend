@@ -11,7 +11,6 @@ import Input from '../../common/components/Input';
 import ActiveButton from '../../common/components/ActiveButton';
 import Difficulty from './components/Difficulty';
 import Profile from '../../common/components/Profile';
-import { addGameSetting } from '../../store/gameSlice';
 import PreviousResultScreen from '../PreviousResult/PrveiousResultScreen';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import { toggleModal } from '../../store/uiSlice';
@@ -46,7 +45,6 @@ const formReducer = (state, action) => {
 };
 
 const SoloScreen = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const isModalVisible = useSelector((state) => state.ui.isModalVisible);
@@ -62,8 +60,9 @@ const SoloScreen = () => {
       return;
     }
 
-    dispatch(addGameSetting(inputValues));
-    navigation.navigate('Running');
+    navigation.navigate('Running', {
+      gameSetting: { speed: inputValues.speed, time: inputValues.time },
+    });
   };
   const handleArrowButton = () => {
     navigation.navigate('Main');
