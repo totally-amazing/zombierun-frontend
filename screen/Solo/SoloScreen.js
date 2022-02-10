@@ -45,7 +45,6 @@ const formReducer = (state, action) => {
 };
 
 const SoloScreen = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const isModalVisible = useSelector((state) => state.ui.isModalVisible);
