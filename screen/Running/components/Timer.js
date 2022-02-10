@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import COLORS from '../../common/constants/COLORS';
+import PropTypes from 'prop-types';
 
-// eslint-disable-next-line react/prop-types
-const Timer = ({ time, start, onTimeout, result }) => {
+import COLORS from '../../../common/constants/COLORS';
+
+const Timer = ({ time, start, onFinish, isFinished }) => {
   const [minutes, setMinutes] = useState(time);
   const [seconds, setSeconds] = useState(0);
-  const [timeWatchId, setTimeWatchId] = useState();
-  let timeWatch;
+  const [timerId, setTimerId] = useState();
+  let timer;
 
   useEffect(() => {
-    const setTimeWatch = () => {
+    const setTimer = () => {
       if (seconds > 0) {
         setSeconds((prevSeconds) => prevSeconds - 1);
         return;
       }
 
       if (seconds === 0 && minutes === 0) {
-        onTimeout();
-        clearInterval(timeWatchId);
+        onFinish(minutes);
+        clearInterval(timerId);
         return;
       }
 
@@ -27,14 +28,21 @@ const Timer = ({ time, start, onTimeout, result }) => {
     };
 
     if (start) {
-      timeWatch = setInterval(setTimeWatch, 1000);
-      setTimeWatchId(timeWatch);
+      timer = setInterval(setTimer, 1000);
+      setTimerId(timer);
     }
 
     return () => {
-      clearInterval(timeWatch);
+      clearInterval(timer);
     };
   }, [minutes, seconds, start]);
+
+  useEffect(() => {
+    if (isFinished) {
+      onFinish(minutes);
+      clearInterval(timerId);
+    }
+  }, [isFinished]);
 
   return (
     <View>
@@ -52,3 +60,10 @@ const styles = StyleSheet.create({
     color: COLORS.WHITE,
   },
 });
+
+Timer.propTypes = {
+  time: PropTypes.number.isRequired,
+  start: PropTypes.bool.isRequired,
+  isFinished: PropTypes.bool.isRequired,
+  onFinish: PropTypes.func.isRequired,
+};
