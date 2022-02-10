@@ -163,9 +163,9 @@ const RunningScreen = ({ route }) => {
         result: {
           locationHistory,
           isWinner,
-          speed,
-          time: survivalTime,
           distance: userDistance,
+          time: survivalTime,
+          speed,
         },
       });
     }
