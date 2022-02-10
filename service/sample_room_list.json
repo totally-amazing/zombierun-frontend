@@ -1,0 +1,42 @@
+[
+  {
+    "id": "6200929e6137d4ba9cb2a933",
+    "mode": "Survival",
+    "title": "test 1",
+    "speed": 5,
+    "time": null,
+    "participants": [1, 2, 3, 4, 5]
+  },
+  {
+    "id": "6200929e6137d4ba9cb2a934",
+    "mode": "OneOnOne",
+    "title": "test 2",
+    "speed": null,
+    "time": 30,
+    "participants": [1, 2]
+  },
+  {
+    "id": "6200929e6137d4ba9cb2a935",
+    "mode": "Survival",
+    "title": "test 3",
+    "speed": 2,
+    "time": null,
+    "participants": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  },
+  {
+    "id": "6200929e6137d4ba9cb2a936",
+    "mode": "OneOnOne",
+    "title": "test 4",
+    "speed": null,
+    "time": 120,
+    "participants": [1]
+  },
+  {
+    "id": "6200929e6137d4ba9cb2a937",
+    "mode": "Survival",
+    "title": "test 5",
+    "speed": 10,
+    "time": null,
+    "participants": [1, 2, 3]
+  }
+]

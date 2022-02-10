@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
-import getProfileHeaderOption from '../../common/screenOptions/profileHeaderOption';
+import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
 
 const MainScreen = ({ navigation }) => {
   const handleSingleText = () => {

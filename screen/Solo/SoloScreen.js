@@ -13,7 +13,7 @@ import { addGameSetting } from '../../store/gameSlice';
 import PreviousResultScreen from '../PreviousResult/PrveiousResultScreen';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import { toggleModal } from '../../store/uiSlice';
-import getProfileHeaderOption from '../../common/screenOptions/profileHeaderOption';
+import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
 
 const INVALID_FORM_ERROR_MESSAGE = '잘못된 입력값이 존재합니다';
 const FORM_UPDATE = 'FORM_UPDATE';
