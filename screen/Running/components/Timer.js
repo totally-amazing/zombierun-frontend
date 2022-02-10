@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import COLORS from '../../../common/constants/COLORS';
 
-const Timer = ({ time, start, onFinish, isFinished }) => {
+const Timer = ({ time, hasStarted, onFinish, hasFinished }) => {
   const [minutes, setMinutes] = useState(time);
   const [seconds, setSeconds] = useState(0);
   const [timerId, setTimerId] = useState();
@@ -27,7 +27,7 @@ const Timer = ({ time, start, onFinish, isFinished }) => {
       setSeconds(59);
     };
 
-    if (start) {
+    if (hasStarted) {
       timer = setInterval(setTimer, 1000);
       setTimerId(timer);
     }
@@ -35,14 +35,14 @@ const Timer = ({ time, start, onFinish, isFinished }) => {
     return () => {
       clearInterval(timer);
     };
-  }, [minutes, seconds, start]);
+  }, [minutes, seconds, hasStarted]);
 
   useEffect(() => {
-    if (isFinished) {
+    if (hasFinished) {
       onFinish(minutes);
       clearInterval(timerId);
     }
-  }, [isFinished]);
+  }, [hasFinished]);
 
   return (
     <View>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 
 Timer.propTypes = {
   time: PropTypes.number.isRequired,
-  start: PropTypes.bool.isRequired,
-  isFinished: PropTypes.bool.isRequired,
+  hasStarted: PropTypes.bool.isRequired,
+  hasFinished: PropTypes.bool.isRequired,
   onFinish: PropTypes.func.isRequired,
 };

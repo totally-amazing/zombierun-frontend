@@ -16,7 +16,7 @@ const RunningScreen = ({ route }) => {
   const { speed, time } = route.params.gameSetting;
   const navigation = useNavigation();
   const [userDistance, setUserDistance] = useState(0);
-  const [tracker, setTracker] = useState(null);
+  const [tracker, setTracker] = useState();
   const [zombieSize, setZombieSize] = useState('far');
   const [zombieStatus, setZombieStatus] = useState();
   const [zombieDistance, setZombieDistance] = useState(-500);
@@ -47,9 +47,9 @@ const RunningScreen = ({ route }) => {
         const { coords } = location;
 
         setUserDistance((preivousDistance) => {
-          const reducedDistance = preivousDistance + coords.speed;
+          const reducedHumanDistance = preivousDistance + coords.speed;
 
-          return reducedDistance;
+          return reducedHumanDistance;
         });
         setLocationHistory((prevHistory) => {
           return [
@@ -65,9 +65,9 @@ const RunningScreen = ({ route }) => {
 
     const zombieMovement = setInterval(() => {
       setZombieDistance((previousDistance) => {
-        const reducedDistance = previousDistance + speedMeterPerSecond;
+        const reducedZombieDistance = previousDistance + speedMeterPerSecond;
 
-        return reducedDistance;
+        return reducedZombieDistance;
       });
     }, 1000);
 
@@ -180,9 +180,9 @@ const RunningScreen = ({ route }) => {
       />
       <Timer
         time={time}
-        start={hasGameStarted}
+        hasStarted={hasGameStarted}
         onFinish={handleFinishGame}
-        isFinished={hasGameFinished}
+        hasFinished={hasGameFinished}
       />
       <Text style={styles.distance}>Distance:{distanceGap}</Text>
       {hasGameStarted && (

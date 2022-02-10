@@ -19,8 +19,8 @@ export default Pause;
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: COLORS.LIGHT_GRAY,
     opacity: 0.7,
+    backgroundColor: COLORS.LIGHT_GRAY,
   },
 });
 
