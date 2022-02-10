@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { BASE_URL } from '@env';
 
 import RoomTitle from './components/RoomTitle';
 import GameModeInput from './components/GameModeInput';
@@ -12,12 +11,8 @@ import FONT from '../../common/constants/FONT';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import StandardModal from '../../common/components/StandardModal';
 import ActiveButton from '../../common/components/ActiveButton';
-import HttpClient from '../../network/http';
-import RoomService from '../../service/room';
 import { toggleModal } from '../../store/uiSlice';
-
-const httpClient = new HttpClient(BASE_URL);
-const roomService = new RoomService(httpClient);
+import { useNewRoomId } from '../../common/hooks/useRoom';
 
 const formReducer = (state, action) => {
   if (action.type === 'INPUT_CHANGE') {
@@ -102,7 +97,13 @@ const RoomMakerScreen = () => {
       time,
     };
 
-    const { id } = await roomService.createRoom(roomInfo);
+    let id;
+
+    try {
+      id = await useNewRoomId(roomInfo);
+    } catch (error) {
+      showErrorMessage(error.message);
+    }
 
     if (mode === 'oneOnOne') {
       navigation.navigate('OneOnOne', {
