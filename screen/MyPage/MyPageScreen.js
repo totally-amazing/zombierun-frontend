@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
@@ -32,7 +31,7 @@ const MyPageScreen = () => {
       isWinner: 0,
     },
   });
-  const { id, nickname } = useSelector((state) => state.user);
+  const { id, nickname } = useUser();
 
   useTotalGameRecord(
     id,

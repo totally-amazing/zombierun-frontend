@@ -8,7 +8,6 @@ import * as Location from 'expo-location';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import SettingScreen from '../Setting/SettingScreen';
-import ShowErrorMessage from '../../common/components/ShowErrorMessage';
 import Timer from './Timer';
 import AudioController from './audioCotroller';
 

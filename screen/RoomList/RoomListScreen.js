@@ -6,15 +6,25 @@ import RoomListItem from './components/RoomListItem';
 import RoomMakerScreen from '../RoomMaker/RoomMakerScreen';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
+<<<<<<< HEAD
 import { useRoomList } from '../../common/hooks/useRoom';
 import showErrorMessage from '../../common/utils/showErrorMessage';
+=======
+import RoomListItem from './components/RoomListItem';
+import RoomMakerScreen from '../RoomMaker/RoomMakerScreen';
+import useRoomList from '../../common/hooks/useRoom';
+>>>>>>> a88c863 (fix: solve consflict)
 
 const RoomListScreen = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
 
+<<<<<<< HEAD
   useRoomList(setRooms, (error) => {
     showErrorMessage(error.message);
   });
+=======
+  useRoomList(setRooms);
+>>>>>>> a88c863 (fix: solve consflict)
 
   return (
     <View style={styles.screen}>
