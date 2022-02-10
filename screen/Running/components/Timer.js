@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 import COLORS from '../../../common/constants/COLORS';
 
 const Timer = ({ time, hasStarted, onFinish, hasFinished }) => {
-  const [minutes, setMinutes] = useState(time);
-  const [seconds, setSeconds] = useState(0);
-  const [timerId, setTimerId] = useState();
-  let timer;
+  const [seconds, setSeconds] = useState(time * 60);
+  const timer = useRef();
 
   useEffect(() => {
     const setTimer = () => {
@@ -17,37 +15,37 @@ const Timer = ({ time, hasStarted, onFinish, hasFinished }) => {
         return;
       }
 
-      if (seconds === 0 && minutes === 0) {
-        onFinish(minutes);
-        clearInterval(timerId);
-        return;
-      }
+      if (seconds === 0) {
+        const minutes = Math.floor(seconds / 60);
 
-      setMinutes((prevMinutes) => prevMinutes - 1);
-      setSeconds(59);
+        onFinish(minutes);
+        clearInterval(timer.current);
+      }
     };
 
     if (hasStarted) {
-      timer = setInterval(setTimer, 1000);
-      setTimerId(timer);
+      timer.current = setInterval(setTimer, 1000);
     }
 
     return () => {
-      clearInterval(timer);
+      clearInterval(timer.current);
     };
-  }, [minutes, seconds, hasStarted]);
+  }, [seconds, hasStarted]);
 
   useEffect(() => {
     if (hasFinished) {
+      const minutes = Math.floor(seconds / 60);
+
       onFinish(minutes);
-      clearInterval(timerId);
+      clearInterval(timer.current);
     }
   }, [hasFinished]);
 
   return (
     <View>
       <Text style={styles.timer}>
-        {minutes}: {seconds < 10 ? `0${seconds}` : seconds}
+        {Math.floor(seconds / 60)}:
+        {seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60}
       </Text>
     </View>
   );

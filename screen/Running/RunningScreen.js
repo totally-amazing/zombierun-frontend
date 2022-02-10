@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
@@ -12,27 +11,27 @@ import Pause from './components/Pause';
 import AudioController from './audioController';
 import SettingScreen from '../Setting/SettingScreen';
 
-const RunningScreen = ({ route }) => {
+const RunningScreen = ({ route, navigation }) => {
   const { speed, time } = route.params.gameSetting;
-  const navigation = useNavigation();
+  const transferFormula = 0.277778;
   const [userDistance, setUserDistance] = useState(0);
   const [tracker, setTracker] = useState();
   const [zombieSize, setZombieSize] = useState('far');
-  const [zombieStatus, setZombieStatus] = useState();
   const [zombieDistance, setZombieDistance] = useState(-500);
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
-  const [locationHistory, setLocationHistory] = useState([]);
-  const [audioController, setAudioController] = useState(
-    new AudioController(true, true),
-  );
 
-  const speedMeterPerSecond = Math.ceil(0.277778 * speed);
+  const locationHistory = useRef([]);
+  const survivalTime = useRef(time);
+  const countDown = useRef();
+  const intervalId = useRef();
+  const { current: audioController } = useRef(new AudioController(true, true));
+
+  const speedMeterPerSecond = Math.ceil(transferFormula * speed);
   const distanceGap = Math.ceil(userDistance - zombieDistance);
 
-  let survivalTime = time;
-  let countDown;
+  survivalTime.current = time;
 
   const startRunning = async () => {
     setHasGameStarted(true);
@@ -51,15 +50,13 @@ const RunningScreen = ({ route }) => {
 
           return reducedHumanDistance;
         });
-        setLocationHistory((prevHistory) => {
-          return [
-            ...prevHistory,
-            {
-              lat: coords.latitude,
-              lon: coords.longitude,
-            },
-          ];
-        });
+        locationHistory.current = [
+          ...locationHistory.current,
+          {
+            lat: coords.latitude,
+            lon: coords.longitude,
+          },
+        ];
       },
     );
 
@@ -70,46 +67,42 @@ const RunningScreen = ({ route }) => {
         return reducedZombieDistance;
       });
     }, 1000);
-
-    setZombieStatus(zombieMovement);
+    intervalId.current = zombieMovement;
     setTracker(userLocation);
   };
 
   const getCurrentLocation = async () => {
     const { coords } = await Location.getCurrentPositionAsync();
 
-    setLocationHistory((prevHistory) => {
-      return [
-        ...prevHistory,
-        {
-          lat: coords.latitude,
-          lon: coords.longitude,
-        },
-      ];
-    });
+    locationHistory.current = [
+      ...locationHistory.current,
+      {
+        lat: coords.latitude,
+        lon: coords.longitude,
+      },
+    ];
   };
 
-  const handleStopButton = () => {
+  const handlePressStopButton = () => {
     if (hasGameStarted) {
       tracker?.remove();
-      clearInterval(zombieStatus);
-      setZombieStatus(null);
+      clearInterval(intervalId.current);
+      intervalId.current = null;
       setHasGameStarted(false);
       audioController.stopAllSound();
     }
   };
 
-  const handleStartButton = () => {
+  const handlePressStartButton = () => {
     startRunning();
     setHasGameStarted(true);
-    audioController.playAllSound();
   };
 
   const handleFinishGame = (passedTime) => {
     if (passedTime === 0) {
       setIsWinner(true);
     } else {
-      survivalTime -= passedTime;
+      survivalTime.current -= passedTime;
     }
 
     setHasGameFinished(true);
@@ -120,11 +113,11 @@ const RunningScreen = ({ route }) => {
 
     audioController.loadAudio();
 
-    countDown = setTimeout(startRunning, 5000);
+    countDown.current = setTimeout(startRunning, 5000);
 
     return () => {
       audioController.resetAudio();
-      clearTimeout(countDown);
+      clearTimeout(countDown.current);
       tracker?.remove();
     };
   }, []);
@@ -156,7 +149,7 @@ const RunningScreen = ({ route }) => {
 
   useEffect(() => {
     if (isWinner || hasGameFinished) {
-      clearInterval(zombieStatus);
+      clearInterval(intervalId.current);
       tracker?.remove();
       audioController.resetAudio();
       navigation.navigate('Result', {
@@ -164,7 +157,7 @@ const RunningScreen = ({ route }) => {
           locationHistory,
           isWinner,
           distance: userDistance,
-          time: survivalTime,
+          time: survivalTime.current,
           speed,
         },
       });
@@ -173,11 +166,13 @@ const RunningScreen = ({ route }) => {
 
   return (
     <View style={styles.screen}>
-      {!hasGameStarted && <Pause onPress={handleStartButton} />}
-      <Image
-        style={styles[zombieSize]}
-        source={require('../../assets/images/zombie.gif')}
-      />
+      {!hasGameStarted && <Pause onPress={handlePressStartButton} />}
+      <View style={styles.imageContainer}>
+        <Image
+          style={styles[zombieSize]}
+          source={require('../../assets/images/zombie.gif')}
+        />
+      </View>
       <Timer
         time={time}
         hasStarted={hasGameStarted}
@@ -189,8 +184,8 @@ const RunningScreen = ({ route }) => {
         <FontAwesome5
           name="pause-circle"
           size={50}
-          color="white"
-          onPress={handleStopButton}
+          color={COLORS.WHITE}
+          onPress={handlePressStopButton}
         />
       )}
     </View>
@@ -205,6 +200,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.BLACK,
+  },
+  imageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: 400,
   },
   distance: {
     fontSize: FONT.X_LARGE,
@@ -234,4 +236,5 @@ RunningScreen.propTypes = {
       }),
     }),
   }).isRequired,
+  navigation: PropTypes.objectOf(PropTypes.func).isRequired,
 };
