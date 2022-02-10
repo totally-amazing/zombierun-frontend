@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   value: {
-    fontSize: FONT.X_LARGE,
+    fontSize: FONT.LARGE,
     color: COLORS.WHITE,
   },
   unit: {
