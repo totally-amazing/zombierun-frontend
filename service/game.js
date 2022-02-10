@@ -11,6 +11,10 @@ class GameService {
       },
     );
 
+    if (!result) {
+      throw new Error('서버에서 total record를 받아오지 못했습니다');
+    }
+
     return result;
   };
 
@@ -21,6 +25,10 @@ class GameService {
         method: 'get',
       },
     );
+
+    if (!result) {
+      throw new Error('서버에서 recent record를 받아오지 못했습니다');
+    }
 
     return result;
   };

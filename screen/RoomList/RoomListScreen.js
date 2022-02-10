@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 
-import COLORS from '../../common/constants/COLORS';
-import FONT from '../../common/constants/FONT';
 import RoomListItem from './components/RoomListItem';
 import RoomMakerScreen from '../RoomMaker/RoomMakerScreen';
-import useRoomList from '../../common/hooks/useRoom';
+import COLORS from '../../common/constants/COLORS';
+import FONT from '../../common/constants/FONT';
+import { useRoomList } from '../../common/hooks/useRoom';
+import showErrorMessage from '../../common/utils/showErrorMessage';
 
 const RoomListScreen = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
 
-  useRoomList(setRooms);
+  useRoomList(setRooms, (error) => {
+    showErrorMessage(error.message);
+  });
 
   return (
     <View style={styles.screen}>

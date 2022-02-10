@@ -11,6 +11,7 @@ import TextChunk from '../../common/components/TextChunk';
 import LineWithText from './components/LineWithText';
 import useUser from '../../common/hooks/useUser';
 import { useTotalGameRecord } from '../../common/hooks/useGame';
+import showErrorMessage from '../../common/utils/showErrorMessage';
 
 const MyPageScreen = () => {
   const [record, setRecord] = useState({
@@ -33,15 +34,19 @@ const MyPageScreen = () => {
   });
   const { id, nickname } = useUser();
 
-  useTotalGameRecord(id, (totalRecord) => {
-    setRecord({
-      ...totalRecord,
-      time: {
-        hour: totalRecord.time && Math.floor(totalRecord.time / 60),
-        minute: totalRecord.time && totalRecord.time % 60,
-      },
-    });
-  });
+  useTotalGameRecord(
+    id,
+    (totalRecord) => {
+      setRecord({
+        ...totalRecord,
+        time: {
+          hour: totalRecord.time && Math.floor(totalRecord.time / 60),
+          minute: totalRecord.time && totalRecord.time % 60,
+        },
+      });
+    },
+    (error) => showErrorMessage(error.message),
+  );
 
   return (
     <View style={styles.screen}>
