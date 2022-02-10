@@ -1,36 +1,37 @@
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, Button } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
+import Timer from './components/Timer';
+import Pause from './components/Pause';
+import AudioController from './audioController';
 import SettingScreen from '../Setting/SettingScreen';
-import Timer from './Timer';
-import AudioController from './audioCotroller';
-import Pause from './Pause';
 
 const RunningScreen = ({ route }) => {
-  const navigation = useNavigation();
   const { speed, time } = route.params.gameSetting;
+  const navigation = useNavigation();
   const [userDistance, setUserDistance] = useState(0);
+  const [tracker, setTracker] = useState(null);
+  const [zombieSize, setZombieSize] = useState('far');
+  const [zombieStatus, setZombieStatus] = useState();
   const [zombieDistance, setZombieDistance] = useState(-500);
   const [hasGameStarted, setHasGameStarted] = useState(false);
-  const [tracker, setTracker] = useState(null);
-  const [zombieStatus, setZombieStatus] = useState();
-  const [zombieSize, setZombieSize] = useState('far');
   const [isWinner, setIsWinner] = useState(false);
-
+  const [hasGameFinished, setHasGameFinished] = useState(false);
   const [locationHistory, setLocationHistory] = useState([]);
   const [audioController, setAudioController] = useState(
     new AudioController(true, true),
   );
 
   const speedMeterPerSecond = Math.ceil(0.277778 * speed);
-  const distanceGap = Math.floor(userDistance - zombieDistance);
+  const distanceGap = Math.ceil(userDistance - zombieDistance);
 
+  let survivalTime = time;
   let countDown;
 
   const startRunning = async () => {
@@ -62,11 +63,10 @@ const RunningScreen = ({ route }) => {
       },
     );
 
-    // 만약 Together 모드로 가정된다면 밑에 부분에 setInterval 로직 부분이
-    // 다른 유저한테 받아온 socket 관련 데이터를 받아야함
     const zombieMovement = setInterval(() => {
       setZombieDistance((previousDistance) => {
         const reducedDistance = previousDistance + speedMeterPerSecond;
+
         return reducedDistance;
       });
     }, 1000);
@@ -105,8 +105,14 @@ const RunningScreen = ({ route }) => {
     audioController.playAllSound();
   };
 
-  const handleTimeout = () => {
-    setIsWinner(true);
+  const handleFinishGame = (passedTime) => {
+    if (passedTime === 0) {
+      setIsWinner(true);
+    } else {
+      survivalTime -= passedTime;
+    }
+
+    setHasGameFinished(true);
   };
 
   useEffect(() => {
@@ -117,7 +123,6 @@ const RunningScreen = ({ route }) => {
     countDown = setTimeout(startRunning, 5000);
 
     return () => {
-      // audioController.stopAllSound();
       audioController.resetAudio();
       clearTimeout(countDown);
       tracker?.remove();
@@ -125,39 +130,46 @@ const RunningScreen = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    if (distanceGap <= 400) {
+    if (!hasGameStarted) {
+      return;
+    }
+
+    if (distanceGap >= 400) {
+      setZombieSize('far');
       audioController.changeSoundEffectVolume(0.2);
     }
 
-    if (distanceGap <= 200) {
+    if (distanceGap >= 200 && distanceGap < 400) {
       setZombieSize('middle');
       audioController.changeSoundEffectVolume(0.5);
     }
 
-    if (distanceGap <= 100) {
+    if (distanceGap >= 100 && distanceGap < 200) {
       setZombieSize('close');
       audioController.changeSoundEffectVolume(1);
     }
 
-    if (distanceGap < 0) {
-      tracker?.remove();
-      clearInterval(zombieStatus);
-      setHasGameStarted(false);
-      audioController.resetAudio();
-      navigation.navigate('Result', {
-        result: { locationHistory, isWinner, speed, distance: userDistance },
-      });
+    if (distanceGap <= 0) {
+      setHasGameFinished(true);
     }
-  }, [distanceGap]);
+  }, [distanceGap, hasGameStarted]);
 
   useEffect(() => {
-    if (isWinner) {
+    if (isWinner || hasGameFinished) {
+      clearInterval(zombieStatus);
+      tracker?.remove();
       audioController.resetAudio();
       navigation.navigate('Result', {
-        result: { locationHistory, isWinner, speed, distance: userDistance },
+        result: {
+          locationHistory,
+          isWinner,
+          speed,
+          time: survivalTime,
+          distance: userDistance,
+        },
       });
     }
-  }, [isWinner]);
+  }, [isWinner, hasGameFinished]);
 
   return (
     <View style={styles.screen}>
@@ -169,10 +181,10 @@ const RunningScreen = ({ route }) => {
       <Timer
         time={time}
         start={hasGameStarted}
-        onTimeout={handleTimeout}
-        result={isWinner}
+        onFinish={handleFinishGame}
+        isFinished={hasGameFinished}
       />
-      <Text style={styles.text}>Distance:{distanceGap}</Text>
+      <Text style={styles.distance}>Distance:{distanceGap}</Text>
       {hasGameStarted && (
         <FontAwesome5
           name="pause-circle"
@@ -194,7 +206,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.BLACK,
   },
-  text: {
+  distance: {
     fontSize: FONT.X_LARGE,
     color: COLORS.WHITE,
     fontFamily: FONT.BLOOD_FONT,
@@ -212,3 +224,14 @@ const styles = StyleSheet.create({
     height: 100,
   },
 });
+
+RunningScreen.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      gameSetting: PropTypes.shape({
+        speed: PropTypes.number.isRequired,
+        time: PropTypes.number.isRequired,
+      }),
+    }),
+  }).isRequired,
+};

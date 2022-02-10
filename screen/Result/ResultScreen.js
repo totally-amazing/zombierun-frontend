@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 
-const ResultScreen = (props) => {
+const ResultScreen = () => {
   return (
     <View style={styles.screen}>
       <Text style={styles.text}>ResultScreen</Text>

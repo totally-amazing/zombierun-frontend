@@ -1,7 +1,8 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, View, Button, StyleSheet } from 'react-native';
-import COLORS from '../../common/constants/COLORS';
+
+import COLORS from '../../../common/constants/COLORS';
 
 const Pause = ({ onPress }) => {
   return (
@@ -22,3 +23,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
 });
+
+Pause.propTypes = {
+  onPress: PropTypes.func.isRequired,
+};
