@@ -1,6 +1,6 @@
 import { Audio } from 'expo-av';
 
-export default class AudioController {
+class AudioController {
   constructor(onSoundEffect, onBackgroundMusic) {
     this.backgroundMusicSource = require('../../assets/sounds/background.mp3');
     this.soundEffectSource = require('../../assets/sounds/zombieSound.mp3');
@@ -62,3 +62,5 @@ export default class AudioController {
     this.soundEffectAudio.setVolumeAsync(volume);
   };
 }
+
+export default AudioController;
