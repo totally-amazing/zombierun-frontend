@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { useNavigation } from '@react-navigation/native';
+import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
 
 import FONT from '../../common/constants/FONT';
@@ -9,8 +9,7 @@ import COLORS from '../../common/constants/COLORS';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import Profile from '../../common/components/Profile';
 
-const MainScreen = () => {
-  const navigation = useNavigation();
+const MainScreen = ({ navigation }) => {
   const handleSingleText = () => {
     navigation.navigate('Solo');
   };
@@ -79,3 +78,7 @@ const styles = StyleSheet.create({
     marginLeft: 40,
   },
 });
+
+MainScreen.propTypes = {
+  navigation: PropTypes.objectOf(PropTypes.func).isRequired,
+};

@@ -27,7 +27,6 @@ class AudioController {
       this.soundEffectAudio.loadAsync(this.soundEffectSource, {
         isLooping: true,
         shouldPlay: false,
-        volume: 0.1,
       });
     }
   };

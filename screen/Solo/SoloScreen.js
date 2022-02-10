@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import PropTypes from 'prop-types';
 
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
@@ -44,8 +44,7 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const SoloScreen = () => {
-  const navigation = useNavigation();
+const SoloScreen = ({ navigation }) => {
   const isModalVisible = useSelector((state) => state.ui.isModalVisible);
   const [formState, dispatchForm] = useReducer(formReducer, {
     inputValues: {},
@@ -53,7 +52,7 @@ const SoloScreen = () => {
     formIsValid: false,
   });
 
-  const handlePresseStartButton = () => {
+  const handlePressStartButton = () => {
     const { inputValues, formIsValid } = formState;
     if (!formIsValid) {
       showErrorMessage(INVALID_FORM_ERROR_MESSAGE);
@@ -117,7 +116,7 @@ const SoloScreen = () => {
           message="START TO SURVIVE"
           style={styles.button}
           disabled={false}
-          onPress={handlePresseStartButton}
+          onPress={handlePressStartButton}
         />
       </View>
       <View style={styles.navButtonContainer}>
@@ -189,3 +188,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
+
+SoloScreen.propTypes = {
+  navigation: PropTypes.objectOf(PropTypes.func).isRequired,
+};
