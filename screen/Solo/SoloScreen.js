@@ -46,13 +46,13 @@ const formReducer = (state, action) => {
 
 const SoloScreen = () => {
   const navigation = useNavigation();
-
   const isModalVisible = useSelector((state) => state.ui.isModalVisible);
   const [formState, dispatchForm] = useReducer(formReducer, {
     inputValues: {},
     inputValidation: {},
     formIsValid: false,
   });
+
   const handlePresseStartButton = () => {
     const { inputValues, formIsValid } = formState;
     if (!formIsValid) {
@@ -67,9 +67,11 @@ const SoloScreen = () => {
       },
     });
   };
+
   const handleArrowButton = () => {
     navigation.navigate('Main');
   };
+
   const handleInputChange = useCallback(
     (inputIdentifier, inputValue, inputValidation) => {
       dispatchForm({
