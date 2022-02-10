@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import COLORS from '../../common/constants/COLORS';
 
 // eslint-disable-next-line react/prop-types
-const Timer = ({ time, start, onTimeout }) => {
+const Timer = ({ time, start, onTimeout, result }) => {
   const [minutes, setMinutes] = useState(time);
   const [seconds, setSeconds] = useState(0);
   const [timeWatchId, setTimeWatchId] = useState();

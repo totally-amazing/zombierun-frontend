@@ -18,38 +18,31 @@ export default class AudioController {
   loadAudio = async () => {
     if (this.onBackgroundMusic) {
       this.backgroundAudio.loadAsync(this.backgroundSource, {
+        isLooping: true,
         shouldPlay: false,
       });
     }
 
     if (this.onSoundEffect) {
       this.soundEffectAudio.loadAsync(this.soundEffectSource, {
+        isLooping: true,
         shouldPlay: false,
+        volume: 0.1,
       });
     }
   };
 
   playBackgroundMusic = async () => {
-    this.backgroundAudio.replayAsync({
-      isLooping: true,
-    });
+    this.backgroundAudio.playAsync();
   };
 
   playSoundEffect = async () => {
-    this.soundEffectAudio.replayAsync({
-      isLooping: true,
-      volume: 1,
-    });
+    this.soundEffectAudio.playAsync();
   };
 
   playAllSound = async () => {
-    this.backgroundAudio.replayAsync({
-      isLooping: true,
-    });
-    this.soundEffectAudio.replayAsync({
-      isLooping: true,
-      volume: 1,
-    });
+    this.backgroundAudio.playAsync();
+    this.soundEffectAudio.playAsync();
   };
 
   stopBackgroundMusic = async () => {

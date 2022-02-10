@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { FontAwesome5 } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 
 import COLORS from '../../common/constants/COLORS';
@@ -21,6 +22,7 @@ const RunningScreen = ({ route }) => {
   const [zombieStatus, setZombieStatus] = useState();
   const [zombieSize, setZombieSize] = useState('far');
   const [isWinner, setIsWinner] = useState(false);
+
   const [locationHistory, setLocationHistory] = useState([]);
   const [audioController, setAudioController] = useState(
     new AudioController(true, true),
@@ -30,8 +32,6 @@ const RunningScreen = ({ route }) => {
   const distanceGap = Math.floor(userDistance - zombieDistance);
 
   let countDown;
-
-  // 음악 재생 부분  react native sound
 
   const startRunning = async () => {
     setHasGameStarted(true);
@@ -125,28 +125,28 @@ const RunningScreen = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    if (distanceGap <= 450) {
-      audioController.changeSoundEffectVolume(1);
+    if (distanceGap <= 400) {
+      audioController.changeSoundEffectVolume(0.2);
     }
 
     if (distanceGap <= 200) {
       setZombieSize('middle');
-      audioController.changeSoundEffectVolume(4);
+      audioController.changeSoundEffectVolume(0.5);
     }
 
-    if (distanceGap <= 10) {
+    if (distanceGap <= 100) {
       setZombieSize('close');
-      audioController.changeSoundEffectVolume(8);
+      audioController.changeSoundEffectVolume(1);
     }
 
     if (distanceGap < 0) {
       tracker?.remove();
       clearInterval(zombieStatus);
       setHasGameStarted(false);
+      audioController.resetAudio();
       navigation.navigate('Result', {
         result: { locationHistory, isWinner, speed, distance: userDistance },
       });
-      audioController.resetAudio();
     }
   }, [distanceGap]);
 
@@ -162,13 +162,25 @@ const RunningScreen = ({ route }) => {
   return (
     <View style={styles.screen}>
       {!hasGameStarted && <Pause onPress={handleStartButton} />}
-      <Timer time={1} start={hasGameStarted} onTimeout={handleTimeout} />
-      <Text style={styles.text}>Distance:{distanceGap}</Text>
-      {hasGameStarted && <Button title="stop" onPress={handleStopButton} />}
       <Image
         style={styles[zombieSize]}
         source={require('../../assets/images/zombie.gif')}
       />
+      <Timer
+        time={time}
+        start={hasGameStarted}
+        onTimeout={handleTimeout}
+        result={isWinner}
+      />
+      <Text style={styles.text}>Distance:{distanceGap}</Text>
+      {hasGameStarted && (
+        <FontAwesome5
+          name="pause-circle"
+          size={50}
+          color="white"
+          onPress={handleStopButton}
+        />
+      )}
     </View>
   );
 };
