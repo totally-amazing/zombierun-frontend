@@ -8,9 +8,8 @@ import COLORS from '../../common/constants/COLORS';
 import { useRecentGameRecord } from '../../common/hooks/useGame';
 import useUser from '../../common/hooks/useUser';
 import TextChunk from '../../common/components/TextChunk';
+import getResultMessage from '../../common/utils/getResultMessage';
 
-const SURVIVED = "YOU'RE SURVIVED";
-const FAILED = 'YOU WERE INFECTED';
 const SPPED = 'km/h';
 const KILOMETER = 'km';
 const MINUTE = 'm';
@@ -23,6 +22,8 @@ const PreviousResultScreen = () => {
     time: 0,
     speed: 0,
     isWinner: false,
+    role: 'human',
+    mode: 'solo',
   });
   const { id } = useUser();
 
@@ -39,7 +40,9 @@ const PreviousResultScreen = () => {
         <TextChunk title="최근 러닝 타임" value={record.time} unit={MINUTE} />
         <TextChunk title="최근 거리" value={record.distance} unit={KILOMETER} />
       </View>
-      <Text style={styles.result}>{record.isWinner ? SURVIVED : FAILED}</Text>
+      <Text style={styles.result}>
+        {getResultMessage(record.mode, record.role, record.isWinner)}
+      </Text>
     </View>
   );
 

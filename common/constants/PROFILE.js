@@ -1,4 +1,4 @@
-const PROFILE = {
+export default {
   SMALL: 48,
   MEDIUM: 64,
   LARGE: 80,
@@ -6,5 +6,3 @@ const PROFILE = {
   MEDIUM_BORDER_RADIUS: 32,
   LARGE_BORDER_RADIUS: 40,
 };
-
-export default PROFILE;
