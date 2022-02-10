@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 
 import StandardModal from '../../common/components/StandardModal';
-import TitleText from '../../common/components/TilteText';
-import UnitText from '../../common/components/UnitText';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 import { useRecentGameRecord } from '../../common/hooks/useGame';
 import useUser from '../../common/hooks/useUser';
+import TextChunk from '../../common/components/TextChunk';
 
 const SURVIVED = "YOU'RE SURVIVED";
 const FAILED = 'YOU WERE INFECTED';
+const SPPED = 'km/h';
 const KILOMETER = 'km';
 const MINUTE = 'm';
 
@@ -35,27 +35,9 @@ const PreviousResultScreen = () => {
   const previousResult = (
     <View>
       <View style={styles.main}>
-        <View style={styles.header}>
-          <TitleText>최근 속도</TitleText>
-          <View style={styles.title}>
-            <Text style={styles.value}>{record.speed}</Text>
-            <UnitText style={styles.unit}>{KILOMETER}</UnitText>
-          </View>
-        </View>
-        <View style={styles.header}>
-          <TitleText>최근 러닝 타임</TitleText>
-          <View style={styles.title}>
-            <Text style={styles.value}>{record.time}</Text>
-            <UnitText style={styles.unit}>{MINUTE}</UnitText>
-          </View>
-        </View>
-        <View style={styles.header}>
-          <TitleText>최근 거리</TitleText>
-          <View style={styles.title}>
-            <Text style={styles.value}>{record.distance}</Text>
-            <UnitText style={styles.unit}>{KILOMETER}</UnitText>
-          </View>
-        </View>
+        <TextChunk title="최근 속도" value={record.speed} unit={SPPED} />
+        <TextChunk title="최근 러닝 타임" value={record.time} unit={MINUTE} />
+        <TextChunk title="최근 거리" value={record.distance} unit={KILOMETER} />
       </View>
       <Text style={styles.result}>{record.isWinner ? SURVIVED : FAILED}</Text>
     </View>
@@ -78,15 +60,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flexDirection: 'row',
-  },
-  header: {
-    justifyContent: 'center',
-    textAlign: 'center',
-    alignItems: 'center',
-    marginRight: 15,
-  },
-  title: {
-    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   result: {
     textAlign: 'center',
@@ -94,12 +68,5 @@ const styles = StyleSheet.create({
     fontSize: FONT.LARGE,
     fontFamily: FONT.BLOOD_FONT,
     color: COLORS.WHITE,
-  },
-  value: {
-    fontSize: FONT.MEDIUM,
-    color: COLORS.WHITE,
-  },
-  unit: {
-    marginTop: 20,
   },
 });

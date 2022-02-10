@@ -1,19 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TitleText from './TitleText';
-import UnitText from './UnitText';
+
+import TinyTitle from './TinyTitle';
+import ValueWithUnit from './ValueWithUnit';
 
 const TextChunk = ({ title, value, unit }) => {
   return (
-    <TitleText title={title}>
-      <UnitText value={value} unit={unit} />
-    </TitleText>
+    <TinyTitle title={title}>
+      <ValueWithUnit value={value} unit={unit} />
+    </TinyTitle>
   );
 };
 
 TextChunk.propTypes = {
   title: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   unit: PropTypes.string,
 };
 

@@ -5,8 +5,8 @@ import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import Profile from '../../common/components/Profile';
 import PROFILE from '../../common/constants/PROFILE';
-import TitleText from '../../common/components/TitleText';
-import UnitText from '../../common/components/UnitText';
+import TinyTitle from '../../common/components/TinyTitle';
+import ValueWithUnit from '../../common/components/ValueWithUnit';
 import TextChunk from '../../common/components/TextChunk';
 import LineWithText from './components/LineWithText';
 import useUser from '../../common/hooks/useUser';
@@ -56,10 +56,10 @@ const MyPageScreen = () => {
       </View>
       <View style={styles.row}>
         <TextChunk title="총 거리" value={String(record.distance)} unit="km" />
-        <TitleText title="총 러닝 타임">
-          <UnitText value={String(record.time.hour)} unit="h" />
-          <UnitText value={String(record.time.minute)} unit="m" />
-        </TitleText>
+        <TinyTitle title="총 러닝 타임">
+          <ValueWithUnit value={String(record.time.hour)} unit="h" />
+          <ValueWithUnit value={String(record.time.minute)} unit="m" />
+        </TinyTitle>
       </View>
       <LineWithText text="솔로" />
       <View style={styles.row}>
