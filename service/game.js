@@ -1,6 +1,7 @@
 class GameService {
-  constructor(httpClient) {
+  constructor(httpClient, socket) {
     this.httpClient = httpClient;
+    this.socket = socket;
   }
 
   getTotalRecord = async (userId) => {
@@ -31,6 +32,24 @@ class GameService {
     }
 
     return result;
+  };
+
+  update = async (game) => {
+    this.httpClient.fetch('/game', {
+      method: 'put',
+      data: game,
+    });
+  };
+
+  create = async (game) => {
+    this.httpClient.fetch('/game', {
+      method: 'post',
+      data: game,
+    });
+  };
+
+  emitDie = (gameId) => {
+    this.socket.emit('user/die', gameId);
   };
 }
 

@@ -9,7 +9,7 @@ import COLORS from '../../common/constants/COLORS';
 import Input from '../../common/components/Input';
 import ActiveButton from '../../common/components/ActiveButton';
 import Difficulty from './components/Difficulty';
-import { addGameSetting } from '../../store/gameSlice';
+import { startGame } from '../../store/gameSlice';
 import PreviousResultScreen from '../PreviousResult/PrveiousResultScreen';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import { toggleModal } from '../../store/uiSlice';
@@ -59,8 +59,8 @@ const SoloScreen = ({ navigation }) => {
       return;
     }
 
-    dispatch(addGameSetting(inputValues));
-    navigation.navigate('Running');
+    dispatch(startGame({ mode: 'solo' }));
+    navigation.navigate('Running', inputValues);
   };
   const handleArrowButton = () => {
     navigation.navigate('Main');

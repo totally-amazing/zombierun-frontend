@@ -13,6 +13,7 @@ import StandardModal from '../../common/components/StandardModal';
 import ActiveButton from '../../common/components/ActiveButton';
 import { toggleModal } from '../../store/uiSlice';
 import { useNewRoomId } from '../../common/hooks/useRoom';
+import { startGame } from '../../store/gameSlice';
 
 const formReducer = (state, action) => {
   if (action.type === 'INPUT_CHANGE') {
@@ -118,6 +119,7 @@ const RoomMakerScreen = () => {
     }
 
     dispatch(toggleModal());
+    dispatch(startGame({ mode: modeValue }));
   };
 
   return (
