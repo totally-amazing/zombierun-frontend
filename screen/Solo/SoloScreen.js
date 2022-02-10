@@ -1,7 +1,6 @@
 import React, { useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { AntDesign } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
@@ -10,11 +9,11 @@ import COLORS from '../../common/constants/COLORS';
 import Input from '../../common/components/Input';
 import ActiveButton from '../../common/components/ActiveButton';
 import Difficulty from './components/Difficulty';
-import Profile from '../../common/components/Profile';
 import { addGameSetting } from '../../store/gameSlice';
 import PreviousResultScreen from '../PreviousResult/PrveiousResultScreen';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import { toggleModal } from '../../store/uiSlice';
+import getProfileHeaderOption from '../../common/screenOptions/profileHeaderOption';
 
 const INVALID_FORM_ERROR_MESSAGE = '잘못된 입력값이 존재합니다';
 const FORM_UPDATE = 'FORM_UPDATE';
@@ -126,37 +125,19 @@ const SoloScreen = ({ navigation }) => {
 
 export default SoloScreen;
 
-export const screenOption = (navData) => {
-  const handleProfileButton = () => {
-    navData.navigation.navigate('MyPage');
+export const screenOption = getProfileHeaderOption(() => {
+  const dispatch = useDispatch();
+  const handlePreviousText = () => {
+    dispatch(toggleModal());
   };
-
-  return {
-    headerTitle: '',
-    headerLeft: () => {
-      return (
-        <View style={styles.buttonContainer}>
-          <HeaderButtons HeaderButtonComponent={Profile}>
-            <Item size="small" onPress={handleProfileButton} />
-          </HeaderButtons>
-        </View>
-      );
-    },
-    headerRight: () => {
-      const dispatch = useDispatch();
-      const handlePreviousText = () => {
-        dispatch(toggleModal());
-      };
-      return (
-        <View style={styles.buttonContainer}>
-          <Text style={styles.text} onPress={handlePreviousText}>
-            이전 기록 보기
-          </Text>
-        </View>
-      );
-    },
-  };
-};
+  return (
+    <View style={styles.buttonContainer}>
+      <Text style={styles.text} onPress={handlePreviousText}>
+        이전 기록 보기
+      </Text>
+    </View>
+  );
+});
 
 const styles = StyleSheet.create({
   screen: {
