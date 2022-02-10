@@ -5,12 +5,10 @@ class GameService {
   }
 
   getTotalRecord = async (userId) => {
-    const result = await this.httpClient.fetch(
-      `/game/total/?userId=${userId}`,
-      {
-        method: 'get',
-      },
-    );
+    const result = await this.httpClient.fetch({
+      url: `/game/total/?userId=${userId}`,
+      method: 'get',
+    });
 
     if (!result) {
       throw new Error('서버에서 total record를 받아오지 못했습니다');
@@ -20,12 +18,10 @@ class GameService {
   };
 
   getRecentRecord = async (userId) => {
-    const result = await this.httpClient.fetch(
-      `/game/recent/?userId=${userId}`,
-      {
-        method: 'get',
-      },
-    );
+    const result = await this.httpClient.fetch({
+      url: `/game/recent/?userId=${userId}`,
+      method: 'get',
+    });
 
     if (!result) {
       throw new Error('서버에서 recent record를 받아오지 못했습니다');
@@ -35,14 +31,16 @@ class GameService {
   };
 
   update = async (game) => {
-    this.httpClient.fetch('/game', {
+    this.httpClient.fetch({
+      url: '/game',
       method: 'put',
       data: game,
     });
   };
 
   create = async (game) => {
-    this.httpClient.fetch('/game', {
+    this.httpClient.fetch({
+      url: '/game',
       method: 'post',
       data: game,
     });
