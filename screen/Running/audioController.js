@@ -2,7 +2,7 @@ import { Audio } from 'expo-av';
 
 export default class AudioController {
   constructor(onSoundEffect, onBackgroundMusic) {
-    this.backgroundSource = require('../../assets/sounds/background.mp3');
+    this.backgroundMusicSource = require('../../assets/sounds/background.mp3');
     this.soundEffectSource = require('../../assets/sounds/zombieSound.mp3');
     this.backgroundAudio = new Audio.Sound();
     this.soundEffectAudio = new Audio.Sound();
@@ -17,7 +17,7 @@ export default class AudioController {
 
   loadAudio = async () => {
     if (this.onBackgroundMusic) {
-      this.backgroundAudio.loadAsync(this.backgroundSource, {
+      this.backgroundAudio.loadAsync(this.backgroundMusicSource, {
         isLooping: true,
         shouldPlay: false,
       });
