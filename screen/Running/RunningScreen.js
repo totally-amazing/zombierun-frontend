@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
@@ -11,12 +11,12 @@ import UnitText from '../../common/components/UnitText';
 import Timer from './components/Timer';
 import Pause from './components/Pause';
 import AudioController from './audioController';
+import GameView from './components/GameView';
 
 const RunningScreen = ({ route, navigation }) => {
   const { speed, time } = route.params.gameSetting;
   const conversionRate = 0.277778;
   const [userDistance, setUserDistance] = useState(0);
-  const [zombieSize, setZombieSize] = useState('far');
   const [zombieDistance, setZombieDistance] = useState(-500);
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
@@ -90,20 +90,31 @@ const RunningScreen = ({ route, navigation }) => {
     ];
   };
 
+  const pauseGameStatus = () => {
+    clearInterval(intervalId.current);
+    tracker.current?.remove();
+    intervalId.current = null;
+    audioController.stopAllSound();
+    setHasGameStarted(false);
+  };
+
   const handlePressStopButton = () => {
-    if (hasGameStarted) {
-      clearInterval(intervalId.current);
-      tracker.current?.remove();
-      intervalId.current = null;
-      setHasGameStarted(false);
-      setHasOptionClicked(false);
-      audioController.stopAllSound();
-    }
+    pauseGameStatus();
+    setHasOptionClicked(false);
   };
 
   const handlePressStartButton = () => {
     startRunning();
     setHasGameStarted(true);
+  };
+
+  const handlePressOptionButton = () => {
+    pauseGameStatus();
+    setHasOptionClicked(true);
+  };
+
+  const handleFinishDistanceResult = () => {
+    setHasGameFinished(true);
   };
 
   const handleFinishGame = (passedTime) => {
@@ -114,15 +125,6 @@ const RunningScreen = ({ route, navigation }) => {
     }
 
     setHasGameFinished(true);
-  };
-
-  const handlePressOptionButton = () => {
-    clearInterval(intervalId.current);
-    tracker.current?.remove();
-    intervalId.current = null;
-    setHasGameStarted(false);
-    setHasOptionClicked(true);
-    audioController.stopAllSound();
   };
 
   const headerOptionButton = useCallback(() => {
@@ -174,31 +176,6 @@ const RunningScreen = ({ route, navigation }) => {
   }, [hasGameStarted]);
 
   useEffect(() => {
-    if (!hasGameStarted) {
-      return;
-    }
-
-    if (distanceGap >= 400) {
-      setZombieSize('far');
-      audioController.changeSoundEffectVolume(0.2);
-    }
-
-    if (distanceGap >= 200 && distanceGap < 400) {
-      setZombieSize('middle');
-      audioController.changeSoundEffectVolume(0.5);
-    }
-
-    if (distanceGap >= 100 && distanceGap < 200) {
-      setZombieSize('close');
-      audioController.changeSoundEffectVolume(1);
-    }
-
-    if (distanceGap <= 0) {
-      setHasGameFinished(true);
-    }
-  }, [distanceGap, hasGameStarted]);
-
-  useEffect(() => {
     if (isWinner || hasGameFinished) {
       clearInterval(intervalId.current);
       tracker.current?.remove();
@@ -233,19 +210,16 @@ const RunningScreen = ({ route, navigation }) => {
         />
         <UnitText value={String(speed)} unit="km/h" />
       </View>
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles[zombieSize]}
-          source={require('../../assets/images/zombie.gif')}
-        />
-      </View>
-      <Text style={styles.distance}>Distance</Text>
-      <Text style={styles.distanceNumber}>{distanceGap}M</Text>
+      <GameView
+        hasStarted={hasGameStarted}
+        audioController={audioController}
+        distanceGap={distanceGap}
+        onFinish={handleFinishDistanceResult}
+      />
       {hasGameStarted && (
         <FontAwesome5
           name="pause-circle"
-          size={50}
-          color={COLORS.WHITE}
+          style={styles.stopButton}
           onPress={handlePressStopButton}
         />
       )}
@@ -272,34 +246,9 @@ const styles = StyleSheet.create({
     color: COLORS.WHITE,
     marginHorizontal: 30,
   },
-  distance: {
-    fontSize: FONT.MEDIUM,
-    fontFamily: FONT.BLOOD_FONT,
+  stopButton: {
+    fontSize: 50,
     color: COLORS.WHITE,
-  },
-  distanceNumber: {
-    fontSize: FONT.X_LARGE,
-    fontFamily: FONT.BLOOD_FONT,
-    color: COLORS.WHITE,
-  },
-  imageContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: 400,
-  },
-  close: {
-    width: 400,
-    height: 400,
-  },
-  middle: {
-    width: 200,
-    height: 200,
-  },
-  far: {
-    width: 100,
-    height: 100,
   },
 });
 

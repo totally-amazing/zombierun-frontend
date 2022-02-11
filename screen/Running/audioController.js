@@ -38,14 +38,6 @@ class AudioController {
     this.soundEffectAudio.playAsync();
   };
 
-  stopBackgroundMusic = async () => {
-    this.backgroundAudio.pauseAsync();
-  };
-
-  stopSoundEffect = async () => {
-    this.soundEffectAudio.pauseAsync();
-  };
-
   stopAllSound = async () => {
     this.backgroundAudio.pauseAsync();
     this.soundEffectAudio.pauseAsync();
