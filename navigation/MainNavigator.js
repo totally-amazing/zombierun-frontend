@@ -45,7 +45,11 @@ const MainNavigator = () => {
         component={SoloScreen}
         options={soloHeaderOption}
       />
-      <MainStackNavigator.Screen name="OneOnOne" component={OneOnOneScreen} />
+      <MainStackNavigator.Screen
+        name="OneOnOne"
+        component={OneOnOneScreen}
+        options={{ headerShown: false }}
+      />
       <MainStackNavigator.Screen
         name="PreviousResult"
         component={PreviousResultScreen}
