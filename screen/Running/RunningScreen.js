@@ -6,10 +6,10 @@ import * as Location from 'expo-location';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
+import SettingScreen from '../Setting/SettingScreen';
 import Timer from './components/Timer';
 import Pause from './components/Pause';
 import AudioController from './audioController';
-import SettingScreen from '../Setting/SettingScreen';
 
 const RunningScreen = ({ route, navigation }) => {
   const { speed, time } = route.params.gameSetting;
@@ -210,8 +210,8 @@ const styles = StyleSheet.create({
   },
   distance: {
     fontSize: FONT.X_LARGE,
-    color: COLORS.WHITE,
     fontFamily: FONT.BLOOD_FONT,
+    color: COLORS.WHITE,
   },
   close: {
     width: 400,

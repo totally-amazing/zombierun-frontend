@@ -6,8 +6,8 @@ class AudioController {
     this.soundEffectSource = require('../../assets/sounds/zombieSound.mp3');
     this.backgroundAudio = new Audio.Sound();
     this.soundEffectAudio = new Audio.Sound();
-    this.onSoundEffect = onSoundEffect;
     this.onBackgroundMusic = onBackgroundMusic;
+    this.onSoundEffect = onSoundEffect;
   }
 
   resetAudio = async () => {
