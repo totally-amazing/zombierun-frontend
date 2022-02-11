@@ -6,8 +6,8 @@ import * as Location from 'expo-location';
 
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
+import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
 import showErrorMessage from '../../common/utils/showErrorMessage';
-import Profile from '../../common/components/Profile';
 
 const MainScreen = ({ navigation }) => {
   const handleSingleText = () => {
@@ -42,24 +42,7 @@ const MainScreen = ({ navigation }) => {
 
 export default MainScreen;
 
-export const screenOption = (navData) => {
-  const handleProfileButton = () => {
-    navData.navigation.navigate('MyPage');
-  };
-
-  return {
-    headerTitle: '',
-    headerLeft: () => {
-      return (
-        <View style={styles.buttonContainer}>
-          <HeaderButtons HeaderButtonComponent={Profile}>
-            <Item size="small" onPress={handleProfileButton} />
-          </HeaderButtons>
-        </View>
-      );
-    },
-  };
-};
+export const screenOption = getProfileHeaderOption();
 
 const styles = StyleSheet.create({
   screen: {

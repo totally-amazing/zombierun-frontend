@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import Profile from '../../common/components/Profile';
 import PROFILE from '../../common/constants/PROFILE';
-import TitleText from '../../common/components/TitleText';
-import UnitText from '../../common/components/UnitText';
+import TinyTitle from '../../common/components/TinyTitle';
+import ValueWithUnit from '../../common/components/ValueWithUnit';
 import TextChunk from '../../common/components/TextChunk';
 import LineWithText from './components/LineWithText';
-import useUser from '../../common/hooks/useUser';
 import { useTotalGameRecord } from '../../common/hooks/useGame';
+import showErrorMessage from '../../common/utils/showErrorMessage';
 
 const MyPageScreen = () => {
   const [record, setRecord] = useState({
@@ -31,17 +32,21 @@ const MyPageScreen = () => {
       isWinner: 0,
     },
   });
-  const { id, nickname } = useUser();
+  const { id, nickname } = useSelector((state) => state.user);
 
-  useTotalGameRecord(id, (totalRecord) => {
-    setRecord({
-      ...totalRecord,
-      time: {
-        hour: totalRecord.time && Math.floor(totalRecord.time / 60),
-        minute: totalRecord.time && totalRecord.time % 60,
-      },
-    });
-  });
+  useTotalGameRecord(
+    id,
+    (totalRecord) => {
+      setRecord({
+        ...totalRecord,
+        time: {
+          hour: totalRecord.time && Math.floor(totalRecord.time / 60),
+          minute: totalRecord.time && totalRecord.time % 60,
+        },
+      });
+    },
+    (error) => showErrorMessage(error.message),
+  );
 
   return (
     <View style={styles.screen}>
@@ -51,10 +56,10 @@ const MyPageScreen = () => {
       </View>
       <View style={styles.row}>
         <TextChunk title="총 거리" value={String(record.distance)} unit="km" />
-        <TitleText title="총 러닝 타임">
-          <UnitText value={String(record.time.hour)} unit="h" />
-          <UnitText value={String(record.time.minute)} unit="m" />
-        </TitleText>
+        <TinyTitle title="총 러닝 타임">
+          <ValueWithUnit value={String(record.time.hour)} unit="h" />
+          <ValueWithUnit value={String(record.time.minute)} unit="m" />
+        </TinyTitle>
       </View>
       <LineWithText text="솔로" />
       <View style={styles.row}>

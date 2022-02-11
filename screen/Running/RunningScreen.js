@@ -7,7 +7,7 @@ import * as Location from 'expo-location';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import UnitText from '../../common/components/UnitText';
+import ValueWithUnit from '../../common/components/ValueWithUnit';
 import Timer from './components/Timer';
 import Pause from './components/Pause';
 import AudioController from './audioController';
@@ -208,7 +208,7 @@ const RunningScreen = ({ route, navigation }) => {
           hasFinished={hasGameFinished}
           onFinish={handleFinishGame}
         />
-        <UnitText value={String(speed)} unit="km/h" />
+        <ValueWithUnit value={String(speed)} unit="km/h" />
       </View>
       <GameView
         hasStarted={hasGameStarted}

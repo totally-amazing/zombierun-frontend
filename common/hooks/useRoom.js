@@ -7,10 +7,14 @@ import RoomService from '../../service/room';
 const httpClient = new HttpClient(BASE_URL);
 const roomService = new RoomService(httpClient);
 
-const useRoomList = (onSuccess, onFailure) => {
+export const useRoomList = (onSuccess, onFailure) => {
   useEffect(() => {
     roomService.getRooms().then(onSuccess).catch(onFailure);
   }, [roomService]);
 };
 
-export default useRoomList;
+export const useNewRoomId = async (roomInfo) => {
+  const { id } = await roomService.createRoom(roomInfo);
+
+  return id;
+};
