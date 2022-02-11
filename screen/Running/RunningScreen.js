@@ -158,6 +158,22 @@ const RunningScreen = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
+    if (hasGameStarted) {
+      intervalId.current = setInterval(() => {
+        setZombieDistance((previousDistance) => {
+          const reducedZombieDistance = previousDistance + speedMeterPerSecond;
+
+          return reducedZombieDistance;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(intervalId.current);
+    };
+  }, [hasGameStarted]);
+
+  useEffect(() => {
     if (!hasGameStarted) {
       return;
     }
@@ -181,22 +197,6 @@ const RunningScreen = ({ route, navigation }) => {
       setHasGameFinished(true);
     }
   }, [distanceGap, hasGameStarted]);
-
-  useEffect(() => {
-    if (hasGameStarted) {
-      intervalId.current = setInterval(() => {
-        setZombieDistance((previousDistance) => {
-          const reducedZombieDistance = previousDistance + speedMeterPerSecond;
-
-          return reducedZombieDistance;
-        });
-      }, 1000);
-    }
-
-    return () => {
-      clearInterval(intervalId.current);
-    };
-  }, [hasGameStarted]);
 
   useEffect(() => {
     if (isWinner || hasGameFinished) {

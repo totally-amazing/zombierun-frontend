@@ -15,12 +15,20 @@ const SettingScreen = ({ onClose }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const isSwitchEffect = useSelector((state) => state.ui.canHearingEffect);
-  const isSwitchSound = useSelector((state) => state.ui.canHearingBGMusic);
+  const hasSwitchSoundEffectOption = useSelector(
+    (state) => state.ui.canHearingEffect,
+  );
+  const hasSwitchMusicOption = useSelector(
+    (state) => state.ui.canHearingBGMusic,
+  );
   const [hasExitCheck, setHasExitCheck] = useState(false);
 
-  const soundEffect = isSwitchEffect ? '효과음 켜기' : '효과음 끄기';
-  const backgroundMusic = isSwitchSound ? '배경음악 켜기' : '배경음악 끄기';
+  const soundEffect = hasSwitchSoundEffectOption
+    ? '효과음 켜기'
+    : '효과음 끄기';
+  const backgroundMusic = hasSwitchMusicOption
+    ? '배경음악 켜기'
+    : '배경음악 끄기';
 
   const toggleSoundEffect = () => {
     dispatch(toggleEffect());
@@ -30,11 +38,11 @@ const SettingScreen = ({ onClose }) => {
     dispatch(toggleSound());
   };
 
-  const handleExitConfirmButton = () => {
+  const handlePressExitConfirmButton = () => {
     setHasExitCheck(true);
   };
 
-  const handlePressExit = () => {
+  const handlePressExitButton = () => {
     navigation.navigate('Main');
   };
 
@@ -49,7 +57,7 @@ const SettingScreen = ({ onClose }) => {
               message={backgroundMusic}
             />
             <WindowWithText
-              onPress={handleExitConfirmButton}
+              onPress={handlePressExitConfirmButton}
               message="러닝 종료"
             />
           </View>
@@ -58,7 +66,7 @@ const SettingScreen = ({ onClose }) => {
           <View style={styles.screen}>
             <Text style={styles.text}>러닝을 종료하시겠습니까?</Text>
             <ActiveButton
-              onPress={handlePressExit}
+              onPress={handlePressExitButton}
               message="종료"
               style={styles.exitButton}
               disabled={false}
