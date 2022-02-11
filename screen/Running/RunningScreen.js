@@ -60,14 +60,13 @@ const RunningScreen = ({ route, navigation }) => {
       },
     );
 
-    const zombieMovement = setInterval(() => {
+    intervalId.current = setInterval(() => {
       setZombieDistance((previousDistance) => {
         const reducedZombieDistance = previousDistance + speedMeterPerSecond;
 
         return reducedZombieDistance;
       });
     }, 1000);
-    intervalId.current = zombieMovement;
     setTracker(userLocation);
   };
 
