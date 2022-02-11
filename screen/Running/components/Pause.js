@@ -21,8 +21,7 @@ const Pause = ({ onPress, hasOptionClicked, countDownStatus }) => {
         {countDownStatus && (
           <FontAwesome
             name="play"
-            size={100}
-            color={COLORS.BLACK}
+            style={styles.startButton}
             onPress={onPress}
           />
         )}
@@ -41,10 +40,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  startButton: {
+    fontSize: 100,
+    color: COLORS.BLACK,
+  },
   startText: {
-    color: COLORS.DEEP_RED,
     fontFamily: FONT.BLOOD_FONT,
     fontSize: FONT.LARGE,
+    color: COLORS.DEEP_RED,
     textAlign: 'center',
   },
 });
