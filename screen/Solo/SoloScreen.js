@@ -52,7 +52,8 @@ const SoloScreen = ({ navigation }) => {
     inputValidation: {},
     formIsValid: false,
   });
-  const handlePressdStartButton = () => {
+
+  const handlePressStartButton = () => {
     const { inputValues, formIsValid } = formState;
     if (!formIsValid) {
       showErrorMessage(INVALID_FORM_ERROR_MESSAGE);
@@ -62,9 +63,11 @@ const SoloScreen = ({ navigation }) => {
     dispatch(startGame({ mode: 'solo' }));
     navigation.navigate('Running', inputValues);
   };
+
   const handleArrowButton = () => {
     navigation.navigate('Main');
   };
+
   const handleInputChange = useCallback(
     (inputIdentifier, inputValue, inputValidation) => {
       dispatchForm({
@@ -110,7 +113,7 @@ const SoloScreen = ({ navigation }) => {
           message="START TO SURVIVE"
           style={styles.button}
           disabled={false}
-          onPress={handlePressdStartButton}
+          onPress={handlePressStartButton}
         />
       </View>
       <View style={styles.navButtonContainer}>

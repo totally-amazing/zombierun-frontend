@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import PropTypes from 'prop-types';
+import * as Location from 'expo-location';
 
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
+import showErrorMessage from '../../common/utils/showErrorMessage';
 
 const MainScreen = ({ navigation }) => {
   const handleSingleText = () => {
@@ -14,6 +17,16 @@ const MainScreen = ({ navigation }) => {
   const handleTogetherText = () => {
     navigation.navigate('RoomList');
   };
+
+  useEffect(() => {
+    const getLocationPermission = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        showErrorMessage('권한이 허가 되지 않았습니다');
+      }
+    };
+    getLocationPermission();
+  }, []);
 
   return (
     <View style={styles.screen}>
