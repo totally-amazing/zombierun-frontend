@@ -25,14 +25,15 @@ export const useTotalGameRecord = (userId, onSuccess, onFailure) => {
 export const useGameEnd = (result, onFailure) => {
   const userId = useSelector((state) => state.user.id);
 
-  const { mode, isWinner, time, speed, distance } = result;
+  const { mode, isWinner, time, speed, role, distance } = result;
   const gameResult = {
     mode,
     player: {
       isWinner,
-      time,
-      speed,
+      time: Number(time),
+      speed: Number(speed),
       distance,
+      role,
       id: userId,
     },
   };
@@ -41,7 +42,7 @@ export const useGameEnd = (result, onFailure) => {
     if (mode === 'solo') {
       gameService.create(gameResult).catch(onFailure);
     } else {
-      gameService.emitDie(userId);
+      gameService.emitDie();
       gameService.update(gameResult.player).catch(onFailure);
     }
   }, [gameService]);

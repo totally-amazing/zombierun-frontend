@@ -61,7 +61,9 @@ const SoloScreen = ({ navigation }) => {
     }
 
     dispatch(startGame({ mode: 'solo' }));
-    navigation.navigate('Running', inputValues);
+    navigation.navigate('Running', {
+      gameSetting: { speed: inputValues.speed, time: inputValues.time },
+    });
   };
 
   const handleArrowButton = () => {

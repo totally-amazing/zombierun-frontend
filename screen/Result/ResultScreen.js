@@ -20,7 +20,7 @@ const ResultScreen = ({ navigation, route }) => {
     navigation.navigate('Main');
   };
 
-  useGameEnd({ ...route.params, mode }, (error) => {
+  useGameEnd({ ...route.params, mode, role }, (error) => {
     showErrorMessage(error.message);
   });
 
@@ -85,8 +85,8 @@ ResultScreen.propTypes = {
       isWinner: PropTypes.bool,
       distance: PropTypes.number,
       time: PropTypes.number,
-      speed: PropTypes.number,
-      locationHistory: PropTypes.arrayOf(PropTypes.number),
+      speed: PropTypes.string,
+      locationHistory: PropTypes.arrayOf(PropTypes.object),
     }),
     path: PropTypes.string,
   }).isRequired,

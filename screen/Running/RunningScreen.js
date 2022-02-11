@@ -152,13 +152,11 @@ const RunningScreen = ({ route, navigation }) => {
       tracker?.remove();
       audioController.resetAudio();
       navigation.navigate('Result', {
-        result: {
-          locationHistory,
-          isWinner,
-          distance: userDistance,
-          time: survivalTime.current,
-          speed,
-        },
+        locationHistory,
+        isWinner,
+        distance: userDistance,
+        time: survivalTime.current,
+        speed,
       });
     }
   }, [isWinner, hasGameFinished]);
