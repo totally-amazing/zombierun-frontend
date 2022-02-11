@@ -23,10 +23,10 @@ const RunningScreen = ({ route, navigation }) => {
   const [hasGameFinished, setHasGameFinished] = useState(false);
   const [hasOptionClicked, setHasOptionClicked] = useState(false);
 
-  const hasSwitchSoundEffectOption = useSelector(
+  const canHearingSoundEffect = useSelector(
     (state) => state.ui.canHearingEffect,
   );
-  const hasSwitchMusicOption = useSelector(
+  const canHearingBackgroundusic = useSelector(
     (state) => state.ui.canHearingBGMusic,
   );
 
@@ -45,11 +45,11 @@ const RunningScreen = ({ route, navigation }) => {
   const startRunning = async () => {
     setHasGameStarted(true);
 
-    if (!hasSwitchSoundEffectOption) {
+    if (canHearingSoundEffect) {
       audioController.playSoundEffect();
     }
 
-    if (!hasSwitchMusicOption) {
+    if (canHearingBackgroundusic) {
       audioController.playBackgroundMusic();
     }
 
@@ -138,19 +138,26 @@ const RunningScreen = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerTitle: '',
-      headerLeft: () => {},
-      headerRight: headerOptionButton,
-    });
+    const setNavigatorOptions = () => {
+      navigation.setOptions({
+        headerTitle: '',
+        headerLeft: () => {},
+        headerRight: headerOptionButton,
+      });
+    };
+
+    setNavigatorOptions();
   }, [navigation]);
 
   useEffect(() => {
-    getCurrentLocation();
+    const initStartUp = () => {
+      getCurrentLocation();
 
-    audioController.loadAudio();
+      audioController.loadAudio();
+      countDown.current = setTimeout(startRunning, 5000);
+    };
 
-    countDown.current = setTimeout(startRunning, 5000);
+    initStartUp();
 
     return () => {
       clearTimeout(countDown.current);
@@ -160,7 +167,7 @@ const RunningScreen = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (hasGameStarted) {
+    const startZombieChasing = () => {
       intervalId.current = setInterval(() => {
         setZombieDistance((previousDistance) => {
           const reducedZombieDistance = previousDistance + speedMeterPerSecond;
@@ -168,6 +175,10 @@ const RunningScreen = ({ route, navigation }) => {
           return reducedZombieDistance;
         });
       }, 1000);
+    };
+
+    if (hasGameStarted) {
+      startZombieChasing();
     }
 
     return () => {
@@ -176,7 +187,7 @@ const RunningScreen = ({ route, navigation }) => {
   }, [hasGameStarted]);
 
   useEffect(() => {
-    if (isWinner || hasGameFinished) {
+    const finishGame = () => {
       clearInterval(intervalId.current);
       tracker.current?.remove();
       audioController.resetAudio();
@@ -189,6 +200,10 @@ const RunningScreen = ({ route, navigation }) => {
           speed,
         },
       });
+    };
+
+    if (isWinner || hasGameFinished) {
+      finishGame();
     }
   }, [isWinner, hasGameFinished]);
 

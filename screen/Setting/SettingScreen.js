@@ -24,11 +24,11 @@ const SettingScreen = ({ onClose }) => {
   const [hasExitCheck, setHasExitCheck] = useState(false);
 
   const soundEffect = hasSwitchSoundEffectOption
-    ? '효과음 켜기'
-    : '효과음 끄기';
+    ? '효과음 끄기'
+    : '효과음 켜기';
   const backgroundMusic = hasSwitchMusicOption
-    ? '배경음악 켜기'
-    : '배경음악 끄기';
+    ? '배경음악 끄기'
+    : '배경음악 켜기';
 
   const toggleSoundEffect = () => {
     dispatch(toggleEffect());

@@ -4,8 +4,8 @@ const uiSlice = createSlice({
   name: 'ui',
   initialState: {
     isModalVisible: false,
-    canHearingEffect: false,
-    canHearingBGMusic: false,
+    canHearingEffect: true,
+    canHearingBGMusic: true,
   },
   reducers: {
     toggleModal: (state, action) => {
@@ -16,6 +16,9 @@ const uiSlice = createSlice({
     },
     toggleSound: (state) => {
       state.canHearingBGMusic = !state.canHearingBGMusic;
+    },
+    checkExitGame: (state, action) => {
+      state.shouldExitGame = action.payload;
     },
   },
 });
