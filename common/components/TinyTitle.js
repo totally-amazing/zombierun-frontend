@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import FONT from '../constants/FONT';
 import COLORS from '../constants/COLORS';
 
-const TitleText = ({ title, children }) => {
+const TinyTitle = ({ title, children }) => {
   return (
     <View style={styles.wrapper}>
       <Text style={styles.title}>{title}</Text>
@@ -14,7 +14,7 @@ const TitleText = ({ title, children }) => {
   );
 };
 
-export default TitleText;
+export default TinyTitle;
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
 });
 
-TitleText.propTypes = {
+TinyTitle.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),

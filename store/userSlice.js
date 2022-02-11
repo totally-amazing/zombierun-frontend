@@ -1,4 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { BASE_URL } from '@env';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+import HttpClient from '../network/http';
+import AuthService from '../service/auth';
+
+const httpClient = new HttpClient(BASE_URL);
+const authService = new AuthService(httpClient);
+
+export const fetchUserByIdToken = createAsyncThunk(
+  'user/fetchByIdToeknStatus',
+  async (idToken) => {
+    const user = await authService.signIn(idToken);
+    return user;
+  },
+);
 
 const userSlice = createSlice({
   name: 'user',
@@ -7,15 +22,15 @@ const userSlice = createSlice({
     nickname: null,
     imageUrl: null,
   },
-  reducers: {
-    setUser: (state, action) => {
-      const { id, nickname, imageUrl } = action.payload;
+  extraReducers: {
+    [fetchUserByIdToken.fulfilled]: (state, action) => {
+      const { id, imageUrl, nickname } = action.payload;
+
       state.id = id;
-      state.nickname = nickname;
       state.imageUrl = imageUrl;
+      state.nickname = nickname;
     },
   },
 });
 
-export const { setUser } = userSlice.actions;
 export default userSlice.reducer;

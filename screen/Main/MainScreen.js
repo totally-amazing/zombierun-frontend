@@ -1,11 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import PropTypes from 'prop-types';
 
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
-import Profile from '../../common/components/Profile';
+import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
 
 const MainScreen = ({ navigation }) => {
   const handleSingleText = () => {
@@ -30,24 +29,7 @@ const MainScreen = ({ navigation }) => {
 
 export default MainScreen;
 
-export const screenOption = (navData) => {
-  const handleProfileButton = () => {
-    navData.navigation.navigate('MyPage');
-  };
-
-  return {
-    headerTitle: '',
-    headerLeft: () => {
-      return (
-        <View style={styles.buttonContainer}>
-          <HeaderButtons HeaderButtonComponent={Profile}>
-            <Item size="small" onPress={handleProfileButton} />
-          </HeaderButtons>
-        </View>
-      );
-    },
-  };
-};
+export const screenOption = getProfileHeaderOption();
 
 const styles = StyleSheet.create({
   screen: {

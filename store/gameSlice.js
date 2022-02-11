@@ -3,17 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 const gameSlice = createSlice({
   name: 'game',
   initialState: {
-    speed: 0,
-    time: 0,
+    mode: '',
+    role: 'human',
   },
   reducers: {
-    addGameSetting: (state, action) => {
-      const { speed, time } = action.payload;
-      state.speed = speed;
-      state.time = time;
+    startGame: (state, action) => {
+      const { mode, role } = action.payload;
+      state.mode = mode;
+      state.role = role || 'human';
     },
   },
 });
 
-export const { addGameSetting } = gameSlice.actions;
+export const { startGame } = gameSlice.actions;
 export default gameSlice.reducer;

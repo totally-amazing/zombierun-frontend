@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import FONT from '../constants/FONT';
 import COLORS from '../constants/COLORS';
 
-const UnitText = ({ value, unit }) => {
+const ValueWithUnit = ({ value, unit }) => {
   return (
     <View style={styles.wrapper}>
       <Text style={styles.value}>{value}</Text>
@@ -14,14 +14,14 @@ const UnitText = ({ value, unit }) => {
   );
 };
 
-export default UnitText;
+export default ValueWithUnit;
 
 const styles = StyleSheet.create({
   wrapper: {
     flexDirection: 'row',
   },
   value: {
-    fontSize: FONT.X_LARGE,
+    fontSize: FONT.LARGE,
     color: COLORS.WHITE,
   },
   unit: {
@@ -31,12 +31,12 @@ const styles = StyleSheet.create({
   },
 });
 
-UnitText.propTypes = {
-  value: PropTypes.string,
+ValueWithUnit.propTypes = {
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   unit: PropTypes.string,
 };
 
-UnitText.defaultProps = {
+ValueWithUnit.defaultProps = {
   value: '',
   unit: '',
 };

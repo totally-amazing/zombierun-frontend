@@ -9,6 +9,10 @@ class RoomService {
       method: 'get',
     });
 
+    if (!result) {
+      throw new Error('서버에서 room list를 받아오지 못했습니다');
+    }
+
     return result;
   };
 

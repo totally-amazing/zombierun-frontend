@@ -1,5 +1,4 @@
 import axios from 'axios';
-import showErrorMessage from '../common/utils/showErrorMessage';
 
 class HttpClient {
   constructor(baseURL) {
@@ -9,13 +8,7 @@ class HttpClient {
   }
 
   fetch = async (req) => {
-    let res;
-
-    try {
-      res = await this.client(req);
-    } catch (err) {
-      showErrorMessage(err.message);
-    }
+    const res = await this.client(req);
 
     return res?.data;
   };
