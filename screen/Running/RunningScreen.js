@@ -13,7 +13,7 @@ import SettingScreen from '../Setting/SettingScreen';
 
 const RunningScreen = ({ route, navigation }) => {
   const { speed, time } = route.params.gameSetting;
-  const transferFormula = 0.277778;
+  const conversionRate = 0.277778;
   const [userDistance, setUserDistance] = useState(0);
   const [tracker, setTracker] = useState();
   const [zombieSize, setZombieSize] = useState('far');
@@ -28,7 +28,7 @@ const RunningScreen = ({ route, navigation }) => {
   const intervalId = useRef();
   const { current: audioController } = useRef(new AudioController(true, true));
 
-  const speedMeterPerSecond = Math.ceil(transferFormula * speed);
+  const speedMeterPerSecond = Math.ceil(conversionRate * speed);
   const distanceGap = Math.ceil(userDistance - zombieDistance);
 
   survivalTime.current = time;
