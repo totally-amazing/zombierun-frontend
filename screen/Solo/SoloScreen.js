@@ -52,7 +52,8 @@ const SoloScreen = ({ navigation }) => {
     inputValidation: {},
     formIsValid: false,
   });
-  const handlePressdStartButton = () => {
+
+  const handlePressStartButton = () => {
     const { inputValues, formIsValid } = formState;
     if (!formIsValid) {
       showErrorMessage(INVALID_FORM_ERROR_MESSAGE);
@@ -108,7 +109,7 @@ const SoloScreen = ({ navigation }) => {
           message="START TO SURVIVE"
           style={styles.button}
           disabled={false}
-          onPress={handlePressdStartButton}
+          onPress={handlePressStartButton}
         />
       </View>
       <ArrowMain />
