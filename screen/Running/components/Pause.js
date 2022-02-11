@@ -1,14 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, View, Button, StyleSheet } from 'react-native';
+import { Modal, View, StyleSheet, Text } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
+import SettingScreen from '../../Setting/SettingScreen';
 import COLORS from '../../../common/constants/COLORS';
+import FONT from '../../../common/constants/FONT';
 
-const Pause = ({ onPress }) => {
+const Pause = ({ onPress, hasOptionClicked, countDownStatus }) => {
+  if (hasOptionClicked) {
+    return <SettingScreen onClose={onPress} />;
+  }
+
   return (
     <Modal transparent>
       <View style={styles.backdrop}>
-        <Button title="start" onPress={onPress} />
+        {!countDownStatus && (
+          <Text style={styles.startText}>ZOMBIE IS CHASING YOU</Text>
+        )}
+        {countDownStatus && (
+          <FontAwesome
+            name="play"
+            size={100}
+            color={COLORS.BLACK}
+            onPress={onPress}
+          />
+        )}
       </View>
     </Modal>
   );
@@ -21,9 +38,23 @@ const styles = StyleSheet.create({
     flex: 1,
     opacity: 0.7,
     backgroundColor: COLORS.LIGHT_GRAY,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  startText: {
+    color: COLORS.DEEP_RED,
+    fontFamily: FONT.BLOOD_FONT,
+    fontSize: FONT.LARGE,
+    textAlign: 'center',
   },
 });
 
 Pause.propTypes = {
   onPress: PropTypes.func.isRequired,
+  hasOptionClicked: PropTypes.bool.isRequired,
+  countDownStatus: PropTypes.number,
+};
+
+Pause.defaultProps = {
+  countDownStatus: null,
 };

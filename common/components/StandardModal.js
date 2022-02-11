@@ -17,7 +17,7 @@ import COLORS from '../constants/COLORS';
 import FONT from '../constants/FONT';
 import { toggleModal } from '../../store/uiSlice';
 
-const StandardModal = ({ children }) => {
+const StandardModal = ({ children, onClose }) => {
   const dispatch = useDispatch();
   const isVisible = useSelector((state) => state.ui.isVisible);
 
@@ -34,7 +34,10 @@ const StandardModal = ({ children }) => {
       >
         <TouchableWithoutFeedback>
           <View style={styles.blankSpace}>
-            <Pressable style={styles.button} onPress={handleCloseButton}>
+            <Pressable
+              style={styles.button}
+              onPress={onClose || handleCloseButton}
+            >
               <Text>
                 <AntDesign name="closecircleo" style={styles.closeCircleo} />
               </Text>
@@ -86,4 +89,9 @@ StandardModal.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
+  onClose: PropTypes.func,
+};
+
+StandardModal.defaultProps = {
+  onClose: null,
 };
