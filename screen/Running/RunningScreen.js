@@ -98,14 +98,14 @@ const RunningScreen = ({ route, navigation }) => {
     setHasGameStarted(false);
   };
 
-  const handlePressStopButton = () => {
-    pauseGameStatus();
-    setHasOptionClicked(false);
-  };
-
   const handlePressStartButton = () => {
     startRunning();
     setHasGameStarted(true);
+  };
+
+  const handlePressStopButton = () => {
+    pauseGameStatus();
+    setHasOptionClicked(false);
   };
 
   const handlePressOptionButton = () => {

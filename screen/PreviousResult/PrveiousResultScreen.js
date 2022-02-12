@@ -6,9 +6,9 @@ import StandardModal from '../../common/components/StandardModal';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
-import { useRecentGameRecord } from '../../common/hooks/useGame';
 import TextChunk from '../../common/components/TextChunk';
 import getResultMessage from '../../common/utils/getResultMessage';
+import { useRecentGameRecord } from '../../common/hooks/useGame';
 
 const SPPED = 'km/h';
 const KILOMETER = 'km';

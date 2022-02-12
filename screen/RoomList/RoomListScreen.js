@@ -6,8 +6,8 @@ import RoomListItem from './components/RoomListItem';
 import RoomMakerScreen from '../RoomMaker/RoomMakerScreen';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import { useRoomList } from '../../common/hooks/useRoom';
 import showErrorMessage from '../../common/utils/showErrorMessage';
+import { useRoomList } from '../../common/hooks/useRoom';
 
 const RoomListScreen = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);

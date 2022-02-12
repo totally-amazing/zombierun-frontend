@@ -8,9 +8,9 @@ import TextChunk from '../../common/components/TextChunk';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
-import { useGameEnd } from '../../common/hooks/useGame';
 import getResultMessage from '../../common/utils/getResultMessage';
 import showErrorMessage from '../../common/utils/showErrorMessage';
+import { useGameEnd } from '../../common/hooks/useGame';
 
 const ResultScreen = ({ navigation, route }) => {
   const { isWinner, time, speed, distance } = route.params;

@@ -3,12 +3,12 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import RoleChoice from './components/RoleChoice';
-import ArrowMain from '../../common/components/ArrowMain';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import Profile from '../../common/components/Profile';
 import PROFILE from '../../common/constants/PROFILE';
 import CustomButton from '../../common/components/CustomButton';
+import ArrowMainButton from '../../common/components/ArrowMainButton';
 
 const OneOnOneScreen = () => {
   const { nickname } = useSelector((state) => state.user);
@@ -44,7 +44,7 @@ const OneOnOneScreen = () => {
         disabled={false}
         onPress={handlePressStartButton}
       />
-      <ArrowMain style={styles.main} />
+      <ArrowMainButton style={styles.main} />
     </View>
   );
 };
