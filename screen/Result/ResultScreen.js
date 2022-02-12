@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
+import Map from './components/Map';
 import CustomButton from '../../common/components/CustomButton';
 import TextChunk from '../../common/components/TextChunk';
 import COLORS from '../../common/constants/COLORS';
@@ -11,9 +12,8 @@ import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
 import getResultMessage from '../../common/utils/getResultMessage';
 
 const ResultScreen = ({ navigation }) => {
-  const { mode, isWinner, time, speed, distance, role } = useSelector(
-    (state) => state.game.result,
-  );
+  const { mode, isWinner, time, speed, distance, role, locationHistory } =
+    useSelector((state) => state.game.result);
 
   const handlePressButton = () => {
     navigation.navigate('Main');
@@ -34,7 +34,9 @@ const ResultScreen = ({ navigation }) => {
         disabled={false}
         onPress={handlePressButton}
       />
-      <View style={styles.map} />
+      <View style={styles.map}>
+        <Map locationHistory={locationHistory} />
+      </View>
     </View>
   );
 };
