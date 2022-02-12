@@ -6,7 +6,6 @@ const uiSlice = createSlice({
     isModalVisible: false,
     canHearingEffect: true,
     canHearingBGMusic: true,
-    shouldExitGame: false,
   },
   reducers: {
     toggleModal: (state, action) => {
