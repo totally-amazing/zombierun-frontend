@@ -196,13 +196,7 @@ const RunningScreen = ({ route, navigation }) => {
       clearInterval(intervalId.current);
       tracker.current?.remove();
       audioController.resetAudio();
-      navigation.navigate('Result', {
-        locationHistory: locationHistory.current,
-        isWinner,
-        distance: Math.ceil(userDistance),
-        time: survivalTime.current,
-        speed,
-      });
+      navigation.navigate('Result');
       dispatch(
         getGameResult({
           userId: id,
