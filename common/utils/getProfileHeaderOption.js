@@ -18,6 +18,7 @@ function getProfileHeaderOption(headerRight) {
           nav.navigation.push('MyPage');
           dispatch(getTotalRecord(id));
         };
+
         return (
           <View style={styles.buttonContainer}>
             <HeaderButtons HeaderButtonComponent={Profile}>
