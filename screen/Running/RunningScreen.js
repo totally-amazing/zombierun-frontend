@@ -26,7 +26,7 @@ const RunningScreen = ({ route, navigation }) => {
   const canHearingSoundEffect = useSelector(
     (state) => state.ui.canHearingEffect,
   );
-  const canHearingBackgroundusic = useSelector(
+  const canHearingBackgroundMusic = useSelector(
     (state) => state.ui.canHearingBGMusic,
   );
 
@@ -49,7 +49,7 @@ const RunningScreen = ({ route, navigation }) => {
       audioController.playSoundEffect();
     }
 
-    if (canHearingBackgroundusic) {
+    if (canHearingBackgroundMusic) {
       audioController.playBackgroundMusic();
     }
 
