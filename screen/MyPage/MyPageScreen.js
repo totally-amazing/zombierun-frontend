@@ -9,9 +9,9 @@ import PROFILE from '../../common/constants/PROFILE';
 import TinyTitle from '../../common/components/TinyTitle';
 import ValueWithUnit from '../../common/components/ValueWithUnit';
 import TextChunk from '../../common/components/TextChunk';
-import LineWithText from './components/LineWithText';
 import { useTotalGameRecord } from '../../common/hooks/useGame';
 import showErrorMessage from '../../common/utils/showErrorMessage';
+import LineWithText from './components/LineWithText';
 
 const MyPageScreen = () => {
   const [record, setRecord] = useState({

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
 

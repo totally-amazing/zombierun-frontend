@@ -8,7 +8,7 @@ import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import Profile from '../../common/components/Profile';
 import PROFILE from '../../common/constants/PROFILE';
-import ActiveButton from '../../common/components/ActiveButton';
+import CustomButton from '../../common/components/CustomButton';
 
 const OneOnOneScreen = () => {
   const { nickname } = useSelector((state) => state.user);
@@ -38,7 +38,7 @@ const OneOnOneScreen = () => {
           style={styles.waiting}
         />
       </View>
-      <ActiveButton
+      <CustomButton
         message="Ready"
         style={isReady ? styles.start : styles.ready}
         disabled={false}

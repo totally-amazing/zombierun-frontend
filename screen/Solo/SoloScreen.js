@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 import Input from '../../common/components/Input';
-import ActiveButton from '../../common/components/ActiveButton';
+import CustomButton from '../../common/components/CustomButton';
 import Difficulty from './components/Difficulty';
 import { startGame } from '../../store/gameSlice';
 import PreviousResultScreen from '../PreviousResult/PrveiousResultScreen';
@@ -105,7 +105,7 @@ const SoloScreen = ({ navigation }) => {
         />
       </View>
       <View>
-        <ActiveButton
+        <CustomButton
           message="START TO SURVIVE"
           style={styles.button}
           disabled={false}

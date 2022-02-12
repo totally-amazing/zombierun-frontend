@@ -8,7 +8,7 @@ import { toggleEffect, toggleSound } from '../../store/uiSlice';
 import StandardModal from '../../common/components/StandardModal';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import ActiveButton from '../../common/components/ActiveButton';
+import ActiveButton from '../../common/components/CustomButton';
 import WindowWithText from './components/WindowWithText';
 
 const SettingScreen = ({ onClose }) => {

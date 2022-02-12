@@ -1,8 +1,8 @@
 import React, { useState, useReducer, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import RoomTitle from './components/RoomTitle';
 import GameModeInput from './components/GameModeInput';
@@ -10,7 +10,7 @@ import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import StandardModal from '../../common/components/StandardModal';
-import ActiveButton from '../../common/components/ActiveButton';
+import CustomButton from '../../common/components/CustomButton';
 import { toggleModal } from '../../store/uiSlice';
 import { useNewRoomId } from '../../common/hooks/useRoom';
 import { startGame } from '../../store/gameSlice';
@@ -124,7 +124,7 @@ const RoomMakerScreen = () => {
 
   return (
     <View>
-      <ActiveButton
+      <CustomButton
         message="방 만들기"
         onPress={handlePressButton}
         disabled={false}
@@ -145,7 +145,7 @@ const RoomMakerScreen = () => {
             />
             <RoomTitle value={title} onInputChange={setTitle} />
             <GameModeInput onInputChange={handleInputChange} mode={mode} />
-            <ActiveButton
+            <CustomButton
               style={styles.createButton}
               message="생성"
               disabled={false}

@@ -2,14 +2,14 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
-import ActiveButton from '../../../common/components/ActiveButton';
+import CustomButton from '../../../common/components/CustomButton';
 import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
 
 const RoleChoice = ({ isZombieRole, onPress }) => {
   return (
     <View>
-      <ActiveButton
+      <CustomButton
         message={isZombieRole ? 'ZOMBIE' : 'HUMAN'}
         style={styles.switchButton}
         disabled={false}
