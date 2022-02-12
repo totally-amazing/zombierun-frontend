@@ -8,7 +8,7 @@ import TextChunk from '../../common/components/TextChunk';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
-import { useGameEnd } from '../../common/hooks/useGame';
+import useGameResult from '../../common/hooks/useGameResult';
 import getResultMessage from '../../common/utils/getResultMessage';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 
@@ -20,7 +20,7 @@ const ResultScreen = ({ navigation, route }) => {
     navigation.navigate('Main');
   };
 
-  useGameEnd({ ...route.params, mode, role }, (error) => {
+  useGameResult({ ...route.params, mode, role }, (error) => {
     showErrorMessage(error.message);
   });
 

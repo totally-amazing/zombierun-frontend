@@ -10,19 +10,7 @@ const httpClient = new HttpClient(BASE_URL);
 const socket = new Socket(BASE_URL);
 const gameService = new GameService(httpClient, socket);
 
-export const useRecentGameRecord = (userId, onSuccess, onFailure) => {
-  useEffect(() => {
-    gameService.getRecentRecord(userId).then(onSuccess).catch(onFailure);
-  }, [gameService]);
-};
-
-export const useTotalGameRecord = (userId, onSuccess, onFailure) => {
-  useEffect(() => {
-    gameService.getTotalRecord(userId).then(onSuccess).catch(onFailure);
-  }, [gameService]);
-};
-
-export const useGameEnd = (result, onFailure) => {
+const useGameResult = (result, onFailure) => {
   const userId = useSelector((state) => state.user.id);
 
   const { mode, isWinner, time, speed, role, distance } = result;
@@ -47,3 +35,5 @@ export const useGameEnd = (result, onFailure) => {
     }
   }, [gameService]);
 };
+
+export default useGameResult;
