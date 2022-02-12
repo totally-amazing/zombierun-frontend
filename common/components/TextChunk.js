@@ -13,12 +13,14 @@ const TextChunk = ({ title, value, unit }) => {
 };
 
 TextChunk.propTypes = {
-  title: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  title: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   unit: PropTypes.string,
 };
 
 TextChunk.defaultProps = {
+  title: '',
+  value: '',
   unit: '',
 };
 

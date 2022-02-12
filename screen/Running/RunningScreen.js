@@ -69,8 +69,8 @@ const RunningScreen = ({ route, navigation }) => {
         locationHistory.current = [
           ...locationHistory.current,
           {
-            lat: coords.latitude,
-            lon: coords.longitude,
+            latitude: coords.latitude,
+            longitude: coords.longitude,
           },
         ];
       },
@@ -85,8 +85,8 @@ const RunningScreen = ({ route, navigation }) => {
     locationHistory.current = [
       ...locationHistory.current,
       {
-        lat: coords.latitude,
-        lon: coords.longitude,
+        latitude: coords.latitude,
+        longitude: coords.longitude,
       },
     ];
   };
