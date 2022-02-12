@@ -75,7 +75,7 @@ const SoloScreen = ({ navigation }) => {
         input: inputIdentifier,
       });
     },
-    [dispatchForm],
+    [dispatchForm]
   );
 
   return (
