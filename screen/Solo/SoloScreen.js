@@ -8,7 +8,7 @@ import COLORS from '../../common/constants/COLORS';
 import Input from '../../common/components/Input';
 import ActiveButton from '../../common/components/ActiveButton';
 import Difficulty from './components/Difficulty';
-import { startGame } from '../../store/gameSlice';
+import { getRecentRecord, startGame } from '../../store/gameSlice';
 import PreviousResultScreen from '../PreviousResult/PrveiousResultScreen';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import { toggleModal } from '../../store/uiSlice';
@@ -61,7 +61,9 @@ const SoloScreen = ({ navigation }) => {
     }
 
     dispatch(startGame({ mode: 'solo' }));
-    navigation.navigate('Running', inputValues);
+    navigation.navigate('Running', {
+      gameSetting: { speed: inputValues.speed, time: inputValues.time },
+    });
   };
 
   const handleInputChange = useCallback(
@@ -73,7 +75,7 @@ const SoloScreen = ({ navigation }) => {
         input: inputIdentifier,
       });
     },
-    [dispatchForm],
+    [dispatchForm]
   );
 
   return (
@@ -121,8 +123,11 @@ export default SoloScreen;
 
 export const screenOption = getProfileHeaderOption(() => {
   const dispatch = useDispatch();
+  const { id } = useSelector((state) => state.user);
+
   const handlePreviousText = () => {
     dispatch(toggleModal());
+    dispatch(getRecentRecord(id));
   };
   return (
     <View style={styles.buttonContainer}>
