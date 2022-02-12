@@ -17,7 +17,7 @@ const RunningScreen = ({ route, navigation }) => {
   const [userDistance, setUserDistance] = useState(0);
   const [tracker, setTracker] = useState();
   const [zombieSize, setZombieSize] = useState('far');
-  const [zombieDistance, setZombieDistance] = useState(-500);
+  const [zombieDistance, setZombieDistance] = useState(-20);
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
@@ -152,7 +152,7 @@ const RunningScreen = ({ route, navigation }) => {
       tracker?.remove();
       audioController.resetAudio();
       navigation.navigate('Result', {
-        locationHistory,
+        locationHistory: locationHistory.current,
         isWinner,
         distance: userDistance,
         time: survivalTime.current,
