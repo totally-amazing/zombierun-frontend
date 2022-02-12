@@ -3,8 +3,9 @@ import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 import COLORS from '../../../common/constants/COLORS';
+import FONT from '../../../common/constants/FONT';
 
-const Timer = ({ time, hasStarted, onFinish, hasFinished }) => {
+const Timer = ({ time, hasStarted, hasFinished, onFinish }) => {
   const [seconds, setSeconds] = useState(time * 60);
   const timer = useRef();
 
@@ -55,6 +56,7 @@ export default Timer;
 
 const styles = StyleSheet.create({
   timer: {
+    fontSize: FONT.X_LARGE,
     color: COLORS.WHITE,
   },
 });

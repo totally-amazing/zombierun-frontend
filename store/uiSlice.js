@@ -7,7 +7,6 @@ const uiSlice = createSlice({
     isModalVisible: false,
     canHearingEffect: true,
     canHearingBGMusic: true,
-    shouldExitGame: false,
     isLoading: true,
   },
   reducers: {

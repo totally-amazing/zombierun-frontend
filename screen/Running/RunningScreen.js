@@ -1,32 +1,41 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
+import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
 
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import SettingScreen from '../Setting/SettingScreen';
+import ValueWithUnit from '../../common/components/ValueWithUnit';
 import Timer from './components/Timer';
 import Pause from './components/Pause';
 import AudioController from './audioController';
+import GameView from './components/GameView';
 
 const RunningScreen = ({ route, navigation }) => {
   const { speed, time } = route.params.gameSetting;
   const conversionRate = 0.277778;
   const [userDistance, setUserDistance] = useState(0);
-  const [tracker, setTracker] = useState();
-  const [zombieSize, setZombieSize] = useState('far');
-  const [zombieDistance, setZombieDistance] = useState(-20);
+  const [zombieDistance, setZombieDistance] = useState(-500);
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
+  const [hasOptionClicked, setHasOptionClicked] = useState(false);
+
+  const canHearingSoundEffect = useSelector(
+    (state) => state.ui.canHearingEffect,
+  );
+  const canHearingBackgroundusic = useSelector(
+    (state) => state.ui.canHearingBGMusic,
+  );
 
   const locationHistory = useRef([]);
   const survivalTime = useRef(time);
   const countDown = useRef();
   const intervalId = useRef();
-  const { current: audioController } = useRef(new AudioController(true, true));
+  const tracker = useRef();
+  const { current: audioController } = useRef(new AudioController());
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
   const distanceGap = Math.ceil(userDistance - zombieDistance);
@@ -36,7 +45,13 @@ const RunningScreen = ({ route, navigation }) => {
   const startRunning = async () => {
     setHasGameStarted(true);
 
-    audioController.playAllSound();
+    if (canHearingSoundEffect) {
+      audioController.playSoundEffect();
+    }
+
+    if (canHearingBackgroundusic) {
+      audioController.playBackgroundMusic();
+    }
 
     const userLocation = await Location.watchPositionAsync(
       {
@@ -60,14 +75,7 @@ const RunningScreen = ({ route, navigation }) => {
       },
     );
 
-    intervalId.current = setInterval(() => {
-      setZombieDistance((previousDistance) => {
-        const reducedZombieDistance = previousDistance + speedMeterPerSecond;
-
-        return reducedZombieDistance;
-      });
-    }, 1000);
-    setTracker(userLocation);
+    tracker.current = userLocation;
   };
 
   const getCurrentLocation = async () => {
@@ -82,19 +90,31 @@ const RunningScreen = ({ route, navigation }) => {
     ];
   };
 
+  const pauseGameStatus = () => {
+    clearInterval(intervalId.current);
+    tracker.current?.remove();
+    intervalId.current = null;
+    audioController.stopAllSound();
+    setHasGameStarted(false);
+  };
+
   const handlePressStopButton = () => {
-    if (hasGameStarted) {
-      tracker?.remove();
-      clearInterval(intervalId.current);
-      intervalId.current = null;
-      setHasGameStarted(false);
-      audioController.stopAllSound();
-    }
+    pauseGameStatus();
+    setHasOptionClicked(false);
   };
 
   const handlePressStartButton = () => {
     startRunning();
     setHasGameStarted(true);
+  };
+
+  const handlePressOptionButton = () => {
+    pauseGameStatus();
+    setHasOptionClicked(true);
+  };
+
+  const handleFinishDistanceResult = () => {
+    setHasGameFinished(true);
   };
 
   const handleFinishGame = (passedTime) => {
@@ -107,81 +127,112 @@ const RunningScreen = ({ route, navigation }) => {
     setHasGameFinished(true);
   };
 
+  const headerOptionButton = useCallback(() => {
+    return (
+      <FontAwesome
+        name="gear"
+        style={styles.option}
+        onPress={handlePressOptionButton}
+      />
+    );
+  }, []);
+
   useEffect(() => {
-    getCurrentLocation();
+    const setNavigatorOptions = () => {
+      navigation.setOptions({
+        headerTitle: '',
+        headerLeft: () => {},
+        headerRight: headerOptionButton,
+      });
+    };
 
-    audioController.loadAudio();
+    setNavigatorOptions();
+  }, [navigation]);
 
-    countDown.current = setTimeout(startRunning, 5000);
+  useEffect(() => {
+    const initStartUp = () => {
+      getCurrentLocation();
+
+      audioController.loadAudio();
+      countDown.current = setTimeout(startRunning, 5000);
+    };
+
+    initStartUp();
 
     return () => {
-      audioController.resetAudio();
       clearTimeout(countDown.current);
-      tracker?.remove();
+      tracker.current?.remove();
+      audioController.resetAudio();
     };
   }, []);
 
   useEffect(() => {
-    if (!hasGameStarted) {
-      return;
+    const startZombieChasing = () => {
+      intervalId.current = setInterval(() => {
+        setZombieDistance((previousDistance) => {
+          const reducedZombieDistance = previousDistance + speedMeterPerSecond;
+
+          return reducedZombieDistance;
+        });
+      }, 1000);
+    };
+
+    if (hasGameStarted) {
+      startZombieChasing();
     }
 
-    if (distanceGap >= 400) {
-      setZombieSize('far');
-      audioController.changeSoundEffectVolume(0.2);
-    }
-
-    if (distanceGap >= 200 && distanceGap < 400) {
-      setZombieSize('middle');
-      audioController.changeSoundEffectVolume(0.5);
-    }
-
-    if (distanceGap >= 100 && distanceGap < 200) {
-      setZombieSize('close');
-      audioController.changeSoundEffectVolume(1);
-    }
-
-    if (distanceGap <= 0) {
-      setHasGameFinished(true);
-    }
-  }, [distanceGap, hasGameStarted]);
+    return () => {
+      clearInterval(intervalId.current);
+    };
+  }, [hasGameStarted]);
 
   useEffect(() => {
-    if (isWinner || hasGameFinished) {
+    const finishGame = () => {
       clearInterval(intervalId.current);
-      tracker?.remove();
+      tracker.current?.remove();
       audioController.resetAudio();
       navigation.navigate('Result', {
         locationHistory: locationHistory.current,
         isWinner,
-        distance: userDistance,
+        distance: Math.ceil(userDistance),
         time: survivalTime.current,
         speed,
       });
+    };
+
+    if (isWinner || hasGameFinished) {
+      finishGame();
     }
   }, [isWinner, hasGameFinished]);
 
   return (
     <View style={styles.screen}>
-      {!hasGameStarted && <Pause onPress={handlePressStartButton} />}
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles[zombieSize]}
-          source={require('../../assets/images/zombie.gif')}
+      {!hasGameStarted && (
+        <Pause
+          onPress={handlePressStartButton}
+          hasOptionClicked={hasOptionClicked}
+          countDownStatus={countDown.current}
         />
+      )}
+      <View style={styles.header}>
+        <Timer
+          time={time}
+          hasStarted={hasGameStarted}
+          hasFinished={hasGameFinished}
+          onFinish={handleFinishGame}
+        />
+        <ValueWithUnit value={String(speed)} unit="km/h" />
       </View>
-      <Timer
-        time={time}
+      <GameView
         hasStarted={hasGameStarted}
-        onFinish={handleFinishGame}
-        hasFinished={hasGameFinished}
+        audioController={audioController}
+        distanceGap={distanceGap}
+        onFinish={handleFinishDistanceResult}
       />
-      <Text style={styles.distance}>Distance:{distanceGap}</Text>
       {hasGameStarted && (
         <FontAwesome5
           name="pause-circle"
-          size={50}
-          color={COLORS.WHITE}
+          style={styles.stopButton}
           onPress={handlePressStopButton}
         />
       )}
@@ -198,29 +249,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.BLACK,
   },
-  imageContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: 400,
+  header: {
+    flexDirection: 'row',
+    width: '80%',
+    justifyContent: 'space-between',
   },
-  distance: {
-    fontSize: FONT.X_LARGE,
-    fontFamily: FONT.BLOOD_FONT,
+  option: {
+    fontSize: FONT.MEDIUM,
     color: COLORS.WHITE,
+    marginHorizontal: 30,
   },
-  close: {
-    width: 400,
-    height: 400,
-  },
-  middle: {
-    width: 200,
-    height: 200,
-  },
-  far: {
-    width: 100,
-    height: 100,
+  stopButton: {
+    fontSize: 50,
+    color: COLORS.WHITE,
   },
 });
 
