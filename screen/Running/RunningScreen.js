@@ -18,7 +18,7 @@ const RunningScreen = ({ route, navigation }) => {
   const { speed, time } = route.params.gameSetting;
   const conversionRate = 0.277778;
   const [userDistance, setUserDistance] = useState(0);
-  const [zombieDistance, setZombieDistance] = useState(-20);
+  const [zombieDistance, setZombieDistance] = useState(-500);
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
