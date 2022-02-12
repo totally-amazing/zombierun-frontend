@@ -1,7 +1,6 @@
 import React, { useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 import FONT from '../../common/constants/FONT';
@@ -14,6 +13,7 @@ import PreviousResultScreen from '../PreviousResult/PrveiousResultScreen';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import { toggleModal } from '../../store/uiSlice';
 import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
+import ArrowMain from '../../common/components/ArrowMain';
 
 const INVALID_FORM_ERROR_MESSAGE = '잘못된 입력값이 존재합니다';
 const FORM_UPDATE = 'FORM_UPDATE';
@@ -66,10 +66,6 @@ const SoloScreen = ({ navigation }) => {
     });
   };
 
-  const handleArrowButton = () => {
-    navigation.navigate('Main');
-  };
-
   const handleInputChange = useCallback(
     (inputIdentifier, inputValue, inputValidation) => {
       dispatchForm({
@@ -118,12 +114,7 @@ const SoloScreen = ({ navigation }) => {
           onPress={handlePressStartButton}
         />
       </View>
-      <View style={styles.navButtonContainer}>
-        <Pressable style={styles.navButton} onPress={handleArrowButton}>
-          <AntDesign name="arrowleft" size={20} color={COLORS.DEEP_RED} />
-          <Text style={styles.text}>To the Main</Text>
-        </Pressable>
-      </View>
+      <ArrowMain />
     </View>
   );
 };
@@ -163,13 +154,6 @@ const styles = StyleSheet.create({
   },
   button: {
     fontFamily: FONT.BLOOD_FONT,
-  },
-  navButtonContainer: {
-    width: '80%',
-    justifyContent: 'flex-start',
-  },
-  navButton: {
-    flexDirection: 'row',
   },
 });
 
