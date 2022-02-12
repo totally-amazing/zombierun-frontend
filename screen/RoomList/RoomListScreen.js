@@ -1,26 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import RoomListItem from './components/RoomListItem';
 import RoomMakerScreen from '../RoomMaker/RoomMakerScreen';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import { useRoomList } from '../../common/hooks/useRoom';
-import showErrorMessage from '../../common/utils/showErrorMessage';
 
 const RoomListScreen = ({ navigation }) => {
-  const [rooms, setRooms] = useState([]);
-
-  useRoomList(setRooms, (error) => {
-    showErrorMessage(error.message);
-  });
+  const roomList = useSelector((state) => state.room.list);
 
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>Room List</Text>
       <FlatList
-        data={rooms}
+        data={roomList}
         renderItem={({ item }) => (
           <RoomListItem
             onPress={() => navigation.push('Room', item.id)}

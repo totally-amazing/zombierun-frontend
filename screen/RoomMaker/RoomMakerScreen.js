@@ -12,8 +12,8 @@ import showErrorMessage from '../../common/utils/showErrorMessage';
 import StandardModal from '../../common/components/StandardModal';
 import ActiveButton from '../../common/components/ActiveButton';
 import { toggleModal } from '../../store/uiSlice';
-import { useNewRoomId } from '../../common/hooks/useRoom';
 import { startGame } from '../../store/gameSlice';
+import { createRoom } from '../../store/roomSlice';
 
 const formReducer = (state, action) => {
   if (action.type === 'INPUT_CHANGE') {
@@ -98,24 +98,14 @@ const RoomMakerScreen = () => {
       time,
     };
 
-    let id;
-
-    try {
-      id = await useNewRoomId(roomInfo);
-    } catch (error) {
-      showErrorMessage(error.message);
-    }
+    dispatch(createRoom(roomInfo));
 
     if (mode === 'oneOnOne') {
-      navigation.navigate('OneOnOne', {
-        roomdId: id,
-      });
+      navigation.navigate('OneOnOne');
     }
 
     if (mode === 'survival') {
-      navigation.navigate('Survival', {
-        roomId: id,
-      });
+      navigation.navigate('Survival');
     }
 
     dispatch(toggleModal());
