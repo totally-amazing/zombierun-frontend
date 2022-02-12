@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import AppLoading from 'expo-app-loading';
-import * as Font from 'expo-font';
-import { Provider } from 'react-redux';
 import FlashMessage from 'react-native-flash-message';
+import { Provider } from 'react-redux';
+import * as Font from 'expo-font';
 
-import AppNavigator from './navigation/AppNavigator';
 import store from './store';
+import AppNavigator from './navigation/AppNavigator';
 import showErrorMessage from './common/utils/showErrorMessage';
 
 const fetchFonts = () => {

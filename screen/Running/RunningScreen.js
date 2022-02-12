@@ -193,18 +193,22 @@ const RunningScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     const finishGame = () => {
+      const kilometerDistance = Math.ceil(userDistance) / 1000;
+      const kilomterPerHour = kilometerDistance / (survivalTime.current / 60);
+
       clearInterval(intervalId.current);
       tracker.current?.remove();
       audioController.resetAudio();
       navigation.navigate('Result');
+
       dispatch(
         getGameResult({
           userId: id,
           locationHistory: locationHistory.current,
           isWinner,
-          distance: Math.ceil(userDistance),
+          distance: kilometerDistance,
           time: survivalTime.current,
-          speed,
+          speed: kilomterPerHour.toFixed(1),
           mode,
           role,
         }),
@@ -232,7 +236,7 @@ const RunningScreen = ({ route, navigation }) => {
           hasFinished={hasGameFinished}
           onFinish={handleFinishGame}
         />
-        <ValueWithUnit value={String(speed)} unit="km/h" />
+        <ValueWithUnit value={speed} unit="km/h" />
       </View>
       <GameView
         hasStarted={hasGameStarted}
