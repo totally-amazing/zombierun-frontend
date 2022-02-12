@@ -23,6 +23,33 @@ export const getRecentRecord = createAsyncThunk(
   },
 );
 
+export const getGameResult = createAsyncThunk(
+  'game/getGameResultStatus',
+  async (result) => {
+    const { userId, mode, isWinner, time, speed, distance, role } = result;
+    const mappedResult = {
+      mode,
+      player: {
+        isWinner,
+        time: Number(time),
+        speed: Number(speed),
+        distance,
+        role,
+        id: userId,
+      },
+    };
+
+    if (mode === 'solo') {
+      await gameService.create(mappedResult);
+    } else {
+      gameService.emitDie();
+      await gameService.update(mappedResult.player);
+    }
+
+    return result;
+  },
+);
+
 const gameSlice = createSlice({
   name: 'game',
   initialState: {
@@ -30,6 +57,7 @@ const gameSlice = createSlice({
     role: 'human',
     totalRecord: {},
     recentRecord: {},
+    result: {},
   },
   reducers: {
     startGame: (state, action) => {
@@ -51,6 +79,9 @@ const gameSlice = createSlice({
     },
     [getRecentRecord.fulfilled]: (state, action) => {
       state.recentRecord = action.payload;
+    },
+    [getGameResult.fulfilled]: (state, action) => {
+      state.result = action.payload;
     },
   },
 });

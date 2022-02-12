@@ -8,21 +8,16 @@ import TextChunk from '../../common/components/TextChunk';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
-import useGameResult from '../../common/hooks/useGameResult';
 import getResultMessage from '../../common/utils/getResultMessage';
-import showErrorMessage from '../../common/utils/showErrorMessage';
 
-const ResultScreen = ({ navigation, route }) => {
-  const { isWinner, time, speed, distance } = route.params;
-  const { mode, role } = useSelector((state) => state.game);
+const ResultScreen = ({ navigation }) => {
+  const { mode, isWinner, time, speed, distance, role } = useSelector(
+    (state) => state.game.result,
+  );
 
   const handlePressButton = () => {
     navigation.navigate('Main');
   };
-
-  useGameResult({ ...route.params, mode, role }, (error) => {
-    showErrorMessage(error.message);
-  });
 
   return (
     <View style={styles.screen}>
@@ -78,16 +73,4 @@ const styles = StyleSheet.create({
 
 ResultScreen.propTypes = {
   navigation: PropTypes.objectOf(PropTypes.func).isRequired,
-  route: PropTypes.shape({
-    key: PropTypes.string,
-    name: PropTypes.string,
-    params: PropTypes.shape({
-      isWinner: PropTypes.bool,
-      distance: PropTypes.number,
-      time: PropTypes.number,
-      speed: PropTypes.string,
-      locationHistory: PropTypes.arrayOf(PropTypes.object),
-    }),
-    path: PropTypes.string,
-  }).isRequired,
 };

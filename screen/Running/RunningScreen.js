@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
@@ -12,12 +12,13 @@ import Timer from './components/Timer';
 import Pause from './components/Pause';
 import AudioController from './audioController';
 import GameView from './components/GameView';
+import { getGameResult } from '../../store/gameSlice';
 
 const RunningScreen = ({ route, navigation }) => {
   const { speed, time } = route.params.gameSetting;
   const conversionRate = 0.277778;
   const [userDistance, setUserDistance] = useState(0);
-  const [zombieDistance, setZombieDistance] = useState(-500);
+  const [zombieDistance, setZombieDistance] = useState(-20);
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
@@ -186,6 +187,10 @@ const RunningScreen = ({ route, navigation }) => {
     };
   }, [hasGameStarted]);
 
+  const dispatch = useDispatch();
+  const { id } = useSelector((state) => state.user);
+  const { mode, role } = useSelector((state) => state.game);
+
   useEffect(() => {
     const finishGame = () => {
       clearInterval(intervalId.current);
@@ -198,6 +203,18 @@ const RunningScreen = ({ route, navigation }) => {
         time: survivalTime.current,
         speed,
       });
+      dispatch(
+        getGameResult({
+          userId: id,
+          locationHistory: locationHistory.current,
+          isWinner,
+          distance: Math.ceil(userDistance),
+          time: survivalTime.current,
+          speed,
+          mode,
+          role,
+        }),
+      );
     };
 
     if (isWinner || hasGameFinished) {
