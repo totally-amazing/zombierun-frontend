@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
-import ActiveButton from '../../common/components/ActiveButton';
+import CustomButton from '../../common/components/CustomButton';
 import TextChunk from '../../common/components/TextChunk';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
@@ -29,7 +29,7 @@ const ResultScreen = ({ navigation }) => {
         <TextChunk title="생존시간" value={time} unit="분" />
         <TextChunk title="거리" value={distance} unit="km" />
       </View>
-      <ActiveButton
+      <CustomButton
         message="To the Main"
         disabled={false}
         onPress={handlePressButton}

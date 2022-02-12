@@ -27,7 +27,7 @@ const RunningScreen = ({ route, navigation }) => {
   const canHearingSoundEffect = useSelector(
     (state) => state.ui.canHearingEffect,
   );
-  const canHearingBackgroundusic = useSelector(
+  const canHearingBackgroundMusic = useSelector(
     (state) => state.ui.canHearingBGMusic,
   );
 
@@ -50,7 +50,7 @@ const RunningScreen = ({ route, navigation }) => {
       audioController.playSoundEffect();
     }
 
-    if (canHearingBackgroundusic) {
+    if (canHearingBackgroundMusic) {
       audioController.playBackgroundMusic();
     }
 
@@ -99,14 +99,14 @@ const RunningScreen = ({ route, navigation }) => {
     setHasGameStarted(false);
   };
 
-  const handlePressStopButton = () => {
-    pauseGameStatus();
-    setHasOptionClicked(false);
-  };
-
   const handlePressStartButton = () => {
     startRunning();
     setHasGameStarted(true);
+  };
+
+  const handlePressStopButton = () => {
+    pauseGameStatus();
+    setHasOptionClicked(false);
   };
 
   const handlePressOptionButton = () => {

@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import COLORS from '../constants/COLORS';
 import FONT from '../constants/FONT';
 
-const ArrowMain = () => {
+const ArrowMainButton = () => {
   const navigation = useNavigation();
 
   const handleGoToMainButton = () => {
@@ -23,7 +23,7 @@ const ArrowMain = () => {
   );
 };
 
-export default ArrowMain;
+export default ArrowMainButton;
 
 const styles = StyleSheet.create({
   navButtonContainer: {

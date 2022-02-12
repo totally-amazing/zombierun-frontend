@@ -12,7 +12,7 @@ import {
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import { fetchUserByIdToken } from '../../store/userSlice';
-import ActiveButton from '../../common/components/ActiveButton';
+import CustomButton from '../../common/components/CustomButton';
 
 const AuthScreen = () => {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const AuthScreen = () => {
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>ZOMBIE RUN</Text>
-      <ActiveButton
+      <CustomButton
         message="Google Sign In"
         disabled={!request}
         onPress={promptAsync}

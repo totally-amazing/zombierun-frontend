@@ -6,14 +6,14 @@ import PropTypes from 'prop-types';
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 import Input from '../../common/components/Input';
-import ActiveButton from '../../common/components/ActiveButton';
-import Difficulty from './components/Difficulty';
-import { getRecentRecord, startGame } from '../../store/gameSlice';
+import CustomButton from '../../common/components/CustomButton';
 import PreviousResultScreen from '../PreviousResult/PrveiousResultScreen';
 import showErrorMessage from '../../common/utils/showErrorMessage';
-import { toggleModal } from '../../store/uiSlice';
 import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
-import ArrowMain from '../../common/components/ArrowMain';
+import ArrowMainButton from '../../common/components/ArrowMainButton';
+import { getRecentRecord, startGame } from '../../store/gameSlice';
+import { toggleModal } from '../../store/uiSlice';
+import Difficulty from './components/Difficulty';
 
 const INVALID_FORM_ERROR_MESSAGE = '잘못된 입력값이 존재합니다';
 const FORM_UPDATE = 'FORM_UPDATE';
@@ -75,7 +75,7 @@ const SoloScreen = ({ navigation }) => {
         input: inputIdentifier,
       });
     },
-    [dispatchForm]
+    [dispatchForm],
   );
 
   return (
@@ -107,14 +107,14 @@ const SoloScreen = ({ navigation }) => {
         />
       </View>
       <View>
-        <ActiveButton
+        <CustomButton
           message="START TO SURVIVE"
           style={styles.button}
           disabled={false}
           onPress={handlePressStartButton}
         />
       </View>
-      <ArrowMain />
+      <ArrowMainButton />
     </View>
   );
 };
