@@ -1,44 +1,35 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import StandardModal from '../../common/components/StandardModal';
-import showErrorMessage from '../../common/utils/showErrorMessage';
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 import TextChunk from '../../common/components/TextChunk';
 import getResultMessage from '../../common/utils/getResultMessage';
-import { useRecentGameRecord } from '../../common/hooks/useGame';
 
 const SPPED = 'km/h';
 const KILOMETER = 'km';
 const MINUTE = 'm';
 
 const PreviousResultScreen = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [record, setRecord] = useState({
-    distance: 0,
-    time: 0,
-    speed: 0,
-    isWinner: false,
-    role: 'human',
-    mode: 'solo',
-  });
-  const { id } = useSelector((state) => state.user);
-
-  useRecentGameRecord(id, setRecord, (error) => {
-    setIsLoading(false);
-    setHasError(true);
-    showErrorMessage(error.message);
-  });
+  const isLoading = useSelector((state) => state.ui.isLoading);
+  const record = useSelector((state) => state.game.recentRecord);
 
   const previousResult = (
     <View>
       <View style={styles.main}>
-        <TextChunk title="최근 속도" value={record.speed} unit={SPPED} />
-        <TextChunk title="최근 러닝 타임" value={record.time} unit={MINUTE} />
-        <TextChunk title="최근 거리" value={record.distance} unit={KILOMETER} />
+        <TextChunk title="최근 속도" value={record.speed || 0} unit={SPPED} />
+        <TextChunk
+          title="최근 러닝 타임"
+          value={record.time || 0}
+          unit={MINUTE}
+        />
+        <TextChunk
+          title="최근 거리"
+          value={record.distance || 0}
+          unit={KILOMETER}
+        />
       </View>
       <Text style={styles.result}>
         {getResultMessage(record.mode, record.role, record.isWinner)}
@@ -49,7 +40,7 @@ const PreviousResultScreen = () => {
   return (
     <StandardModal>
       {isLoading && <ActivityIndicator size="large" color={COLORS.RED} />}
-      {!isLoading && !hasError && previousResult}
+      {!isLoading && previousResult}
     </StandardModal>
   );
 };

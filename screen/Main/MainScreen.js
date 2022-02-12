@@ -2,19 +2,24 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
+import { useDispatch } from 'react-redux';
 
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
 import showErrorMessage from '../../common/utils/showErrorMessage';
+import { getRoomList } from '../../store/roomSlice';
 
 const MainScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   const handleSingleText = () => {
     navigation.navigate('Solo');
   };
 
   const handleTogetherText = () => {
     navigation.navigate('RoomList');
+    dispatch(getRoomList());
   };
 
   useEffect(() => {

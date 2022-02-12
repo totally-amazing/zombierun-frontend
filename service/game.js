@@ -46,8 +46,8 @@ class GameService {
     });
   };
 
-  emitDie = (gameId) => {
-    this.socket.emit('user/die', gameId);
+  emitDie = () => {
+    this.socket.emit('user/die');
   };
 }
 

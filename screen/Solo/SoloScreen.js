@@ -7,13 +7,13 @@ import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 import Input from '../../common/components/Input';
 import CustomButton from '../../common/components/CustomButton';
-import Difficulty from './components/Difficulty';
-import { startGame } from '../../store/gameSlice';
 import PreviousResultScreen from '../PreviousResult/PrveiousResultScreen';
 import showErrorMessage from '../../common/utils/showErrorMessage';
-import { toggleModal } from '../../store/uiSlice';
 import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
-import ArrowMain from '../../common/components/ArrowMain';
+import ArrowMainButton from '../../common/components/ArrowMainButton';
+import { getRecentRecord, startGame } from '../../store/gameSlice';
+import { toggleModal } from '../../store/uiSlice';
+import Difficulty from './components/Difficulty';
 
 const INVALID_FORM_ERROR_MESSAGE = '잘못된 입력값이 존재합니다';
 const FORM_UPDATE = 'FORM_UPDATE';
@@ -61,7 +61,9 @@ const SoloScreen = ({ navigation }) => {
     }
 
     dispatch(startGame({ mode: 'solo' }));
-    navigation.navigate('Running', inputValues);
+    navigation.navigate('Running', {
+      gameSetting: { speed: inputValues.speed, time: inputValues.time },
+    });
   };
 
   const handleInputChange = useCallback(
@@ -112,7 +114,7 @@ const SoloScreen = ({ navigation }) => {
           onPress={handlePressStartButton}
         />
       </View>
-      <ArrowMain />
+      <ArrowMainButton />
     </View>
   );
 };
@@ -121,8 +123,11 @@ export default SoloScreen;
 
 export const screenOption = getProfileHeaderOption(() => {
   const dispatch = useDispatch();
+  const { id } = useSelector((state) => state.user);
+
   const handlePreviousText = () => {
     dispatch(toggleModal());
+    dispatch(getRecentRecord(id));
   };
   return (
     <View style={styles.buttonContainer}>
