@@ -8,7 +8,7 @@ import { toggleEffect, toggleSound } from '../../store/uiSlice';
 import StandardModal from '../../common/components/StandardModal';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import ActiveButton from '../../common/components/ActiveButton';
+import CustomButton from '../../common/components/CustomButton';
 import WindowWithText from './components/WindowWithText';
 
 const SettingScreen = ({ onClose }) => {
@@ -65,7 +65,7 @@ const SettingScreen = ({ onClose }) => {
         {hasExitCheck && (
           <View style={styles.screen}>
             <Text style={styles.text}>러닝을 종료하시겠습니까?</Text>
-            <ActiveButton
+            <CustomButton
               onPress={handlePressExitButton}
               message="종료"
               style={styles.exitButton}

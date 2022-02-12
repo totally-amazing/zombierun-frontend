@@ -9,7 +9,7 @@ const BUTTON_WIDTH = 300;
 const BUTTON_HEIGHT = 60;
 const BUTTON_ROUND = 24;
 
-const ActiveButton = ({ message, disabled, onPress, style }) => {
+const CustomButton = ({ message, disabled, onPress, style }) => {
   const handlePressdbutton = () => {
     onPress();
   };
@@ -25,7 +25,7 @@ const ActiveButton = ({ message, disabled, onPress, style }) => {
   );
 };
 
-export default ActiveButton;
+export default CustomButton;
 
 const styles = StyleSheet.create({
   loginButton: {
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
 });
 
-ActiveButton.propTypes = {
+CustomButton.propTypes = {
   message: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   onPress: PropTypes.func.isRequired,
@@ -51,7 +51,7 @@ ActiveButton.propTypes = {
   ]),
 };
 
-ActiveButton.defaultProps = {
+CustomButton.defaultProps = {
   disabled: true,
   style: {},
 };

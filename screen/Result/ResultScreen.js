@@ -3,26 +3,21 @@ import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
-import ActiveButton from '../../common/components/ActiveButton';
+import CustomButton from '../../common/components/CustomButton';
 import TextChunk from '../../common/components/TextChunk';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
-import { useGameEnd } from '../../common/hooks/useGame';
 import getResultMessage from '../../common/utils/getResultMessage';
-import showErrorMessage from '../../common/utils/showErrorMessage';
 
-const ResultScreen = ({ navigation, route }) => {
-  const { isWinner, time, speed, distance } = route.params;
-  const { mode, role } = useSelector((state) => state.game);
+const ResultScreen = ({ navigation }) => {
+  const { mode, isWinner, time, speed, distance, role } = useSelector(
+    (state) => state.game.result,
+  );
 
   const handlePressButton = () => {
     navigation.navigate('Main');
   };
-
-  useGameEnd({ ...route.params, mode }, (error) => {
-    showErrorMessage(error.message);
-  });
 
   return (
     <View style={styles.screen}>
@@ -34,7 +29,7 @@ const ResultScreen = ({ navigation, route }) => {
         <TextChunk title="생존시간" value={time} unit="분" />
         <TextChunk title="거리" value={distance} unit="km" />
       </View>
-      <ActiveButton
+      <CustomButton
         message="To the Main"
         disabled={false}
         onPress={handlePressButton}
@@ -78,16 +73,4 @@ const styles = StyleSheet.create({
 
 ResultScreen.propTypes = {
   navigation: PropTypes.objectOf(PropTypes.func).isRequired,
-  route: PropTypes.shape({
-    key: PropTypes.string,
-    name: PropTypes.string,
-    params: PropTypes.shape({
-      isWinner: PropTypes.bool,
-      distance: PropTypes.number,
-      time: PropTypes.number,
-      speed: PropTypes.number,
-      locationHistory: PropTypes.arrayOf(PropTypes.number),
-    }),
-    path: PropTypes.string,
-  }).isRequired,
 };

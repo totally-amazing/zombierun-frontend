@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { getRecentRecord } from './gameSlice';
 
 const uiSlice = createSlice({
   name: 'ui',
@@ -6,6 +7,7 @@ const uiSlice = createSlice({
     isModalVisible: false,
     canHearingEffect: true,
     canHearingBGMusic: true,
+    isLoading: true,
   },
   reducers: {
     toggleModal: (state, action) => {
@@ -19,6 +21,11 @@ const uiSlice = createSlice({
     },
     checkExitGame: (state, action) => {
       state.shouldExitGame = action.payload;
+    },
+  },
+  extraReducers: {
+    [getRecentRecord.fulfilled]: (state, action) => {
+      state.isLoading = false;
     },
   },
 });

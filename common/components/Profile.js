@@ -1,7 +1,6 @@
 import React from 'react';
-import { Image, Pressable, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-
+import { Image, Pressable, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import PROFILE from '../constants/PROFILE';
