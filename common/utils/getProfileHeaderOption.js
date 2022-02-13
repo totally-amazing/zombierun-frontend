@@ -12,7 +12,7 @@ function getProfileHeaderOption(headerRight) {
       headerTitle: '',
       headerLeft: () => {
         const dispatch = useDispatch();
-        const { id } = useSelector((state) => state.user);
+        const { id, imageUrl } = useSelector((state) => state.user);
 
         const handleProfileButton = () => {
           nav.navigation.push('MyPage');
@@ -22,7 +22,11 @@ function getProfileHeaderOption(headerRight) {
         return (
           <View style={styles.buttonContainer}>
             <HeaderButtons HeaderButtonComponent={Profile}>
-              <Item size="small" onPress={handleProfileButton} />
+              <Item
+                size="small"
+                onPress={handleProfileButton}
+                imageUrl={imageUrl}
+              />
             </HeaderButtons>
           </View>
         );

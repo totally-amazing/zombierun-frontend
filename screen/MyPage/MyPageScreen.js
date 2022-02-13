@@ -13,12 +13,13 @@ import LineWithText from './components/LineWithText';
 
 const MyPageScreen = () => {
   const record = useSelector((state) => state.game.totalRecord);
-  const { nickname } = useSelector((state) => state.user.nickname);
+  const { nickname, imageUrl } = useSelector((state) => state.user);
+  console.log(nickname, imageUrl);
 
   return (
     <View style={styles.screen}>
       <View style={styles.row}>
-        <Profile size="medium" />
+        <Profile size="medium" imageUrl={imageUrl} />
         <Text style={styles.nickname}>{nickname}</Text>
       </View>
       <View style={styles.row}>
