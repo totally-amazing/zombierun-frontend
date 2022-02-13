@@ -1,17 +1,16 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
 
 import COLORS from '../../common/constants/COLORS';
-import FONT from '../../common/constants/FONT';
-import ValueWithUnit from '../../common/components/ValueWithUnit';
-import Timer from './components/Timer';
 import Pause from './components/Pause';
 import AudioController from './audioController';
 import GameView from './components/GameView';
+import Header from './components/Header';
+import socket from '../../network/socket';
 import { getGameResult } from '../../store/gameSlice';
 
 const RunningScreen = ({ route, navigation }) => {
@@ -128,28 +127,6 @@ const RunningScreen = ({ route, navigation }) => {
     setHasGameFinished(true);
   };
 
-  const headerOptionButton = useCallback(() => {
-    return (
-      <FontAwesome
-        name="gear"
-        style={styles.option}
-        onPress={handlePressOptionButton}
-      />
-    );
-  }, []);
-
-  useEffect(() => {
-    const setNavigatorOptions = () => {
-      navigation.setOptions({
-        headerTitle: '',
-        headerLeft: () => {},
-        headerRight: headerOptionButton,
-      });
-    };
-
-    setNavigatorOptions();
-  }, [navigation]);
-
   useEffect(() => {
     const initStartUp = () => {
       getCurrentLocation();
@@ -229,15 +206,15 @@ const RunningScreen = ({ route, navigation }) => {
           countDownStatus={countDown.current}
         />
       )}
-      <View style={styles.header}>
-        <Timer
-          time={time}
-          hasStarted={hasGameStarted}
-          hasFinished={hasGameFinished}
-          onFinish={handleFinishGame}
-        />
-        <ValueWithUnit value={speed} unit="km/h" />
-      </View>
+      <Header
+        navigation={navigation}
+        speed={speed}
+        time={time}
+        hasStarted={hasGameStarted}
+        hasFinished={hasGameFinished}
+        onFinish={handleFinishGame}
+        onPress={handlePressOptionButton}
+      />
       <GameView
         hasStarted={hasGameStarted}
         audioController={audioController}
@@ -263,16 +240,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.BLACK,
-  },
-  header: {
-    flexDirection: 'row',
-    width: '80%',
-    justifyContent: 'space-between',
-  },
-  option: {
-    fontSize: FONT.MEDIUM,
-    color: COLORS.WHITE,
-    marginHorizontal: 30,
   },
   stopButton: {
     fontSize: 50,
