@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { BASE_URL } from '@env';
@@ -25,10 +25,11 @@ const RunningScreen = ({ route, navigation }) => {
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
   const [hasOptionClicked, setHasOptionClicked] = useState(false);
+  const [userCount, setUserCount] = useState(0);
 
   const { id } = useSelector((state) => state.user);
-  const { role } = useSelector((state) => state.game);
-  const mode = 'oneOnOne';
+  const { role, mode } = useSelector((state) => state.game);
+  const { allPlayersId } = useSelector((state) => state.room);
   const canHearingSoundEffect = useSelector(
     (state) => state.ui.canHearingEffect,
   );
@@ -67,7 +68,7 @@ const RunningScreen = ({ route, navigation }) => {
         const { coords } = location;
 
         if (mode === 'oneOnOne') {
-          socket.emit('game/userSpeed', `${coords.speed}`);
+          socket.emit('game/userSpeed', coords.speed);
         }
 
         setUserDistance((preivousDistance) => {
@@ -127,18 +128,34 @@ const RunningScreen = ({ route, navigation }) => {
     setHasGameFinished(true);
   };
 
-  const handleFinishGame = (passedTime) => {
-    if (passedTime === 0) {
-      setIsWinner(true);
-    } else {
-      survivalTime.current -= passedTime;
+  const handleFinishGame = (passedTime, survivorCount) => {
+    if (mode === 'survival') {
+      survivalTime.current = passedTime;
+
+      if (survivorCount === 1) {
+        setIsWinner(true);
+      }
+
+      return;
     }
 
-    setHasGameFinished(true);
+    if (passedTime === 0) {
+      if (role === 'human') {
+        setIsWinner(true);
+        setHasGameFinished(true);
+      }
+    } else {
+      survivalTime.current -= passedTime;
+      setHasGameFinished(true);
+    }
   };
 
   useEffect(() => {
     const initStartUp = () => {
+      if (mode === 'survival') {
+        setUserCount(allPlayersId.length);
+      }
+
       getCurrentLocation();
 
       audioController.loadAudio();
@@ -155,10 +172,9 @@ const RunningScreen = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    const startZombieChasing = () => {
+    const startOpponentRunning = () => {
       if (mode === 'oneOnOne') {
         socket.on('game/opponentSpeed', (opponentSpeed) => {
-          console.log(opponentSpeed);
           setOpponentDistance((previousDistance) => {
             const reducedOpponentDistance = previousDistance + opponentSpeed;
 
@@ -169,17 +185,25 @@ const RunningScreen = ({ route, navigation }) => {
         return;
       }
 
-      intervalId.current = setInterval(() => {
-        setOpponentDistance((previousDistance) => {
-          const reducedOpponentDistance =
-            previousDistance + speedMeterPerSecond;
-          return reducedOpponentDistance;
+      if (mode === 'survival') {
+        socket.on('game/die', () => {
+          setUserCount((prev) => prev - 1);
         });
-      }, 1000);
+      }
+
+      if (mode === 'solo') {
+        intervalId.current = setInterval(() => {
+          setOpponentDistance((previousDistance) => {
+            const reducedOpponentDistance =
+              previousDistance + speedMeterPerSecond;
+            return reducedOpponentDistance;
+          });
+        }, 1000);
+      }
     };
 
     if (hasGameStarted) {
-      startZombieChasing();
+      startOpponentRunning();
     }
 
     return () => {
@@ -189,6 +213,10 @@ const RunningScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     const finishGame = () => {
+      if (mode === 'oneOnOne' || mode === 'survival') {
+        socket.emit('user/leave');
+      }
+
       const kilometerDistance = Math.ceil(userDistance) / 1000;
       const kilomterPerHour = kilometerDistance / (survivalTime.current / 60);
 
@@ -220,6 +248,7 @@ const RunningScreen = ({ route, navigation }) => {
     <View style={styles.screen}>
       {!hasGameStarted && (
         <Pause
+          role={role}
           onPress={handlePressStartButton}
           hasOptionClicked={hasOptionClicked}
           countDownStatus={countDown.current}
@@ -230,19 +259,24 @@ const RunningScreen = ({ route, navigation }) => {
         speed={speed}
         time={time}
         mode={mode}
+        socket={socket}
+        userCounts={userCount}
         hasStarted={hasGameStarted}
         hasFinished={hasGameFinished}
         onFinish={handleFinishGame}
         onPress={handlePressOptionButton}
       />
       <GameView
+        id={id}
+        role={role}
         mode={mode}
+        socket={socket}
         hasStarted={hasGameStarted}
         audioController={audioController}
         distanceGap={distanceGap}
         onFinish={handleFinishDistanceResult}
       />
-      {hasGameStarted && (
+      {hasGameStarted && mode === 'solo' && (
         <FontAwesome5
           name="pause-circle"
           style={styles.stopButton}

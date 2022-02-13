@@ -5,9 +5,11 @@ import PropTypes from 'prop-types';
 import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
 import AudioController from '../audioController';
+import Socket from '../../../network/socket';
 
 const GameView = ({
-  mode,
+  role,
+  socket,
   hasStarted,
   audioController,
   distanceGap,
@@ -15,7 +17,7 @@ const GameView = ({
 }) => {
   const [zombieSize, setZombieSize] = useState('far');
   const opponentImage = () => {
-    if (mode === 'oneOnOne') {
+    if (role === 'zombie') {
       return require('../../../assets/images/human.gif');
     }
 
@@ -30,6 +32,7 @@ const GameView = ({
     if (distanceGap >= 400) {
       setZombieSize('far');
       audioController.changeSoundEffectVolume(0.2);
+      return;
     }
 
     if (distanceGap >= 200 && distanceGap < 400) {
@@ -40,9 +43,11 @@ const GameView = ({
     if (distanceGap >= 100 && distanceGap < 200) {
       setZombieSize('close');
       audioController.changeSoundEffectVolume(1);
+      return;
     }
 
     if (distanceGap <= 0) {
+      socket.emit('game/die');
       onFinish();
     }
   }, [distanceGap, hasStarted]);
@@ -102,9 +107,14 @@ const styles = StyleSheet.create({
 });
 
 GameView.propTypes = {
-  mode: PropTypes.string.isRequired,
+  role: PropTypes.string.isRequired,
   hasStarted: PropTypes.bool.isRequired,
   distanceGap: PropTypes.number.isRequired,
   onFinish: PropTypes.func.isRequired,
   audioController: PropTypes.instanceOf(AudioController).isRequired,
+  socket: PropTypes.instanceOf(Socket),
+};
+
+GameView.defaultProps = {
+  socket: '',
 };

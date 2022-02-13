@@ -1,13 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, View, StyleSheet, Text } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import PropTypes from 'prop-types';
 
 import SettingScreen from '../../Setting/SettingScreen';
 import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
 
-const Pause = ({ onPress, hasOptionClicked, countDownStatus }) => {
+const Pause = ({ role, onPress, hasOptionClicked, countDownStatus }) => {
   if (hasOptionClicked) {
     return <SettingScreen onClose={onPress} />;
   }
@@ -16,7 +16,9 @@ const Pause = ({ onPress, hasOptionClicked, countDownStatus }) => {
     <Modal transparent>
       <View style={styles.backdrop}>
         {!countDownStatus && (
-          <Text style={styles.startText}>ZOMBIE IS CHASING YOU</Text>
+          <Text style={styles.startText}>
+            {role === 'human' ? 'ZOMBIE IS CHASING U' : 'U FIND FOOD'}
+          </Text>
         )}
         {countDownStatus && (
           <FontAwesome
@@ -53,11 +55,12 @@ const styles = StyleSheet.create({
 });
 
 Pause.propTypes = {
+  role: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
   hasOptionClicked: PropTypes.bool.isRequired,
   countDownStatus: PropTypes.number,
 };
 
 Pause.defaultProps = {
-  countDownStatus: null,
+  countDownStatus: '',
 };

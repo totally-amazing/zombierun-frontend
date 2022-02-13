@@ -18,7 +18,7 @@ class Socket {
     return () => this.io.off(event);
   }
 
-  emit(event, args) {
+  emit(event, ...args) {
     if (!this.io.connected) {
       this.io.connect();
     }
