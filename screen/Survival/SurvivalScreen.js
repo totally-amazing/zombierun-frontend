@@ -1,48 +1,92 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, FlatList, Pressable, Text } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
-import Profile from '../../common/components/Profile';
 import CustomButton from '../../common/components/CustomButton';
 import TextChunk from '../../common/components/TextChunk';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import usePlayers from '../../common/hooks/userPlayers';
+import { leave, notReady, ready } from '../../store/roomSlice';
+import ProfileItem from './ProfileItem/ProfileItem';
 
-const SurvivalScreen = () => {
+const SurvivalScreen = ({ navigation }) => {
+  const [canStart, setCanStart] = useState(false);
   const [isReady, setIsReady] = useState(false);
+
+  const dispatch = useDispatch();
   const players = usePlayers();
+  const { id } = useSelector((state) => state.user);
+  const currentRoom = useSelector((state) => state.room.current);
+
+  const handlePressReadyButton = () => {
+    if (players.length < 2) {
+      return;
+    }
+
+    setIsReady((prev) => !prev);
+
+    // 이미 ready인 상태에선 ready 버튼을 클릭했을 때 emit notReady
+    if (isReady) {
+      dispatch(notReady(id));
+    } else {
+      dispatch(ready(id));
+    }
+  };
 
   const handlePressStartButton = () => {
-    setIsReady((prev) => !prev);
+    navigation.navigate('Running');
   };
+
+  const handleExitRoom = () => {
+    navigation.pop();
+    dispatch(leave());
+  };
+
+  useEffect(() => {
+    const isAllReady = players.every((player) => player.isReady);
+
+    if (isAllReady) {
+      setCanStart(true);
+    } else {
+      setCanStart(false);
+    }
+  }, [players]);
 
   return (
     <View style={styles.screen}>
       <View style={styles.row}>
-        <TextChunk title="인원" value="20" unit="명" />
-        <TextChunk title="좀비 속도" value="6" unit="km/h" />
+        <TextChunk title="인원" value={players.length} unit="명" />
+        <TextChunk title="좀비 속도" value={currentRoom?.speed} unit="km/h" />
       </View>
 
       <FlatList
-        style={styles.profile}
+        style={styles.players}
         data={players}
         columnWrapperStyle={{
           justifyContent: 'space-between',
           marginBottom: 32,
         }}
-        renderItem={({ item }) => (
-          <Profile size="small" imageUrl={item.imageUrl} />
-        )}
+        renderItem={({ item }) => <ProfileItem item={item} />}
         keyExtractor={(item) => item.id}
         numColumns={4}
       />
 
       <CustomButton
-        message="Ready"
-        style={isReady ? styles.start : styles.ready}
+        message={canStart ? 'Start' : 'Ready'}
+        style={isReady && !canStart ? styles.gray : styles.red}
         disabled={false}
-        onPress={handlePressStartButton}
+        onPress={canStart ? handlePressStartButton : handlePressReadyButton}
       />
+
+      <View styles={styles.arrow}>
+        <Pressable style={styles.exit} onPress={handleExitRoom}>
+          <AntDesign name="arrowleft" size={20} color={COLORS.DEEP_RED} />
+          <Text style={styles.text}>exit</Text>
+        </Pressable>
+      </View>
     </View>
   );
 };
@@ -61,12 +105,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: 300,
   },
-  profile: {
+  players: {
     width: 300,
-    maxHeight: 500,
+    maxHeight: 400,
     marginTop: 32,
   },
-  ready: {
+  red: {
     color: COLORS.RED,
     backgroundColor: COLORS.BLACK,
     borderWidth: 3,
@@ -74,10 +118,24 @@ const styles = StyleSheet.create({
     fontSize: FONT.LARGE,
     fontFamily: FONT.BLOOD_FONT,
   },
-  start: {
+  gray: {
     color: COLORS.BLACK,
     backgroundColor: COLORS.GRAY,
     fontSize: FONT.LARGE,
     fontFamily: FONT.BLOOD_FONT,
   },
+  arrow: {
+    alignItems: 'flex-start',
+  },
+  exit: {
+    flexDirection: 'row',
+    marginTop: 32,
+  },
+  text: {
+    color: COLORS.RED,
+  },
 });
+
+SurvivalScreen.propTypes = {
+  navigation: PropTypes.objectOf(PropTypes.func).isRequired,
+};

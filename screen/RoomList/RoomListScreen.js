@@ -1,15 +1,30 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import RoomListItem from './components/RoomListItem';
 import RoomMakerScreen from '../RoomMaker/RoomMakerScreen';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
+import { joinRoom } from '../../store/roomSlice';
 
 const RoomListScreen = ({ navigation }) => {
-  const roomList = useSelector((state) => state.room.list);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+
+  const allRoomIds = useSelector((state) => state.room.allIds);
+  const roomsById = useSelector((state) => state.room.byId);
+  const roomList = allRoomIds.map((id) => roomsById[id]);
+
+  const handleJoinRoom = (room) => {
+    dispatch(joinRoom({ roomId: room.id, user }));
+    if (room.mode === 'oneOnOne') {
+      navigation.push('OneOnOne');
+    } else {
+      navigation.push('Survival');
+    }
+  };
 
   return (
     <View style={styles.screen}>
@@ -17,10 +32,9 @@ const RoomListScreen = ({ navigation }) => {
       <FlatList
         data={roomList}
         renderItem={({ item }) => (
-          <RoomListItem
-            onPress={() => navigation.push('Room', item.id)}
-            item={item}
-          />
+          <View>
+            <RoomListItem onPress={() => handleJoinRoom(item)} item={item} />
+          </View>
         )}
         keyExtractor={(item) => String(item.id)}
       />
