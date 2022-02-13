@@ -24,22 +24,13 @@ const SurvivalCount = ({ userCounts, hasStarted, hasFinished, onFinish }) => {
   }, [hasStarted]);
 
   useEffect(() => {
-    if (hasFinished) {
-      const minutes = Math.floor(seconds.current / 60);
-
-      onFinish(minutes);
-      clearInterval(stopWatchId.current);
-    }
-  }, [hasFinished]);
-
-  useEffect(() => {
-    if (userCounts === 1) {
+    if (userCounts === 1 || hasFinished) {
       const minutes = Math.floor(seconds.current / 60);
 
       onFinish(minutes, userCounts);
       clearInterval(stopWatchId.current);
     }
-  }, [userCounts]);
+  }, [userCounts, hasFinished]);
 
   return (
     <View>
