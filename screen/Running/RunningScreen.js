@@ -28,7 +28,7 @@ const RunningScreen = ({ route, navigation }) => {
   const [userCount, setUserCount] = useState(0);
 
   const { id } = useSelector((state) => state.user);
-  const { role, mode } = useSelector((state) => state.game);
+  const { mode, role } = useSelector((state) => state.game);
   const { allPlayersId } = useSelector((state) => state.room);
   const canHearingSoundEffect = useSelector(
     (state) => state.ui.canHearingEffect,
@@ -152,9 +152,9 @@ const RunningScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     const initStartUp = () => {
-      // if (mode === 'survival') {
-      //   setUserCount(allPlayersId.length);
-      // }
+      if (mode === 'survival') {
+        setUserCount(allPlayersId.length);
+      }
 
       getCurrentLocation();
 
@@ -185,13 +185,13 @@ const RunningScreen = ({ route, navigation }) => {
         return;
       }
 
-      // if (mode === 'survival') {
-      //   socket.on('game/die', () => {
-      //     setUserCount((prev) => prev - 1);
-      //   });
-      // }
+      if (mode === 'survival') {
+        socket.on('game/die', () => {
+          setUserCount((prev) => prev - 1);
+        });
+      }
 
-      if (mode === 'solo') {
+      if (mode === 'solo' || mode === 'survival') {
         intervalId.current = setInterval(() => {
           setOpponentDistance((previousDistance) => {
             const reducedOpponentDistance =

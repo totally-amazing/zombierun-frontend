@@ -13,7 +13,6 @@ const Header = ({
   navigation,
   mode,
   speed,
-
   time,
   hasStarted,
   hasFinished,

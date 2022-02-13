@@ -43,7 +43,7 @@ const SurvivalCount = ({ userCounts, hasStarted, hasFinished, onFinish }) => {
 
   return (
     <View>
-      <Text style={styles.userCount}>{userCounts}</Text>
+      <Text style={styles.userCount}>left: {userCounts}</Text>
     </View>
   );
 };
@@ -52,8 +52,9 @@ export default SurvivalCount;
 
 const styles = StyleSheet.create({
   userCount: {
-    fontSize: FONT.X_LARGE,
+    fontSize: FONT.LARGE,
     color: COLORS.WHITE,
+    textAlign: 'center',
   },
 });
 

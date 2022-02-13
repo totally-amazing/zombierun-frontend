@@ -38,6 +38,7 @@ const GameView = ({
     if (distanceGap >= 200 && distanceGap < 400) {
       setZombieSize('middle');
       audioController.changeSoundEffectVolume(0.5);
+      return;
     }
 
     if (distanceGap >= 100 && distanceGap < 200) {
