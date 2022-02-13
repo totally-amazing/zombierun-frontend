@@ -15,7 +15,10 @@ class Socket {
     }
 
     this.io.on(event, callback);
-    return () => this.io.off(event);
+    return () => {
+      console.log(`socket:::::off ${event}`);
+      this.io.off(event);
+    };
   };
 
   emit = (event, args) => {
