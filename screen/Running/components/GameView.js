@@ -6,8 +6,21 @@ import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
 import AudioController from '../audioController';
 
-const GameView = ({ hasStarted, audioController, distanceGap, onFinish }) => {
+const GameView = ({
+  mode,
+  hasStarted,
+  audioController,
+  distanceGap,
+  onFinish,
+}) => {
   const [zombieSize, setZombieSize] = useState('far');
+  const opponentImage = () => {
+    if (mode === 'oneOnOne') {
+      return require('../../../assets/images/human.gif');
+    }
+
+    return require('../../../assets/images/zombie.gif');
+  };
 
   useEffect(() => {
     if (!hasStarted) {
@@ -37,10 +50,7 @@ const GameView = ({ hasStarted, audioController, distanceGap, onFinish }) => {
   return (
     <View style={styles.gameView}>
       <View style={styles.imageContainer}>
-        <Image
-          style={styles[zombieSize]}
-          source={require('../../../assets/images/zombie.gif')}
-        />
+        <Image style={styles[zombieSize]} source={opponentImage()} />
       </View>
       <View>
         <Text style={styles.distance}>Distance</Text>
@@ -92,6 +102,7 @@ const styles = StyleSheet.create({
 });
 
 GameView.propTypes = {
+  mode: PropTypes.string.isRequired,
   hasStarted: PropTypes.bool.isRequired,
   distanceGap: PropTypes.number.isRequired,
   onFinish: PropTypes.func.isRequired,

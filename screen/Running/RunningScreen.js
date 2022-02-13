@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { BASE_URL } from '@env';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
 
@@ -10,19 +11,24 @@ import Pause from './components/Pause';
 import AudioController from './audioController';
 import GameView from './components/GameView';
 import Header from './components/Header';
-import socket from '../../network/socket';
+import Socket from '../../network/socket';
 import { getGameResult } from '../../store/gameSlice';
 
 const RunningScreen = ({ route, navigation }) => {
   const { speed, time } = route.params.gameSetting;
   const conversionRate = 0.277778;
+  const socket = new Socket(BASE_URL);
+  const dispatch = useDispatch();
   const [userDistance, setUserDistance] = useState(0);
-  const [zombieDistance, setZombieDistance] = useState(-500);
+  const [opponentDistance, setOpponentDistance] = useState(-500);
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
   const [hasOptionClicked, setHasOptionClicked] = useState(false);
 
+  const { id } = useSelector((state) => state.user);
+  const { role } = useSelector((state) => state.game);
+  const mode = 'oneOnOne';
   const canHearingSoundEffect = useSelector(
     (state) => state.ui.canHearingEffect,
   );
@@ -38,7 +44,7 @@ const RunningScreen = ({ route, navigation }) => {
   const { current: audioController } = useRef(new AudioController());
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
-  const distanceGap = Math.ceil(userDistance - zombieDistance);
+  const distanceGap = Math.ceil(userDistance - opponentDistance);
 
   survivalTime.current = time;
 
@@ -59,6 +65,10 @@ const RunningScreen = ({ route, navigation }) => {
       },
       (location) => {
         const { coords } = location;
+
+        if (mode === 'oneOnOne') {
+          socket.emit('game/userSpeed', `${coords.speed}`);
+        }
 
         setUserDistance((preivousDistance) => {
           const reducedHumanDistance = preivousDistance + coords.speed;
@@ -146,11 +156,24 @@ const RunningScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     const startZombieChasing = () => {
-      intervalId.current = setInterval(() => {
-        setZombieDistance((previousDistance) => {
-          const reducedZombieDistance = previousDistance + speedMeterPerSecond;
+      if (mode === 'oneOnOne') {
+        socket.on('game/opponentSpeed', (opponentSpeed) => {
+          console.log(opponentSpeed);
+          setOpponentDistance((previousDistance) => {
+            const reducedOpponentDistance = previousDistance + opponentSpeed;
 
-          return reducedZombieDistance;
+            return reducedOpponentDistance;
+          });
+        });
+
+        return;
+      }
+
+      intervalId.current = setInterval(() => {
+        setOpponentDistance((previousDistance) => {
+          const reducedOpponentDistance =
+            previousDistance + speedMeterPerSecond;
+          return reducedOpponentDistance;
         });
       }, 1000);
     };
@@ -163,10 +186,6 @@ const RunningScreen = ({ route, navigation }) => {
       clearInterval(intervalId.current);
     };
   }, [hasGameStarted]);
-
-  const dispatch = useDispatch();
-  const { id } = useSelector((state) => state.user);
-  const { mode, role } = useSelector((state) => state.game);
 
   useEffect(() => {
     const finishGame = () => {
@@ -210,12 +229,14 @@ const RunningScreen = ({ route, navigation }) => {
         navigation={navigation}
         speed={speed}
         time={time}
+        mode={mode}
         hasStarted={hasGameStarted}
         hasFinished={hasGameFinished}
         onFinish={handleFinishGame}
         onPress={handlePressOptionButton}
       />
       <GameView
+        mode={mode}
         hasStarted={hasGameStarted}
         audioController={audioController}
         distanceGap={distanceGap}
