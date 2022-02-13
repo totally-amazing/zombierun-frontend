@@ -53,7 +53,7 @@ const Header = ({
           onFinish={onFinish}
         />
       )}
-      <ValueWithUnit value={speed} unit="km/h" />
+      {mode === 'solo' && <ValueWithUnit value={speed} unit="km/h" />}
     </View>
   );
 };

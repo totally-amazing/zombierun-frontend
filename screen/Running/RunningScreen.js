@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { BASE_URL } from '@env';
@@ -19,23 +19,24 @@ const RunningScreen = ({ route, navigation }) => {
   const conversionRate = 0.277778;
   const socket = new Socket(BASE_URL);
   const dispatch = useDispatch();
-  const [userDistance, setUserDistance] = useState(0);
-  const [opponentDistance, setOpponentDistance] = useState(-500);
-  const [hasGameStarted, setHasGameStarted] = useState(false);
-  const [isWinner, setIsWinner] = useState(false);
-  const [hasGameFinished, setHasGameFinished] = useState(false);
-  const [hasOptionClicked, setHasOptionClicked] = useState(false);
-  const [userCount, setUserCount] = useState(0);
 
   const { id } = useSelector((state) => state.user);
-  const { mode, role } = useSelector((state) => state.game);
   const { allPlayersId } = useSelector((state) => state.room);
+  const { role, mode } = useSelector((state) => state.game);
   const canHearingSoundEffect = useSelector(
     (state) => state.ui.canHearingEffect,
   );
   const canHearingBackgroundMusic = useSelector(
     (state) => state.ui.canHearingBGMusic,
   );
+
+  const [userDistance, setUserDistance] = useState(0);
+  const [opponentDistance, setOpponentDistance] = useState(-500);
+  const [hasGameStarted, setHasGameStarted] = useState(false);
+  const [isWinner, setIsWinner] = useState(false);
+  const [hasGameFinished, setHasGameFinished] = useState(false);
+  const [hasOptionClicked, setHasOptionClicked] = useState(false);
+  const [userCount, setUserCount] = useState(allPlayersId.length);
 
   const locationHistory = useRef([]);
   const survivalTime = useRef(time);
@@ -152,10 +153,6 @@ const RunningScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     const initStartUp = () => {
-      if (mode === 'survival') {
-        setUserCount(allPlayersId.length);
-      }
-
       getCurrentLocation();
 
       audioController.loadAudio();
@@ -174,9 +171,9 @@ const RunningScreen = ({ route, navigation }) => {
   useEffect(() => {
     const startOpponentRunning = () => {
       if (mode === 'oneOnOne') {
-        socket.on('game/opponentSpeed', (opponentSpeed) => {
+        socket.on('game/opponentSpeed', (meterPerSecond) => {
           setOpponentDistance((previousDistance) => {
-            const reducedOpponentDistance = previousDistance + opponentSpeed;
+            const reducedOpponentDistance = previousDistance + meterPerSecond;
 
             return reducedOpponentDistance;
           });
