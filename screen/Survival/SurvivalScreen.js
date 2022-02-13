@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
-import { useSelector } from 'react-redux';
-import Profile from '../../common/components/Profile';
 
+import Profile from '../../common/components/Profile';
 import CustomButton from '../../common/components/CustomButton';
 import TextChunk from '../../common/components/TextChunk';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
+import usePlayers from '../../common/hooks/userPlayers';
 
 const SurvivalScreen = () => {
   const [isReady, setIsReady] = useState(false);
-  const players = useSelector((state) => state.game.players);
+  const players = usePlayers();
 
   const handlePressStartButton = () => {
     setIsReady((prev) => !prev);
