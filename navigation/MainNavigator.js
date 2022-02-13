@@ -59,7 +59,11 @@ const MainNavigator = () => {
         component={ResultScreen}
         options={resultHeaderOption}
       />
-      <MainStackNavigator.Screen name="Survival" component={SurvivalScreen} />
+      <MainStackNavigator.Screen
+        name="Survival"
+        component={SurvivalScreen}
+        options={{ headerShown: false }}
+      />
       <MainStackNavigator.Screen name="RoomMaker" component={RoomMakerScreen} />
       <MainStackNavigator.Screen name="RoomList" component={RoomListScreen} />
       <MainStackNavigator.Screen name="Running" component={RunningScreen} />
