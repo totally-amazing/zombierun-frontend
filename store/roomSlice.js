@@ -7,13 +7,10 @@ import RoomService from '../service/room';
 const httpClient = new HttpClient(BASE_URL);
 const roomService = new RoomService(httpClient);
 
-export const getRoomList = createAsyncThunk(
-  'room/getRoomListStatus',
-  async () => {
-    const roomList = await roomService.getRooms();
-    return roomList;
-  },
-);
+export const getRooms = createAsyncThunk('room/getRoomsStatus', async () => {
+  const roomList = await roomService.getRooms();
+  return roomList;
+});
 
 export const createRoom = createAsyncThunk(
   'room/createRoomStatus',
@@ -33,7 +30,7 @@ const roomSlice = createSlice({
     playersById: {},
   },
   extraReducers: {
-    [getRoomList.fulfilled]: (state, action) => {
+    [getRooms.fulfilled]: (state, action) => {
       const rooms = action.payload;
       const ids = rooms.map((room) => room.id);
 
