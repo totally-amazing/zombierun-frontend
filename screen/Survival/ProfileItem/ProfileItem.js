@@ -7,7 +7,6 @@ import COLORS from '../../../common/constants/COLORS';
 import Profile from '../../../common/components/Profile';
 
 const ProfileItem = ({ item }) => {
-  console.log(item);
   return (
     <View style={styles.profile}>
       {item.isReady && (

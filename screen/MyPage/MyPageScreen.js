@@ -14,7 +14,6 @@ import LineWithText from './components/LineWithText';
 const MyPageScreen = () => {
   const record = useSelector((state) => state.game.totalRecord);
   const { nickname, imageUrl } = useSelector((state) => state.user);
-  console.log(nickname, imageUrl);
 
   return (
     <View style={styles.screen}>
