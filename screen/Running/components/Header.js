@@ -13,6 +13,7 @@ const Header = ({
   navigation,
   mode,
   speed,
+
   time,
   hasStarted,
   hasFinished,
@@ -38,7 +39,7 @@ const Header = ({
 
   return (
     <View style={styles.header}>
-      {mode === 'solo' ? (
+      {mode === 'survival' ? (
         <SurvivalCount
           userCounts={userCounts}
           hasStarted={hasStarted}

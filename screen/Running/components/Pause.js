@@ -62,5 +62,5 @@ Pause.propTypes = {
 };
 
 Pause.defaultProps = {
-  countDownStatus: '',
+  countDownStatus: null,
 };

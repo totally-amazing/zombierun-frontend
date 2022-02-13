@@ -152,9 +152,9 @@ const RunningScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     const initStartUp = () => {
-      if (mode === 'survival') {
-        setUserCount(allPlayersId.length);
-      }
+      // if (mode === 'survival') {
+      //   setUserCount(allPlayersId.length);
+      // }
 
       getCurrentLocation();
 
@@ -185,11 +185,11 @@ const RunningScreen = ({ route, navigation }) => {
         return;
       }
 
-      if (mode === 'survival') {
-        socket.on('game/die', () => {
-          setUserCount((prev) => prev - 1);
-        });
-      }
+      // if (mode === 'survival') {
+      //   socket.on('game/die', () => {
+      //     setUserCount((prev) => prev - 1);
+      //   });
+      // }
 
       if (mode === 'solo') {
         intervalId.current = setInterval(() => {
