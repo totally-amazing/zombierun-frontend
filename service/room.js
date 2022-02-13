@@ -1,6 +1,7 @@
 class RoomService {
-  constructor(httpClient) {
+  constructor(httpClient, socket) {
     this.httpClient = httpClient;
+    this.socket = socket;
   }
 
   getRooms = async () => {
@@ -28,6 +29,14 @@ class RoomService {
     }
 
     return result;
+  };
+
+  on = (event, callback) => {
+    return this.socket.on(`room/${event}`, callback);
+  };
+
+  emit = (event, ...args) => {
+    this.socket.emit(`room/${event}`, args);
   };
 }
 
