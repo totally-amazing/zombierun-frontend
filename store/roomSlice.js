@@ -26,12 +26,22 @@ export const createRoom = createAsyncThunk(
 const roomSlice = createSlice({
   name: 'room',
   initialState: {
-    list: [],
-    id: '',
+    allIds: [],
+    byId: {},
+    currentRoom: '',
+    allPlayerIds: [],
+    playersById: {},
   },
   extraReducers: {
     [getRoomList.fulfilled]: (state, action) => {
-      state.list = action.payload;
+      const rooms = action.payload;
+      const ids = rooms.map((room) => room.id);
+
+      state.allIds = ids;
+
+      for (const room of rooms) {
+        state.byId[room.id] = room;
+      }
     },
     [createRoom.fulfilled]: (state, action) => {
       state.id = action.payload;
