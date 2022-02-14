@@ -202,7 +202,7 @@ const RunningScreen = ({ route, navigation }) => {
       }
 
       const kilometerDistance = Math.ceil(userDistance) / 1000;
-      const kilomterPerHour = kilometerDistance / (survivalTime.current / 60);
+      const kilometerPerHour = kilometerDistance / (survivalTime.current / 60);
 
       gameController.resetGameSetup('timer');
       dispatch(
@@ -212,7 +212,7 @@ const RunningScreen = ({ route, navigation }) => {
           isWinner,
           distance: kilometerDistance,
           time: survivalTime.current,
-          speed: kilomterPerHour.toFixed(1),
+          speed: kilometerPerHour.toFixed(1),
           mode,
           role,
         }),
