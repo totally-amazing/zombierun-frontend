@@ -24,7 +24,6 @@ const usePlayers = () => {
 
   useEffect(() => {
     if (room) {
-      console.log(room);
       emitJoin(room, user);
     }
 

@@ -47,8 +47,8 @@ const SurvivalScreen = ({ navigation }) => {
   };
 
   const handleExitRoom = () => {
-    navigation.pop();
-    emitLeave();
+    navigation.navigate('RoomList');
+    emitLeave(currentRoom, players);
   };
 
   useEffect(() => {
@@ -87,12 +87,10 @@ const SurvivalScreen = ({ navigation }) => {
         onPress={canStart ? handlePressStartButton : handlePressReadyButton}
       />
 
-      <View styles={styles.arrow}>
-        <Pressable style={styles.exit} onPress={handleExitRoom}>
-          <AntDesign name="arrowleft" size={20} color={COLORS.DEEP_RED} />
-          <Text style={styles.text}>exit</Text>
-        </Pressable>
-      </View>
+      <Pressable style={styles.exit} onPress={handleExitRoom}>
+        <AntDesign name="arrowleft" size={20} color={COLORS.DEEP_RED} />
+        <Text style={styles.text}>exit</Text>
+      </Pressable>
     </View>
   );
 };
@@ -130,12 +128,11 @@ const styles = StyleSheet.create({
     fontSize: FONT.LARGE,
     fontFamily: FONT.BLOOD_FONT,
   },
-  arrow: {
-    alignItems: 'flex-start',
-  },
   exit: {
     flexDirection: 'row',
+    alignSelf: 'flex-start',
     marginTop: 32,
+    marginLeft: 32,
   },
   text: {
     color: COLORS.RED,
