@@ -19,19 +19,26 @@ const roomService = new RoomService(httpClient, socket);
 const usePlayers = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const offJoin = roomService.on('join', (user) => {
-      dispatch(onJoinRoom(user));
-    });
-    const offReady = roomService.on('ready', (user) => {
-      dispatch(markReady(user));
-    });
-    const offNotReady = roomService.on('notReady', (user) => {
-      dispatch(markNotReady(user));
-    });
+  const room = useSelector((state) => state.room.current);
+  const user = useSelector((state) => state.user);
 
-    const offLetPlayerOut = roomService.on('leave', (user) => {
-      dispatch(onLeave(user));
+  useEffect(() => {
+    if (room) {
+      console.log(room);
+      emitJoin(room, user);
+    }
+
+    const offJoin = roomService.on('join', (player) => {
+      dispatch(onJoinRoom(player));
+    });
+    const offReady = roomService.on('ready', (player) => {
+      dispatch(markReady(player));
+    });
+    const offNotReady = roomService.on('notReady', (player) => {
+      dispatch(markNotReady(player));
+    });
+    const offLetPlayerOut = roomService.on('leave', (player) => {
+      dispatch(onLeave(player));
     });
 
     return () => {
@@ -40,10 +47,10 @@ const usePlayers = () => {
       offNotReady();
       offLetPlayerOut();
     };
-  }, []);
+  }, [room]);
 
-  const allPlayerIds = useSelector((state) => state.room.allPlayerIds);
-  const playersById = useSelector((state) => state.room.playersById);
+  const allPlayerIds = useSelector((state) => state.player.allIds);
+  const playersById = useSelector((state) => state.player.byId);
   const players = allPlayerIds.map((id) => playersById[id]);
 
   return players;
@@ -54,7 +61,11 @@ export const emitJoin = (room, user) => {
   roomService.emit('join', room, user);
 };
 
-export const emitLeave = () => {
+export const emitLeave = async (room, players) => {
+  if (players.length === 1) {
+    await roomService.deleteRoom(room.id);
+  }
+
   roomService.emit('leave');
 };
 
