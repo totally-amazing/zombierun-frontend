@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
+import GameController from '../controllers/gameController';
 import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
 import Socket from '../../../network/socket';
-import AudioController from '../audioController';
 
 const GameView = ({
   role,
   socket,
   hasStarted,
-  audioController,
+  gameController,
   distanceGap,
   onFinish,
 }) => {
@@ -31,19 +31,19 @@ const GameView = ({
 
     if (distanceGap >= 400) {
       setZombieSize('far');
-      audioController.changeSoundEffectVolume(0.2);
+      gameController.soundEffectVolumeControll(0.2);
       return;
     }
 
     if (distanceGap >= 200 && distanceGap < 400) {
       setZombieSize('middle');
-      audioController.changeSoundEffectVolume(0.5);
+      gameController.soundEffectVolumeControll(0.5);
       return;
     }
 
     if (distanceGap >= 100 && distanceGap < 200) {
       setZombieSize('close');
-      audioController.changeSoundEffectVolume(1);
+      gameController.soundEffectVolumeControll(1);
       return;
     }
 
@@ -112,7 +112,7 @@ GameView.propTypes = {
   hasStarted: PropTypes.bool.isRequired,
   distanceGap: PropTypes.number.isRequired,
   onFinish: PropTypes.func.isRequired,
-  audioController: PropTypes.instanceOf(AudioController).isRequired,
+  gameController: PropTypes.instanceOf(GameController).isRequired,
   socket: PropTypes.instanceOf(Socket),
 };
 

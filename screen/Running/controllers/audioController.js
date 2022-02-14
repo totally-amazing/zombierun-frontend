@@ -2,8 +2,8 @@ import { Audio } from 'expo-av';
 
 class AudioController {
   constructor() {
-    this.backgroundMusicSource = require('../../assets/sounds/background.mp3');
-    this.soundEffectSource = require('../../assets/sounds/zombieSound.mp3');
+    this.backgroundMusicSource = require('../../../assets/sounds/background.mp3');
+    this.soundEffectSource = require('../../../assets/sounds/zombieSound.mp3');
     this.backgroundAudio = new Audio.Sound();
     this.soundEffectAudio = new Audio.Sound();
   }

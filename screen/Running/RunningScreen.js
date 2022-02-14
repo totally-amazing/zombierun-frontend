@@ -7,8 +7,8 @@ import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
 
 import Pause from './components/Pause';
-import AudioController from './audioController';
-import GameStatusController from './gameStatusController';
+import AudioController from './controllers/audioController';
+import GameController from './controllers/gameController';
 import GameView from './components/GameView';
 import Header from './components/Header';
 import Socket from '../../network/socket';
@@ -45,7 +45,7 @@ const RunningScreen = ({ route, navigation }) => {
   const tracker = useRef();
   const locationHistory = useRef([]);
   const { current: audioController } = useRef(new AudioController());
-  const gameController = new GameStatusController(
+  const gameController = new GameController(
     intervalId,
     countDown,
     tracker,
@@ -61,13 +61,10 @@ const RunningScreen = ({ route, navigation }) => {
   const startRunning = async () => {
     setHasGameStarted(true);
 
-    if (canHearingSoundEffect) {
-      audioController.playSoundEffect();
-    }
-
-    if (canHearingBackgroundMusic) {
-      audioController.playBackgroundMusic();
-    }
+    gameController.gameSoundControll(
+      canHearingSoundEffect,
+      canHearingBackgroundMusic,
+    );
 
     const userLocation = await Location.watchPositionAsync(
       {
@@ -143,7 +140,7 @@ const RunningScreen = ({ route, navigation }) => {
     const initStartUp = () => {
       getCurrentLocation();
 
-      audioController.loadAudio();
+      gameController.loadGameSound();
       gameController.timeoutId.current = setTimeout(startRunning, 5000);
     };
 
@@ -251,7 +248,7 @@ const RunningScreen = ({ route, navigation }) => {
         mode={mode}
         socket={socket}
         hasStarted={hasGameStarted}
-        audioController={audioController}
+        gameController={gameController}
         distanceGap={distanceGap}
         onFinish={handleFinishDistanceResult}
       />

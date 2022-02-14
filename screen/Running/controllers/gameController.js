@@ -1,4 +1,4 @@
-class GameStatusController {
+class GameController {
   constructor(
     intervalId,
     timeoutId,
@@ -12,6 +12,10 @@ class GameStatusController {
     this.audioController = audioController;
     this.locationRecord = locationRecord;
   }
+
+  loadGameSound = () => {
+    this.audioController.loadAudio();
+  };
 
   pauseGameStatus = () => {
     clearInterval(this.intervalId.current);
@@ -42,6 +46,20 @@ class GameStatusController {
     this.audioController.resetAudio();
     this.locationObj.current?.remove();
   };
+
+  gameSoundControll = (hasEffectOn, hasMusicOn) => {
+    if (hasEffectOn) {
+      this.audioController.playSoundEffect();
+    }
+
+    if (hasMusicOn) {
+      this.audioController.playBackgroundMusic();
+    }
+  };
+
+  soundEffectVolumeControll = (volume) => {
+    this.audioController.changeSoundEffectVolume(volume);
+  };
 }
 
-export default GameStatusController;
+export default GameController;
