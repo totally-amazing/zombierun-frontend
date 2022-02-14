@@ -22,6 +22,14 @@ export const createRoom = createAsyncThunk(
   },
 );
 
+export const enterRoom = createAsyncThunk(
+  'room/enterRoomStatues',
+  async ({ roomId, userId }) => {
+    const room = await roomService.enterRoom(roomId, userId);
+    return room;
+  },
+);
+
 const roomSlice = createSlice({
   name: 'room',
   initialState: {
@@ -30,73 +38,40 @@ const roomSlice = createSlice({
     current: '',
     allPlayerIds: [],
     playersById: {},
-    eventRemovers: [],
   },
   reducers: {
-    joinRoom: (state, action) => {
-      const { user, roomId } = action.payload;
-
-      state.current = state.byId[roomId];
-
-      const allPlayers = state.current.participants;
+    onJoinRoom: (state, action) => {
+      const allPlayers = action.payload;
       state.allPlayerIds = allPlayers.map((player) => player.id);
 
       for (const player of allPlayers) {
         state.playersById[player.id] = player;
       }
-
-      state.allPlayerIds.push(user.id);
-      state.playersById[user.id] = user;
-
-      roomService.emit('join', roomId, user);
-
-      const offJoin = roomService.on('join', (player) => {
-        state.allPlayerIds.push(player.id);
-        state.playersById = {
-          ...state.playersById,
-          [player.id]: player,
-        };
-      });
-
-      const offReady = roomService.on('ready', (id) => {
-        state.playersById[id].isReady = true;
-      });
-
-      const offNotReady = roomService.on('notReady', (id) => {
-        state.playersById[id].isReady = false;
-      });
-
-      const offLeave = roomService.on('leave', (id) => {
-        state.allPlayerIds = state.allPlayerIds.filter(
-          (playerId) => playerId !== id,
-        );
-        delete state.playersById[id];
-      });
-
-      state.eventRemovers = [offJoin, offReady, offNotReady, offLeave];
     },
-    ready: (state, action) => {
+    onReady: (state, action) => {
       const id = action.payload;
       state.playersById[id].isReady = true;
 
       roomService.emit('ready');
     },
-    notReady: (state, action) => {
+    onNotReady: (state, action) => {
       const id = action.payload;
       state.playersById[id].isReady = false;
 
       roomService.emit('notReady');
     },
-    leave: (state, action) => {
+    leaveRoom: (state, action) => {
       state.current = null;
       state.allPlayerIds = [];
       state.playersById = {};
+    },
+    onLeave: (state, action) => {
+      const id = action.payload;
 
-      for (const offEvent of state.eventRemovers) {
-        offEvent();
-      }
-
-      roomService.emit('leave');
+      state.allPlayerIds = state.allPlayerIds.filter(
+        (playerId) => playerId !== id,
+      );
+      delete state.playersById[id];
     },
   },
   extraReducers: {
@@ -117,8 +92,19 @@ const roomSlice = createSlice({
       state.allPlayerIds.push(user.id);
       state.playersById[user.id] = user;
     },
+    [enterRoom.fulfilled]: (state, action) => {
+      const room = action.payload;
+
+      state.current = room;
+      state.allPlayerIds = room.participants.map((player) => player.id);
+
+      for (const player of room.participants) {
+        state.playersById[player.id] = player;
+      }
+    },
   },
 });
 
-export const { joinRoom, ready, notReady, leave } = roomSlice.actions;
+export const { onReady, onNotReady, onJoinRoom, onLeave, leaveRoom } =
+  roomSlice.actions;
 export default roomSlice.reducer;
