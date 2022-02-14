@@ -44,7 +44,8 @@ const RunningScreen = ({ route, navigation }) => {
   const intervalId = useRef();
   const tracker = useRef();
   const locationHistory = useRef([]);
-  const { current: audioController } = useRef(new AudioController());
+
+  const audioController = new AudioController();
   const gameController = new GameController(
     intervalId,
     countDown,
@@ -86,6 +87,7 @@ const RunningScreen = ({ route, navigation }) => {
         gameController.recordUserHistory(coords);
       },
     );
+
     gameController.locationObj = userLocation;
   };
 
