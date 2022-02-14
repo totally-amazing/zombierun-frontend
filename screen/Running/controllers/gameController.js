@@ -24,7 +24,7 @@ class GameController {
     this.audioController.stopAllSound();
   };
 
-  recordUserHistory = (coords) => {
+  recordUserLocationHistory = (coords) => {
     this.locationRecord.current = [
       ...this.locationRecord.current,
       {

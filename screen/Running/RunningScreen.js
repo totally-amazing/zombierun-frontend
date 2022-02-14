@@ -86,7 +86,7 @@ const RunningScreen = ({ route, navigation }) => {
           return reducedHumanDistance;
         });
 
-        gameController.recordUserHistory(coords);
+        gameController.recordUserLocationHistory(coords);
       },
     );
 
@@ -96,7 +96,7 @@ const RunningScreen = ({ route, navigation }) => {
   const getCurrentLocation = async () => {
     const { coords } = await Location.getCurrentPositionAsync();
 
-    gameController.recordUserHistory(coords);
+    gameController.recordUserLocationHistory(coords);
   };
 
   const handlePressStartButton = () => {
