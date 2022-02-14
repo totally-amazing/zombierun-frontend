@@ -37,7 +37,7 @@ const Header = ({
   }, [navigation]);
 
   return (
-    <View style={styles.header}>
+    <View style={styles[mode]}>
       {mode === 'survival' ? (
         <SurvivalCount
           userCounts={userCounts}
@@ -61,10 +61,20 @@ const Header = ({
 export default Header;
 
 const styles = StyleSheet.create({
-  header: {
+  solo: {
     flexDirection: 'row',
     width: '80%',
     justifyContent: 'space-between',
+  },
+  survival: {
+    flexDirection: 'row',
+    width: '80%',
+    justifyContent: 'space-between',
+  },
+  oneOnOne: {
+    flexDirection: 'row',
+    width: '80%',
+    justifyContent: 'center',
   },
   option: {
     fontSize: FONT.MEDIUM,

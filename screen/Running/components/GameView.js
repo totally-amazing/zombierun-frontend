@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 
 import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
-import AudioController from '../audioController';
 import Socket from '../../../network/socket';
+import AudioController from '../audioController';
 
 const GameView = ({
   role,

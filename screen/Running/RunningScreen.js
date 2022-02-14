@@ -6,12 +6,12 @@ import { BASE_URL } from '@env';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
 
-import COLORS from '../../common/constants/COLORS';
 import Pause from './components/Pause';
 import AudioController from './audioController';
 import GameView from './components/GameView';
 import Header from './components/Header';
 import Socket from '../../network/socket';
+import COLORS from '../../common/constants/COLORS';
 import { getGameResult } from '../../store/gameSlice';
 
 const RunningScreen = ({ route, navigation }) => {
@@ -38,17 +38,27 @@ const RunningScreen = ({ route, navigation }) => {
   const [hasOptionClicked, setHasOptionClicked] = useState(false);
   const [userCount, setUserCount] = useState(allPlayersId.length);
 
-  const locationHistory = useRef([]);
   const survivalTime = useRef(time);
   const countDown = useRef();
   const intervalId = useRef();
   const tracker = useRef();
+  const locationHistory = useRef([]);
   const { current: audioController } = useRef(new AudioController());
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
   const distanceGap = Math.ceil(userDistance - opponentDistance);
 
   survivalTime.current = time;
+
+  const recordUserLocation = (coords) => {
+    locationHistory.current = [
+      ...locationHistory.current,
+      {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      },
+    ];
+  };
 
   const startRunning = async () => {
     setHasGameStarted(true);
@@ -77,13 +87,8 @@ const RunningScreen = ({ route, navigation }) => {
 
           return reducedHumanDistance;
         });
-        locationHistory.current = [
-          ...locationHistory.current,
-          {
-            latitude: coords.latitude,
-            longitude: coords.longitude,
-          },
-        ];
+
+        recordUserLocation(coords);
       },
     );
 
@@ -93,13 +98,7 @@ const RunningScreen = ({ route, navigation }) => {
   const getCurrentLocation = async () => {
     const { coords } = await Location.getCurrentPositionAsync();
 
-    locationHistory.current = [
-      ...locationHistory.current,
-      {
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      },
-    ];
+    recordUserLocation(coords);
   };
 
   const pauseGameStatus = () => {
@@ -108,6 +107,11 @@ const RunningScreen = ({ route, navigation }) => {
     intervalId.current = null;
     audioController.stopAllSound();
     setHasGameStarted(false);
+  };
+
+  const resetGameSetup = () => {
+    tracker.current?.remove();
+    audioController.resetAudio();
   };
 
   const handlePressStartButton = () => {
@@ -163,8 +167,7 @@ const RunningScreen = ({ route, navigation }) => {
 
     return () => {
       clearTimeout(countDown.current);
-      tracker.current?.remove();
-      audioController.resetAudio();
+      resetGameSetup();
     };
   }, []);
 
@@ -218,9 +221,7 @@ const RunningScreen = ({ route, navigation }) => {
       const kilomterPerHour = kilometerDistance / (survivalTime.current / 60);
 
       clearInterval(intervalId.current);
-      tracker.current?.remove();
-      audioController.resetAudio();
-      navigation.navigate('Result');
+      resetGameSetup();
 
       dispatch(
         getGameResult({
@@ -234,6 +235,8 @@ const RunningScreen = ({ route, navigation }) => {
           role,
         }),
       );
+
+      navigation.navigate('Result');
     };
 
     if (isWinner || hasGameFinished) {
@@ -264,7 +267,6 @@ const RunningScreen = ({ route, navigation }) => {
         onPress={handlePressOptionButton}
       />
       <GameView
-        id={id}
         role={role}
         mode={mode}
         socket={socket}
