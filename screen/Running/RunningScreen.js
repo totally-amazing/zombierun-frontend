@@ -18,7 +18,6 @@ import { getGameResult } from '../../store/gameSlice';
 const RunningScreen = ({ route, navigation }) => {
   const { speed, time } = route.params.gameSetting;
   const conversionRate = 0.277778;
-  const socket = new Socket(BASE_URL);
   const dispatch = useDispatch();
 
   const { id } = useSelector((state) => state.user);
@@ -45,13 +44,16 @@ const RunningScreen = ({ route, navigation }) => {
   const tracker = useRef();
   const locationHistory = useRef([]);
 
-  const audioController = new AudioController();
-  const gameController = new GameController(
-    intervalId,
-    countDown,
-    tracker,
-    locationHistory,
-    audioController,
+  const { current: socket } = useRef(new Socket(BASE_URL));
+  const { current: audioController } = useRef(new AudioController());
+  const { current: gameController } = useRef(
+    new GameController(
+      intervalId,
+      countDown,
+      tracker,
+      locationHistory,
+      audioController,
+    ),
   );
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
@@ -249,9 +251,9 @@ const RunningScreen = ({ route, navigation }) => {
         role={role}
         mode={mode}
         socket={socket}
+        distanceGap={distanceGap}
         hasStarted={hasGameStarted}
         gameController={gameController}
-        distanceGap={distanceGap}
         onFinish={handleFinishDistanceResult}
       />
       {hasGameStarted && mode === 'solo' && (
