@@ -257,7 +257,6 @@ const RunningScreen = ({ route, navigation }) => {
         speed={speed}
         time={time}
         mode={mode}
-        socket={socket}
         userCounts={userCount}
         hasStarted={hasGameStarted}
         hasFinished={hasGameFinished}

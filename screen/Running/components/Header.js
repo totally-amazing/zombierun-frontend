@@ -11,14 +11,14 @@ import ValueWithUnit from '../../../common/components/ValueWithUnit';
 
 const Header = ({
   navigation,
-  mode,
   speed,
   time,
+  mode,
+  userCounts,
   hasStarted,
   hasFinished,
   onFinish,
   onPress,
-  userCounts,
 }) => {
   const headerOptionButton = useCallback(() => {
     return <FontAwesome name="gear" style={styles.option} onPress={onPress} />;
