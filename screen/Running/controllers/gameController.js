@@ -9,8 +9,8 @@ class GameController {
     this.intervalId = intervalId;
     this.timeoutId = timeoutId;
     this.locationObj = locationObj;
-    this.audioController = audioController;
     this.locationRecord = locationRecord;
+    this.audioController = audioController;
   }
 
   loadGameSound = () => {
