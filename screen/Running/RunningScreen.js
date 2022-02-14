@@ -48,10 +48,10 @@ const RunningScreen = ({ route, navigation }) => {
   const { current: audioController } = useRef(new AudioController());
   const { current: gameController } = useRef(
     new GameController(
-      intervalId,
-      countDown,
-      tracker,
-      locationHistory,
+      intervalId.current,
+      countDown.current,
+      tracker.current,
+      locationHistory.current,
       audioController,
     ),
   );
@@ -64,7 +64,7 @@ const RunningScreen = ({ route, navigation }) => {
   const startRunning = async () => {
     setHasGameStarted(true);
 
-    gameController.gameSoundControll(
+    gameController.controlGameSound(
       canHearingSoundEffect,
       canHearingBackgroundMusic,
     );
@@ -81,9 +81,9 @@ const RunningScreen = ({ route, navigation }) => {
         }
 
         setUserDistance((preivousDistance) => {
-          const reducedHumanDistance = preivousDistance + coords.speed;
+          const totalDistance = preivousDistance + coords.speed;
 
-          return reducedHumanDistance;
+          return totalDistance;
         });
 
         gameController.recordUserLocationHistory(coords);
@@ -145,7 +145,7 @@ const RunningScreen = ({ route, navigation }) => {
       getCurrentLocation();
 
       gameController.loadGameSound();
-      gameController.timeoutId.current = setTimeout(startRunning, 5000);
+      gameController.timeoutId = setTimeout(startRunning, 5000);
     };
 
     initStartUp();
@@ -160,9 +160,9 @@ const RunningScreen = ({ route, navigation }) => {
       if (mode === 'oneOnOne') {
         socket.on('game/opponentSpeed', (meterPerSecond) => {
           setOpponentDistance((previousDistance) => {
-            const reducedOpponentDistance = previousDistance + meterPerSecond;
+            const totalDistance = previousDistance + meterPerSecond;
 
-            return reducedOpponentDistance;
+            return totalDistance;
           });
         });
 
@@ -176,11 +176,10 @@ const RunningScreen = ({ route, navigation }) => {
       }
 
       if (mode === 'solo' || mode === 'survival') {
-        gameController.intervalId.current = setInterval(() => {
+        gameController.intervalId = setInterval(() => {
           setOpponentDistance((previousDistance) => {
-            const reducedOpponentDistance =
-              previousDistance + speedMeterPerSecond;
-            return reducedOpponentDistance;
+            const totalDistance = previousDistance + speedMeterPerSecond;
+            return totalDistance;
           });
         }, 1000);
       }
@@ -191,7 +190,7 @@ const RunningScreen = ({ route, navigation }) => {
     }
 
     return () => {
-      clearInterval(gameController.intervalId.current);
+      clearInterval(gameController.intervalId);
     };
   }, [hasGameStarted]);
 
@@ -208,7 +207,7 @@ const RunningScreen = ({ route, navigation }) => {
       dispatch(
         getGameResult({
           userId: id,
-          locationHistory: gameController.locationRecord.current,
+          locationHistory: gameController.locationRecord,
           isWinner,
           distance: kilometerDistance,
           time: survivalTime.current,

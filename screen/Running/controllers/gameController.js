@@ -18,15 +18,15 @@ class GameController {
   };
 
   pauseGameStatus = () => {
-    clearInterval(this.intervalId.current);
-    this.locationObj.current?.remove();
-    this.intervalId.current = null;
+    clearInterval(this.intervalId);
+    this.locationObj?.remove();
+    this.intervalId = null;
     this.audioController.stopAllSound();
   };
 
   recordUserLocationHistory = (coords) => {
-    this.locationRecord.current = [
-      ...this.locationRecord.current,
+    this.locationRecord = [
+      ...this.locationRecord,
       {
         latitude: coords.latitude,
         longitude: coords.longitude,
@@ -36,18 +36,18 @@ class GameController {
 
   resetGameSetup = (resetTarget) => {
     if (resetTarget === 'timer') {
-      clearInterval(this.intervalId.current);
+      clearInterval(this.intervalId);
     }
 
     if (resetTarget === 'timeout') {
-      clearTimeout(this.timeoutId.current);
+      clearTimeout(this.timeoutId);
     }
 
     this.audioController.resetAudio();
-    this.locationObj.current?.remove();
+    this.locationObj?.remove();
   };
 
-  gameSoundControll = (hasEffectOn, hasMusicOn) => {
+  controlGameSound = (hasEffectOn, hasMusicOn) => {
     if (hasEffectOn) {
       this.audioController.playSoundEffect();
     }
@@ -57,7 +57,7 @@ class GameController {
     }
   };
 
-  soundEffectVolumeControll = (volume) => {
+  soundEffectVolumeControl = (volume) => {
     this.audioController.changeSoundEffectVolume(volume);
   };
 }
