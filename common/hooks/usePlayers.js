@@ -10,7 +10,7 @@ import {
   markNotReady,
   markReady,
   onJoinRoom,
-} from '../../store/roomSlice';
+} from '../../store/playerSlice';
 
 const socket = new Socket(BASE_URL);
 const httpClient = new HttpClient(BASE_URL);

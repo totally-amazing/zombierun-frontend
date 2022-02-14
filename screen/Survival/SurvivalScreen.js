@@ -14,7 +14,7 @@ import usePlayers, {
   emitReady,
   emitNotReady,
 } from '../../common/hooks/usePlayers';
-import { markNotReady, markReady } from '../../store/roomSlice';
+import { markNotReady, markReady } from '../../store/playerSlice';
 
 const SurvivalScreen = ({ navigation }) => {
   const [canStart, setCanStart] = useState(false);

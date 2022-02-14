@@ -1,13 +1,11 @@
 import { BASE_URL } from '@env';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import Socket from '../network/socket';
 import HttpClient from '../network/http';
 import RoomService from '../service/room';
 
-const socket = new Socket(BASE_URL);
 const httpClient = new HttpClient(BASE_URL);
-const roomService = new RoomService(httpClient, socket);
+const roomService = new RoomService(httpClient);
 
 export const getRooms = createAsyncThunk('room/getRoomsStatus', async () => {
   const roomList = await roomService.getRooms();
@@ -28,48 +26,14 @@ const roomSlice = createSlice({
     allIds: [],
     byId: {},
     current: '',
-    allPlayerIds: [],
-    playersById: {},
   },
   reducers: {
-    onJoinRoom: (state, action) => {
-      const user = action.payload;
-      state.allPlayerIds.push(user.id);
-      state.playersById[user.id] = user;
-    },
-    markReady: (state, action) => {
-      const id = action.payload;
-      state.playersById[id].isReady = true;
-    },
-    markNotReady: (state, action) => {
-      const id = action.payload;
-      state.playersById[id].isReady = false;
-    },
-    onLeave: (state, action) => {
-      const id = action.payload;
-
-      state.allPlayerIds = state.allPlayerIds.filter(
-        (playerId) => playerId !== id,
-      );
-      delete state.playersById[id];
-    },
     enterRoom: (state, action) => {
-      const { room, user } = action.payload;
+      const { room } = action.payload;
       state.current = room;
-      const allPlayers = room.participants;
-      state.allPlayerIds = allPlayers.map((player) => player.id);
-
-      for (const player of allPlayers) {
-        state.playersById[player.id] = player;
-      }
-
-      state.allPlayerIds.push(user.id);
-      state.playersById[user.id] = user;
     },
     leaveRoom: (state, action) => {
       state.current = null;
-      state.allPlayerIds = [];
-      state.playersById = {};
     },
   },
   extraReducers: {
@@ -84,21 +48,12 @@ const roomSlice = createSlice({
       }
     },
     [createRoom.fulfilled]: (state, action) => {
-      const { room, user } = action.payload;
+      const { room } = action.payload;
 
       state.current = room;
-      state.allPlayerIds.push(user.id);
-      state.playersById[user.id] = user;
     },
   },
 });
 
-export const {
-  markReady,
-  markNotReady,
-  onJoinRoom,
-  onLeave,
-  leaveRoom,
-  enterRoom,
-} = roomSlice.actions;
+export const { leaveRoom, enterRoom } = roomSlice.actions;
 export default roomSlice.reducer;
