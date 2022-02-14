@@ -140,19 +140,17 @@ const RunningScreen = ({ route, navigation }) => {
       if (survivorCount === 1) {
         setIsWinner(true);
       }
-
-      return;
     }
 
     if (passedTime === 0) {
       if (role === 'human') {
         setIsWinner(true);
-        setHasGameFinished(true);
       }
     } else {
       survivalTime.current -= passedTime;
-      setHasGameFinished(true);
     }
+
+    setHasGameFinished(true);
   };
 
   useEffect(() => {
