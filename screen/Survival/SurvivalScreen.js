@@ -8,18 +8,22 @@ import CustomButton from '../../common/components/CustomButton';
 import TextChunk from '../../common/components/TextChunk';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import usePlayers from '../../common/hooks/userPlayers';
-import { leave, notReady, ready } from '../../store/roomSlice';
 import ProfileItem from './ProfileItem/ProfileItem';
+import usePlayers, {
+  emitLeave,
+  emitReady,
+  emitNotReady,
+} from '../../common/hooks/usePlayers';
+import { markNotReady, markReady } from '../../store/roomSlice';
 
 const SurvivalScreen = ({ navigation }) => {
   const [canStart, setCanStart] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
   const dispatch = useDispatch();
-  const players = usePlayers();
-  const { id } = useSelector((state) => state.user);
   const currentRoom = useSelector((state) => state.room.current);
+  const { id } = useSelector((state) => state.user);
+  const players = usePlayers();
 
   const handlePressReadyButton = () => {
     if (players.length < 2) {
@@ -30,9 +34,11 @@ const SurvivalScreen = ({ navigation }) => {
 
     // 이미 ready인 상태에선 ready 버튼을 클릭했을 때 emit notReady
     if (isReady) {
-      dispatch(notReady(id));
+      dispatch(markNotReady(id));
+      emitNotReady();
     } else {
-      dispatch(ready(id));
+      dispatch(markReady(id));
+      emitReady();
     }
   };
 
@@ -42,7 +48,7 @@ const SurvivalScreen = ({ navigation }) => {
 
   const handleExitRoom = () => {
     navigation.pop();
-    dispatch(leave());
+    emitLeave();
   };
 
   useEffect(() => {

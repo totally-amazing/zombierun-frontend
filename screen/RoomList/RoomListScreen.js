@@ -7,18 +7,21 @@ import RoomListItem from './components/RoomListItem';
 import RoomMakerScreen from '../RoomMaker/RoomMakerScreen';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import { joinRoom } from '../../store/roomSlice';
+import { emitJoin } from '../../common/hooks/usePlayers';
+import { enterRoom } from '../../store/roomSlice';
 
 const RoomListScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const allRoomIds = useSelector((state) => state.room.allIds);
   const roomsById = useSelector((state) => state.room.byId);
   const roomList = allRoomIds.map((id) => roomsById[id]);
 
   const handleJoinRoom = (room) => {
-    dispatch(joinRoom({ roomId: room.id, user }));
+    emitJoin(room, user);
+    dispatch(enterRoom({ room, user }));
+
     if (room.mode === 'oneOnOne') {
       navigation.push('OneOnOne');
     } else {
@@ -32,9 +35,7 @@ const RoomListScreen = ({ navigation }) => {
       <FlatList
         data={roomList}
         renderItem={({ item }) => (
-          <View>
-            <RoomListItem onPress={() => handleJoinRoom(item)} item={item} />
-          </View>
+          <RoomListItem onPress={() => handleJoinRoom(item)} item={item} />
         )}
         keyExtractor={(item) => String(item.id)}
       />

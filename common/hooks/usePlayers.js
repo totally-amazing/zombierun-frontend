@@ -7,8 +7,8 @@ import HttpClient from '../../network/http';
 import RoomService from '../../service/room';
 import {
   onLeave,
-  onReady,
-  onNotReady,
+  markNotReady,
+  markReady,
   onJoinRoom,
 } from '../../store/roomSlice';
 
@@ -20,18 +20,18 @@ const usePlayers = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const offJoin = roomService.on('join', (players) => {
-      dispatch(onJoinRoom(players));
+    const offJoin = roomService.on('join', (user) => {
+      dispatch(onJoinRoom(user));
     });
-    const offReady = roomService.on('ready', (id) => {
-      dispatch(onReady(id));
+    const offReady = roomService.on('ready', (user) => {
+      dispatch(markReady(user));
     });
-    const offNotReady = roomService.on('notReady', (id) => {
-      dispatch(onNotReady(id));
+    const offNotReady = roomService.on('notReady', (user) => {
+      dispatch(markNotReady(user));
     });
 
-    const offLetPlayerOut = roomService.on('leave', (id) => {
-      dispatch(onLeave(id));
+    const offLetPlayerOut = roomService.on('leave', (user) => {
+      dispatch(onLeave(user));
     });
 
     return () => {
@@ -49,8 +49,9 @@ const usePlayers = () => {
   return players;
 };
 
-export const emitJoin = (roomId, user) => {
-  roomService.emit('join', roomId, user);
+export const emitJoin = (room, user) => {
+  user.isReady = false;
+  roomService.emit('join', room, user);
 };
 
 export const emitLeave = () => {
