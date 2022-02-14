@@ -8,6 +8,7 @@ import * as Location from 'expo-location';
 
 import Pause from './components/Pause';
 import AudioController from './audioController';
+import GameStatusController from './gameStatusController';
 import GameView from './components/GameView';
 import Header from './components/Header';
 import Socket from '../../network/socket';
@@ -44,21 +45,18 @@ const RunningScreen = ({ route, navigation }) => {
   const tracker = useRef();
   const locationHistory = useRef([]);
   const { current: audioController } = useRef(new AudioController());
+  const gameController = new GameStatusController(
+    intervalId,
+    countDown,
+    tracker,
+    locationHistory,
+    audioController,
+  );
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
   const distanceGap = Math.ceil(userDistance - opponentDistance);
 
   survivalTime.current = time;
-
-  const recordUserLocation = (coords) => {
-    locationHistory.current = [
-      ...locationHistory.current,
-      {
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      },
-    ];
-  };
 
   const startRunning = async () => {
     setHasGameStarted(true);
@@ -88,30 +86,16 @@ const RunningScreen = ({ route, navigation }) => {
           return reducedHumanDistance;
         });
 
-        recordUserLocation(coords);
+        gameController.recordUserHistory(coords);
       },
     );
-
-    tracker.current = userLocation;
+    gameController.locationObj = userLocation;
   };
 
   const getCurrentLocation = async () => {
     const { coords } = await Location.getCurrentPositionAsync();
 
-    recordUserLocation(coords);
-  };
-
-  const pauseGameStatus = () => {
-    clearInterval(intervalId.current);
-    tracker.current?.remove();
-    intervalId.current = null;
-    audioController.stopAllSound();
-    setHasGameStarted(false);
-  };
-
-  const resetGameSetup = () => {
-    tracker.current?.remove();
-    audioController.resetAudio();
+    gameController.recordUserHistory(coords);
   };
 
   const handlePressStartButton = () => {
@@ -120,12 +104,14 @@ const RunningScreen = ({ route, navigation }) => {
   };
 
   const handlePressStopButton = () => {
-    pauseGameStatus();
+    gameController.pauseGameStatus();
+    setHasGameStarted(false);
     setHasOptionClicked(false);
   };
 
   const handlePressOptionButton = () => {
-    pauseGameStatus();
+    gameController.pauseGameStatus();
+    setHasGameStarted(false);
     setHasOptionClicked(true);
   };
 
@@ -158,14 +144,13 @@ const RunningScreen = ({ route, navigation }) => {
       getCurrentLocation();
 
       audioController.loadAudio();
-      countDown.current = setTimeout(startRunning, 5000);
+      gameController.timeoutId.current = setTimeout(startRunning, 5000);
     };
 
     initStartUp();
 
     return () => {
-      clearTimeout(countDown.current);
-      resetGameSetup();
+      gameController.resetGameSetup('timeout');
     };
   }, []);
 
@@ -190,7 +175,7 @@ const RunningScreen = ({ route, navigation }) => {
       }
 
       if (mode === 'solo' || mode === 'survival') {
-        intervalId.current = setInterval(() => {
+        gameController.intervalId.current = setInterval(() => {
           setOpponentDistance((previousDistance) => {
             const reducedOpponentDistance =
               previousDistance + speedMeterPerSecond;
@@ -205,7 +190,7 @@ const RunningScreen = ({ route, navigation }) => {
     }
 
     return () => {
-      clearInterval(intervalId.current);
+      clearInterval(gameController.intervalId.current);
     };
   }, [hasGameStarted]);
 
@@ -218,13 +203,11 @@ const RunningScreen = ({ route, navigation }) => {
       const kilometerDistance = Math.ceil(userDistance) / 1000;
       const kilomterPerHour = kilometerDistance / (survivalTime.current / 60);
 
-      clearInterval(intervalId.current);
-      resetGameSetup();
-
+      gameController.resetGameSetup('timer');
       dispatch(
         getGameResult({
           userId: id,
-          locationHistory: locationHistory.current,
+          locationHistory: gameController.locationRecord.current,
           isWinner,
           distance: kilometerDistance,
           time: survivalTime.current,
