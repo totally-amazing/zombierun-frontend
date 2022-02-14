@@ -4,11 +4,11 @@ import { AntDesign } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
+import ProfileItem from './ProfileItem/ProfileItem';
 import CustomButton from '../../common/components/CustomButton';
 import TextChunk from '../../common/components/TextChunk';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import ProfileItem from './ProfileItem/ProfileItem';
 import usePlayers, {
   emitLeave,
   emitReady,

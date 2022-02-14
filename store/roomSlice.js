@@ -25,7 +25,7 @@ const roomSlice = createSlice({
   initialState: {
     allIds: [],
     byId: {},
-    current: '',
+    current: {},
   },
   reducers: {
     enterRoom: (state, action) => {
