@@ -7,7 +7,6 @@ import RoomListItem from './components/RoomListItem';
 import RoomMakerScreen from '../RoomMaker/RoomMakerScreen';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import { emitJoin } from '../../common/hooks/usePlayers';
 import { enterRoom } from '../../store/roomSlice';
 
 const RoomListScreen = ({ navigation }) => {
@@ -19,7 +18,6 @@ const RoomListScreen = ({ navigation }) => {
   const roomList = allRoomIds.map((id) => roomsById[id]);
 
   const handleJoinRoom = (room) => {
-    emitJoin(room, user);
     dispatch(enterRoom({ room, user }));
 
     if (room.mode === 'oneOnOne') {
