@@ -14,10 +14,10 @@ const Header = ({
   speed,
   time,
   mode,
-  userCounts,
   hasStarted,
   hasFinished,
   onFinish,
+  onFinishSurvival,
   onPress,
 }) => {
   const headerOptionButton = useCallback(() => {
@@ -40,10 +40,9 @@ const Header = ({
     <View style={styles[mode]}>
       {mode === 'survival' ? (
         <SurvivalCount
-          userCounts={userCounts}
           hasStarted={hasStarted}
           hasFinished={hasFinished}
-          onFinish={onFinish}
+          onFinish={onFinishSurvival}
         />
       ) : (
         <Timer
@@ -92,12 +91,11 @@ Header.propTypes = {
   hasStarted: PropTypes.bool.isRequired,
   hasFinished: PropTypes.bool.isRequired,
   onFinish: PropTypes.func.isRequired,
+  onFinishSurvival: PropTypes.func.isRequired,
   onPress: PropTypes.func.isRequired,
   navigation: PropTypes.objectOf(PropTypes.func).isRequired,
-  userCounts: PropTypes.number,
 };
 
 Header.defaultProps = {
-  userCounts: '',
   time: '',
 };

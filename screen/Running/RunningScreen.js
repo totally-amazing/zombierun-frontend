@@ -7,6 +7,7 @@ import * as Location from 'expo-location';
 
 import {
   emitFinishGame,
+  emitGameDie,
   emitUserSpeed,
   socket,
 } from '../../common/hooks/useSocket';
@@ -23,7 +24,6 @@ const RunningScreen = ({ navigation }) => {
   const conversionRate = 0.277778;
   const dispatch = useDispatch();
 
-  const numberOfPlayer = useSelector((state) => state.player.allIds).length;
   const { role, mode } = useSelector((state) => state.game);
   const canHearingSoundEffect = useSelector(
     (state) => state.ui.canHearingEffect,
@@ -33,14 +33,12 @@ const RunningScreen = ({ navigation }) => {
   );
 
   const [userDistance, setUserDistance] = useState(0);
-  const [opponentDistance, setOpponentDistance] = useState(-500);
+  const [opponentDistance, setOpponentDistance] = useState(-20);
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
   const [hasOptionClicked, setHasOptionClicked] = useState(false);
-  const [userCount, setUserCount] = useState(
-    mode === 'survival' ? numberOfPlayer : 0,
-  );
+
   const survivalTime = useRef(time);
   const countDown = useRef();
   const intervalId = useRef();
@@ -120,22 +118,22 @@ const RunningScreen = ({ navigation }) => {
     setHasGameFinished(true);
   };
 
-  const handleFinishGame = (passedTime, survivorCount) => {
-    if (mode === 'survival') {
-      survivalTime.current = passedTime;
-
-      if (survivorCount === 1) {
-        setIsWinner(true);
-      }
-    }
-
-    if (passedTime === 0 && role === 'human') {
+  const handleFinishGame = (remainingTime) => {
+    if (remainingTime === 0 && role === 'human') {
       setIsWinner(true);
     } else {
-      survivalTime.current -= passedTime;
+      survivalTime.current -= remainingTime;
     }
 
     setHasGameFinished(true);
+  };
+
+  const handleFinishSurvival = (passedTime, survivorCount) => {
+    survivalTime.current = passedTime;
+
+    if (survivorCount === 1) {
+      setIsWinner(true);
+    }
   };
 
   useEffect(() => {
@@ -167,12 +165,6 @@ const RunningScreen = ({ navigation }) => {
         return;
       }
 
-      if (mode === 'survival') {
-        socket.on('game/die', () => {
-          setUserCount((prev) => prev - 1);
-        });
-      }
-
       if (mode === 'solo' || mode === 'survival') {
         gameController.intervalId = setInterval(() => {
           setOpponentDistance((previousDistance) => {
@@ -193,12 +185,13 @@ const RunningScreen = ({ navigation }) => {
   }, [hasGameStarted]);
 
   const gameId = useSelector((state) => state.game.id);
-  const { id } = useSelector((state) => state.user);
+  const userId = useSelector((state) => state.user.id);
 
   useEffect(() => {
     const finishGame = () => {
       if (mode === 'oneOnOne' || mode === 'survival') {
         emitFinishGame();
+        emitGameDie();
       }
 
       const kilometerDistance = Math.ceil(userDistance) / 1000;
@@ -206,8 +199,9 @@ const RunningScreen = ({ navigation }) => {
 
       gameController.resetGameSetup('timer');
       dispatch(
-        getGameResult(gameId, {
-          userId: id,
+        getGameResult({
+          gameId,
+          userId,
           locationHistory: gameController.locationRecord,
           isWinner,
           distance: kilometerDistance,
@@ -241,16 +235,15 @@ const RunningScreen = ({ navigation }) => {
         speed={speed}
         time={time}
         mode={mode}
-        userCounts={userCount}
         hasStarted={hasGameStarted}
         hasFinished={hasGameFinished}
         onFinish={handleFinishGame}
+        onFinishSurvival={handleFinishSurvival}
         onPress={handlePressOptionButton}
       />
       <GameView
         role={role}
         mode={mode}
-        socket={socket}
         distanceGap={distanceGap}
         hasStarted={hasGameStarted}
         gameController={gameController}
