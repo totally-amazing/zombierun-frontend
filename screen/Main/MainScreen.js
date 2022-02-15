@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
-import { useDispatch } from 'react-redux';
 
 import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';

@@ -62,7 +62,10 @@ const SoloScreen = ({ navigation }) => {
 
     dispatch(startGame({ mode: 'solo' }));
     navigation.navigate('Running', {
-      gameSetting: { speed: inputValues.speed, time: inputValues.time },
+      gameSetting: {
+        speed: Number(inputValues.speed),
+        time: Number(inputValues.time),
+      },
     });
   };
 

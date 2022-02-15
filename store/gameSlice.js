@@ -27,6 +27,7 @@ export const getGameResult = createAsyncThunk(
   'game/getGameResultStatus',
   async (result) => {
     const { userId, mode, isWinner, time, speed, distance, role } = result;
+
     const mappedResult = {
       mode,
       player: {
