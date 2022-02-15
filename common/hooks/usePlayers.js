@@ -23,7 +23,7 @@ const usePlayers = () => {
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (room) {
+    if (Object.keys(room).length) {
       emitJoin(room, user);
     }
 
@@ -56,8 +56,8 @@ const usePlayers = () => {
 };
 
 export const emitJoin = (room, user) => {
-  user.isReady = false;
-  roomService.emit('join', room, user);
+  const mappedUser = { ...user, isReady: false };
+  roomService.emit('join', room, mappedUser);
 };
 
 export const emitLeave = async (room, players) => {

@@ -99,6 +99,8 @@ const RoomMakerScreen = () => {
       time,
     };
 
+    dispatch(createRoom({ room: roomInfo, user }));
+
     if (mode === 'oneOnOne') {
       navigation.navigate('OneOnOne');
     }
@@ -107,7 +109,6 @@ const RoomMakerScreen = () => {
       navigation.navigate('Survival');
     }
 
-    dispatch(createRoom({ room: roomInfo, user }));
     dispatch(toggleModal());
   };
 
