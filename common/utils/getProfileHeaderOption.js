@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, imageUrl, StyleSheet } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTotalRecord } from '../../store/gameSlice';
@@ -12,7 +12,7 @@ function getProfileHeaderOption(headerRight) {
       headerTitle: '',
       headerLeft: () => {
         const dispatch = useDispatch();
-        const { id, imageUrl } = useSelector((state) => state.user);
+        const { id } = useSelector((state) => state.user);
 
         const handleProfileButton = () => {
           nav.navigation.push('MyPage');
@@ -21,13 +21,12 @@ function getProfileHeaderOption(headerRight) {
 
         return (
           <View style={styles.buttonContainer}>
-            <HeaderButtons HeaderButtonComponent={Profile}>
-              <Item
-                size="small"
-                onPress={handleProfileButton}
-                imageUrl={imageUrl}
-              />
-            </HeaderButtons>
+            <HeaderButtons
+              HeaderButtonComponent={Profile}
+              size="small"
+              onPress={handleProfileButton}
+              imageUrl={imageUrl}
+            />
           </View>
         );
       },

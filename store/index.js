@@ -11,11 +11,8 @@ const store = configureStore({
     user: userReducer,
     game: gameReducer,
     room: roomReducer,
-    player: playerReducer,
     ui: uiReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export default store;

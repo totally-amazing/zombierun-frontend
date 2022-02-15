@@ -1,29 +1,28 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { BASE_URL } from '@env';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
 
-import COLORS from '../../common/constants/COLORS';
-import FONT from '../../common/constants/FONT';
-import ValueWithUnit from '../../common/components/ValueWithUnit';
-import Timer from './components/Timer';
 import Pause from './components/Pause';
-import AudioController from './audioController';
+import AudioController from './controllers/audioController';
+import GameController from './controllers/gameController';
 import GameView from './components/GameView';
+import Header from './components/Header';
+import Socket from '../../network/socket';
+import COLORS from '../../common/constants/COLORS';
 import { getGameResult } from '../../store/gameSlice';
 
 const RunningScreen = ({ route, navigation }) => {
   const { speed, time } = route.params.gameSetting;
   const conversionRate = 0.277778;
-  const [userDistance, setUserDistance] = useState(0);
-  const [zombieDistance, setZombieDistance] = useState(-500);
-  const [hasGameStarted, setHasGameStarted] = useState(false);
-  const [isWinner, setIsWinner] = useState(false);
-  const [hasGameFinished, setHasGameFinished] = useState(false);
-  const [hasOptionClicked, setHasOptionClicked] = useState(false);
+  const dispatch = useDispatch();
 
+  const { id } = useSelector((state) => state.user);
+  const { allPlayersId } = useSelector((state) => state.room);
+  const { role, mode } = useSelector((state) => state.game);
   const canHearingSoundEffect = useSelector(
     (state) => state.ui.canHearingEffect,
   );
@@ -31,28 +30,45 @@ const RunningScreen = ({ route, navigation }) => {
     (state) => state.ui.canHearingBGMusic,
   );
 
-  const locationHistory = useRef([]);
+  const [userDistance, setUserDistance] = useState(0);
+  const [opponentDistance, setOpponentDistance] = useState(-500);
+  const [hasGameStarted, setHasGameStarted] = useState(false);
+  const [isWinner, setIsWinner] = useState(false);
+  const [hasGameFinished, setHasGameFinished] = useState(false);
+  const [hasOptionClicked, setHasOptionClicked] = useState(false);
+  const [userCount, setUserCount] = useState(
+    mode === 'survival' ? allPlayersId.lenght : 0,
+  );
   const survivalTime = useRef(time);
   const countDown = useRef();
   const intervalId = useRef();
   const tracker = useRef();
+  const locationHistory = useRef([]);
+
+  const { current: socket } = useRef(new Socket(BASE_URL));
   const { current: audioController } = useRef(new AudioController());
+  const { current: gameController } = useRef(
+    new GameController(
+      intervalId.current,
+      countDown.current,
+      tracker.current,
+      locationHistory.current,
+      audioController,
+    ),
+  );
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
-  const distanceGap = Math.ceil(userDistance - zombieDistance);
+  const distanceGap = Math.ceil(userDistance - opponentDistance);
 
   survivalTime.current = time;
 
   const startRunning = async () => {
     setHasGameStarted(true);
 
-    if (canHearingSoundEffect) {
-      audioController.playSoundEffect();
-    }
-
-    if (canHearingBackgroundMusic) {
-      audioController.playBackgroundMusic();
-    }
+    gameController.controlGameSound(
+      canHearingSoundEffect,
+      canHearingBackgroundMusic,
+    );
 
     const userLocation = await Location.watchPositionAsync(
       {
@@ -61,42 +77,27 @@ const RunningScreen = ({ route, navigation }) => {
       (location) => {
         const { coords } = location;
 
-        setUserDistance((preivousDistance) => {
-          const reducedHumanDistance = preivousDistance + coords.speed;
+        if (mode === 'oneOnOne') {
+          socket.emit('game/userSpeed', coords.speed);
+        }
 
-          return reducedHumanDistance;
+        setUserDistance((preivousDistance) => {
+          const totalDistance = preivousDistance + coords.speed;
+
+          return totalDistance;
         });
-        locationHistory.current = [
-          ...locationHistory.current,
-          {
-            latitude: coords.latitude,
-            longitude: coords.longitude,
-          },
-        ];
+
+        gameController.recordUserLocationHistory(coords);
       },
     );
 
-    tracker.current = userLocation;
+    gameController.locationObj = userLocation;
   };
 
   const getCurrentLocation = async () => {
     const { coords } = await Location.getCurrentPositionAsync();
 
-    locationHistory.current = [
-      ...locationHistory.current,
-      {
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      },
-    ];
-  };
-
-  const pauseGameStatus = () => {
-    clearInterval(intervalId.current);
-    tracker.current?.remove();
-    intervalId.current = null;
-    audioController.stopAllSound();
-    setHasGameStarted(false);
+    gameController.recordUserLocationHistory(coords);
   };
 
   const handlePressStartButton = () => {
@@ -105,12 +106,14 @@ const RunningScreen = ({ route, navigation }) => {
   };
 
   const handlePressStopButton = () => {
-    pauseGameStatus();
+    gameController.pauseGameStatus();
+    setHasGameStarted(false);
     setHasOptionClicked(false);
   };
 
   const handlePressOptionButton = () => {
-    pauseGameStatus();
+    gameController.pauseGameStatus();
+    setHasGameStarted(false);
     setHasOptionClicked(true);
   };
 
@@ -118,9 +121,19 @@ const RunningScreen = ({ route, navigation }) => {
     setHasGameFinished(true);
   };
 
-  const handleFinishGame = (passedTime) => {
+  const handleFinishGame = (passedTime, survivorCount) => {
+    if (mode === 'survival') {
+      survivalTime.current = passedTime;
+
+      if (survivorCount === 1) {
+        setIsWinner(true);
+      }
+    }
+
     if (passedTime === 0) {
-      setIsWinner(true);
+      if (role === 'human') {
+        setIsWinner(true);
+      }
     } else {
       survivalTime.current -= passedTime;
     }
@@ -128,87 +141,84 @@ const RunningScreen = ({ route, navigation }) => {
     setHasGameFinished(true);
   };
 
-  const headerOptionButton = useCallback(() => {
-    return (
-      <FontAwesome
-        name="gear"
-        style={styles.option}
-        onPress={handlePressOptionButton}
-      />
-    );
-  }, []);
-
-  useEffect(() => {
-    const setNavigatorOptions = () => {
-      navigation.setOptions({
-        headerTitle: '',
-        headerLeft: () => {},
-        headerRight: headerOptionButton,
-      });
-    };
-
-    setNavigatorOptions();
-  }, [navigation]);
-
   useEffect(() => {
     const initStartUp = () => {
       getCurrentLocation();
 
-      audioController.loadAudio();
-      countDown.current = setTimeout(startRunning, 5000);
+      gameController.loadGameSound();
+      gameController.timeoutId = setTimeout(startRunning, 5000);
     };
 
     initStartUp();
 
     return () => {
-      clearTimeout(countDown.current);
-      tracker.current?.remove();
-      audioController.resetAudio();
+      gameController.resetGameSetup('timeout');
     };
   }, []);
 
   useEffect(() => {
-    const startZombieChasing = () => {
-      intervalId.current = setInterval(() => {
-        setZombieDistance((previousDistance) => {
-          const reducedZombieDistance = previousDistance + speedMeterPerSecond;
+    const startOpponentRunning = () => {
+      if (mode === 'oneOnOne') {
+        socket.on('game/opponentSpeed', (meterPerSecond) => {
+          setOpponentDistance((previousDistance) => {
+            const totalDistance = previousDistance + meterPerSecond;
 
-          return reducedZombieDistance;
+            return totalDistance;
+          });
         });
-      }, 1000);
+
+        return;
+      }
+
+      if (mode === 'survival') {
+        socket.on('game/die', () => {
+          setUserCount((prev) => prev - 1);
+        });
+      }
+
+      if (mode === 'solo' || mode === 'survival') {
+        gameController.intervalId = setInterval(() => {
+          setOpponentDistance((previousDistance) => {
+            const totalDistance = previousDistance + speedMeterPerSecond;
+            return totalDistance;
+          });
+        }, 1000);
+      }
     };
 
     if (hasGameStarted) {
-      startZombieChasing();
+      startOpponentRunning();
     }
 
     return () => {
-      clearInterval(intervalId.current);
+      clearInterval(gameController.intervalId);
     };
   }, [hasGameStarted]);
 
-  const dispatch = useDispatch();
-  const { id } = useSelector((state) => state.user);
-  const { mode, role } = useSelector((state) => state.game);
-
   useEffect(() => {
     const finishGame = () => {
-      clearInterval(intervalId.current);
-      tracker.current?.remove();
-      audioController.resetAudio();
-      navigation.navigate('Result');
+      if (mode === 'oneOnOne' || mode === 'survival') {
+        socket.emit('user/leave');
+      }
+
+      const kilometerDistance = Math.ceil(userDistance) / 1000;
+      const kilometerPerHour = kilometerDistance / (survivalTime.current / 60);
+
+      gameController.resetGameSetup('timer');
       dispatch(
         getGameResult({
           userId: id,
-          locationHistory: locationHistory.current,
+          locationHistory: gameController.locationRecord,
           isWinner,
-          distance: Math.ceil(userDistance),
+          distance: kilometerDistance,
           time: survivalTime.current,
-          speed,
+          speed: kilometerPerHour.toFixed(1),
           mode,
           role,
         }),
       );
+
+      navigation.navigate('Result');
     };
 
     if (isWinner || hasGameFinished) {
@@ -220,27 +230,33 @@ const RunningScreen = ({ route, navigation }) => {
     <View style={styles.screen}>
       {!hasGameStarted && (
         <Pause
+          role={role}
           onPress={handlePressStartButton}
           hasOptionClicked={hasOptionClicked}
-          countDownStatus={countDown.current}
+          countDownStatus={gameController.timeoutId}
         />
       )}
-      <View style={styles.header}>
-        <Timer
-          time={time}
-          hasStarted={hasGameStarted}
-          hasFinished={hasGameFinished}
-          onFinish={handleFinishGame}
-        />
-        <ValueWithUnit value={String(speed)} unit="km/h" />
-      </View>
-      <GameView
+      <Header
+        navigation={navigation}
+        speed={speed}
+        time={time}
+        mode={mode}
+        userCounts={userCount}
         hasStarted={hasGameStarted}
-        audioController={audioController}
+        hasFinished={hasGameFinished}
+        onFinish={handleFinishGame}
+        onPress={handlePressOptionButton}
+      />
+      <GameView
+        role={role}
+        mode={mode}
+        socket={socket}
         distanceGap={distanceGap}
+        hasStarted={hasGameStarted}
+        gameController={gameController}
         onFinish={handleFinishDistanceResult}
       />
-      {hasGameStarted && (
+      {hasGameStarted && mode === 'solo' && (
         <FontAwesome5
           name="pause-circle"
           style={styles.stopButton}
@@ -259,16 +275,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.BLACK,
-  },
-  header: {
-    flexDirection: 'row',
-    width: '80%',
-    justifyContent: 'space-between',
-  },
-  option: {
-    fontSize: FONT.MEDIUM,
-    color: COLORS.WHITE,
-    marginHorizontal: 30,
   },
   stopButton: {
     fontSize: 50,

@@ -19,9 +19,6 @@ const uiSlice = createSlice({
     toggleSound: (state) => {
       state.canHearingBGMusic = !state.canHearingBGMusic;
     },
-    checkExitGame: (state, action) => {
-      state.shouldExitGame = action.payload;
-    },
   },
   extraReducers: {
     [getRecentRecord.fulfilled]: (state, action) => {
@@ -30,6 +27,5 @@ const uiSlice = createSlice({
   },
 });
 
-export const { toggleModal, toggleEffect, toggleSound, checkExitGame } =
-  uiSlice.actions;
+export const { toggleModal, toggleEffect, toggleSound } = uiSlice.actions;
 export default uiSlice.reducer;

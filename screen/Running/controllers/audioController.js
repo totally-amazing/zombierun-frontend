@@ -2,10 +2,10 @@ import { Audio } from 'expo-av';
 
 class AudioController {
   constructor() {
-    this.backgroundMusicSource = require('../../assets/sounds/background.mp3');
-    this.soundEffectSource = require('../../assets/sounds/zombieSound.mp3');
-    this.backgroundAudio = new Audio.Sound();
-    this.soundEffectAudio = new Audio.Sound();
+    this.backgroundMusicSource = require('../../../assets/sounds/background.mp3');
+    this.soundEffectSource = require('../../../assets/sounds/zombieSound.mp3');
+    this.backgroundAudio = null;
+    this.soundEffectAudio = null;
   }
 
   resetAudio = async () => {
@@ -14,11 +14,19 @@ class AudioController {
   };
 
   loadAudio = async () => {
+    await Audio.setAudioModeAsync({
+      staysActiveInBackground: true,
+      shouldDuckAndroid: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
+    });
+
+    this.backgroundAudio = new Audio.Sound();
+    this.soundEffectAudio = new Audio.Sound();
+
     this.backgroundAudio.loadAsync(this.backgroundMusicSource, {
       isLooping: true,
       shouldPlay: false,
     });
-
     this.soundEffectAudio.loadAsync(this.soundEffectSource, {
       isLooping: true,
       shouldPlay: false,

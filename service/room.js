@@ -31,12 +31,19 @@ class RoomService {
     return result;
   };
 
+  deleteRoom = async (roomId) => {
+    await this.httpClient.fetch({
+      url: `/room/${roomId}`,
+      method: 'delete',
+    });
+  };
+
   on = (event, callback) => {
     return this.socket.on(`room/${event}`, callback);
   };
 
   emit = (event, ...args) => {
-    return this.socket.emit(`room/${event}`, args);
+    this.socket.emit(`room/${event}`, args);
   };
 }
 

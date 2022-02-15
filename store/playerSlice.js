@@ -59,5 +59,4 @@ const playerSlice = createSlice({
 
 export const { onJoinRoom, markReady, markNotReady, onLeave } =
   playerSlice.actions;
-
 export default playerSlice.reducer;

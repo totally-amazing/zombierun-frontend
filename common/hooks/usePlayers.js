@@ -66,8 +66,8 @@ const usePlayers = () => {
 };
 
 export const emitJoin = (room, user) => {
-  user.isReady = false;
-  roomService.emit('join', room, user);
+  const mappedUser = { ...user, isReady: false };
+  roomService.emit('join', room, mappedUser);
 };
 
 export const emitLeave = async (room, players) => {
