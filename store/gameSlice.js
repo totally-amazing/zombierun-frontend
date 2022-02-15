@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import HttpClient from '../network/http';
 import GameService from '../service/game';
-import { createRoom } from './roomSlice';
+import { createRoom, enterRoom } from './roomSlice';
 
 const httpClient = new HttpClient(BASE_URL);
 const gameService = new GameService(httpClient);
@@ -26,8 +26,9 @@ export const getRecentRecord = createAsyncThunk(
 
 export const getGameResult = createAsyncThunk(
   'game/getResultStatus',
-  async (result) => {
-    const { userId, mode, isWinner, time, speed, distance, role } = result;
+  async (game) => {
+    const { gameId, userId, mode, isWinner, time, speed, distance, role } =
+      game;
 
     const mappedResult = {
       mode,
@@ -44,26 +45,50 @@ export const getGameResult = createAsyncThunk(
     if (mode === 'solo') {
       await gameService.create(mappedResult);
     } else {
-      gameService.emitDie();
-      await gameService.update(mappedResult.player);
+      await gameService.update(gameId, mappedResult.player);
     }
 
-    return result;
+    return game;
+  },
+);
+
+export const createGameRecord = createAsyncThunk(
+  'game/createRecord',
+  async (game) => {
+    const { mode, userId } = game;
+    const id = await gameService.create({
+      mode,
+      player: {
+        isWinner: false,
+        time: 0,
+        speed: 0,
+        distance: 0,
+        role: 'human',
+        id: userId,
+      },
+    });
+
+    return id;
   },
 );
 
 const gameSlice = createSlice({
   name: 'game',
   initialState: {
+    id: '',
     mode: '',
     role: 'human',
     totalRecord: {},
     recentRecord: {},
     result: {},
+    speed: 0,
+    time: 0,
   },
   reducers: {
     startGame: (state, action) => {
       state.mode = action.payload.mode;
+      state.speed = Number(action.payload.speed);
+      state.time = Number(action.payload.time);
     },
   },
   extraReducers: {
@@ -84,7 +109,20 @@ const gameSlice = createSlice({
       state.result = action.payload;
     },
     [createRoom.fulfilled]: (state, action) => {
-      state.mode = action.payload.mode;
+      const { room } = action.payload;
+      state.mode = room.mode;
+      state.speed = room.speed;
+      state.time = room.time;
+    },
+    [createGameRecord.fulfilled]: (state, action) => {
+      state.id = action.payload;
+    },
+    [enterRoom]: (state, action) => {
+      const { room } = action.payload;
+
+      state.mode = room.mode;
+      state.speed = room.speed;
+      state.time = room.time;
     },
   },
 });
