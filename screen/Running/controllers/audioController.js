@@ -15,13 +15,9 @@ class AudioController {
 
   loadAudio = async () => {
     await Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
       staysActiveInBackground: true,
-      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DUCK_OTHERS,
-      playsInSilentModeIOS: true,
       shouldDuckAndroid: true,
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
-      playThroughEarpieceAndroid: false,
     });
 
     this.backgroundAudio = new Audio.Sound();
