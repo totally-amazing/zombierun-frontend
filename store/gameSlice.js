@@ -28,6 +28,7 @@ export const getGameResult = createAsyncThunk(
   'game/getGameResultStatus',
   async (result) => {
     const { userId, mode, isWinner, time, speed, distance, role } = result;
+
     const mappedResult = {
       mode,
       player: {
@@ -64,6 +65,9 @@ const gameSlice = createSlice({
     switchRole: (state, action) => {
       state.role = action.payload;
     },
+    startGame: (state, action) => {
+      state.mode = action.payload.mode;
+    },
   },
   extraReducers: {
     [getTotalRecord.fulfilled]: (state, action) => {
@@ -93,6 +97,7 @@ const gameSlice = createSlice({
       if (state.mode === 'oneOnOne') {
         state.role = 'zombie';
       }
+      state.mode = action.payload.mode;
     },
   },
 });

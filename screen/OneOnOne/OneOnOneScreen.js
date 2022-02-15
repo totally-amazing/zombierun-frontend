@@ -16,13 +16,12 @@ import usePlayers, {
   emitZombie,
 } from '../../common/hooks/usePlayers';
 import { markNotReady, markReady } from '../../store/playerSlice';
-import { switchRole } from '../../store/gameSlice';
+import { startGame, switchRole } from '../../store/gameSlice';
 import ExitButton from './components/ExitButton';
 
 const OneOnOneScreen = ({ navigation }) => {
   const [isReady, setIsReady] = useState(false);
   const [shouldStart, setShouldStart] = useState(false);
-
   const dispatch = useDispatch();
   const players = usePlayers();
   const currentRoom = useSelector((state) => state.room.current);
@@ -64,7 +63,10 @@ const OneOnOneScreen = ({ navigation }) => {
     }
   };
 
-  const handlePressStartButton = () => {};
+  const handlePressStartButton = () => {
+    dispatch(startGame({ mode: 'oneOnOne' }));
+    navigation.navigate('Running');
+  };
 
   const handleExitRoom = () => {
     navigation.navigate('RoomList');
@@ -86,7 +88,7 @@ const OneOnOneScreen = ({ navigation }) => {
       <Text style={styles.title}>원하는 역할을 선택해주세요</Text>
       <RoleChoice onPress={handlePressToggleButton} role={role} />
       <View style={styles.profileContainer}>
-        {players.map((player, i) => {
+        {players.map((player) => {
           return (
             <View style={styles.profile} key={player.id}>
               <View style={styles.user}>
@@ -131,24 +133,24 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.BLACK,
   },
   title: {
-    color: COLORS.GRAY,
-    fontSize: FONT.X_SMALL,
     marginBottom: 10,
+    fontSize: FONT.X_SMALL,
+    color: COLORS.GRAY,
   },
   profileContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '80%',
+    height: 300,
     marginHorizontal: 40,
     marginTop: 100,
-    height: 300,
-    width: '80%',
-    justifyContent: 'space-around',
   },
   profile: {
     flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
     height: 300,
     width: '80%',
-    justifyContent: 'space-around',
   },
   user: {
     flexDirection: 'column',
@@ -156,23 +158,23 @@ const styles = StyleSheet.create({
   },
   nickname: {
     marginBottom: 50,
-    color: COLORS.WHITE,
     fontSize: FONT.SMALL,
+    color: COLORS.WHITE,
     lineHeight: PROFILE.MEDIUM,
   },
   ready: {
-    color: COLORS.RED,
-    backgroundColor: COLORS.BLACK,
+    fontSize: FONT.LARGE,
+    fontFamily: FONT.BLOOD_FONT,
     borderWidth: 3,
     borderColor: COLORS.RED,
-    fontSize: FONT.LARGE,
-    fontFamily: FONT.BLOOD_FONT,
+    color: COLORS.RED,
+    backgroundColor: COLORS.BLACK,
   },
   start: {
-    color: COLORS.BLACK,
-    backgroundColor: COLORS.GRAY,
     fontSize: FONT.LARGE,
     fontFamily: FONT.BLOOD_FONT,
+    color: COLORS.BLACK,
+    backgroundColor: COLORS.GRAY,
   },
   medium: {
     width: PROFILE.MEDIUM,
