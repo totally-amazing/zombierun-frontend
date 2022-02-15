@@ -16,18 +16,18 @@ import COLORS from '../../common/constants/COLORS';
 import { getGameResult } from '../../store/gameSlice';
 
 const RunningScreen = ({ route, navigation }) => {
-  const { speed, time } = route.params.gameSetting;
+  const { speed, time } = useSelector((state) => state.game);
   const conversionRate = 0.277778;
   const dispatch = useDispatch();
 
   const { id } = useSelector((state) => state.user);
-  const { allPlayersId } = useSelector((state) => state.room);
+  const numberOfPlayer = useSelector((state) => state.player.allIds).length;
   const { role, mode } = useSelector((state) => state.game);
   const canHearingSoundEffect = useSelector(
-    (state) => state.ui.canHearingEffect,
+    (state) => state.ui.canHearingEffect
   );
   const canHearingBackgroundMusic = useSelector(
-    (state) => state.ui.canHearingBGMusic,
+    (state) => state.ui.canHearingBGMusic
   );
 
   const [userDistance, setUserDistance] = useState(0);
@@ -37,7 +37,7 @@ const RunningScreen = ({ route, navigation }) => {
   const [hasGameFinished, setHasGameFinished] = useState(false);
   const [hasOptionClicked, setHasOptionClicked] = useState(false);
   const [userCount, setUserCount] = useState(
-    mode === 'survival' ? allPlayersId.lenght : 0,
+    mode === 'survival' ? numberOfPlayer : 0
   );
   const survivalTime = useRef(time);
   const countDown = useRef();
@@ -53,8 +53,8 @@ const RunningScreen = ({ route, navigation }) => {
       countDown.current,
       tracker.current,
       locationHistory.current,
-      audioController,
-    ),
+      audioController
+    )
   );
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
@@ -67,7 +67,7 @@ const RunningScreen = ({ route, navigation }) => {
 
     gameController.controlGameSound(
       canHearingSoundEffect,
-      canHearingBackgroundMusic,
+      canHearingBackgroundMusic
     );
 
     const userLocation = await Location.watchPositionAsync(
@@ -88,7 +88,7 @@ const RunningScreen = ({ route, navigation }) => {
         });
 
         gameController.recordUserLocationHistory(coords);
-      },
+      }
     );
 
     gameController.locationObj = userLocation;
@@ -215,7 +215,7 @@ const RunningScreen = ({ route, navigation }) => {
           speed: kilometerPerHour.toFixed(1),
           mode,
           role,
-        }),
+        })
       );
 
       navigation.navigate('Result');
