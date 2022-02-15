@@ -31,19 +31,19 @@ const GameView = ({
 
     if (distanceGap >= 400) {
       setZombieSize('far');
-      gameController.soundEffectVolumeControl(0.2);
+      gameController.controlSoundEffectVolume(0.2);
       return;
     }
 
     if (distanceGap >= 200 && distanceGap < 400) {
       setZombieSize('middle');
-      gameController.soundEffectVolumeControl(0.5);
+      gameController.controlSoundEffectVolume(0.5);
       return;
     }
 
     if (distanceGap >= 100 && distanceGap < 200) {
       setZombieSize('close');
-      gameController.soundEffectVolumeControl(1);
+      gameController.controlSoundEffectVolume(1);
       return;
     }
 

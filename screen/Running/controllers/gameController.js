@@ -57,7 +57,7 @@ class GameController {
     }
   };
 
-  soundEffectVolumeControl = (volume) => {
+  controlSoundEffectVolume = (volume) => {
     this.audioController.changeSoundEffectVolume(volume);
   };
 }
