@@ -2,32 +2,34 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { BASE_URL } from '@env';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
 
+import {
+  emitFinishGame,
+  emitUserSpeed,
+  socket,
+} from '../../common/hooks/useSocket';
 import Pause from './components/Pause';
 import AudioController from './controllers/audioController';
 import GameController from './controllers/gameController';
 import GameView from './components/GameView';
 import Header from './components/Header';
-import Socket from '../../network/socket';
 import COLORS from '../../common/constants/COLORS';
 import { getGameResult } from '../../store/gameSlice';
 
-const RunningScreen = ({ route, navigation }) => {
+const RunningScreen = ({ navigation }) => {
   const { speed, time } = useSelector((state) => state.game);
   const conversionRate = 0.277778;
   const dispatch = useDispatch();
 
-  const { id } = useSelector((state) => state.user);
   const numberOfPlayer = useSelector((state) => state.player.allIds).length;
   const { role, mode } = useSelector((state) => state.game);
   const canHearingSoundEffect = useSelector(
-    (state) => state.ui.canHearingEffect
+    (state) => state.ui.canHearingEffect,
   );
   const canHearingBackgroundMusic = useSelector(
-    (state) => state.ui.canHearingBGMusic
+    (state) => state.ui.canHearingBGMusic,
   );
 
   const [userDistance, setUserDistance] = useState(0);
@@ -37,7 +39,7 @@ const RunningScreen = ({ route, navigation }) => {
   const [hasGameFinished, setHasGameFinished] = useState(false);
   const [hasOptionClicked, setHasOptionClicked] = useState(false);
   const [userCount, setUserCount] = useState(
-    mode === 'survival' ? numberOfPlayer : 0
+    mode === 'survival' ? numberOfPlayer : 0,
   );
   const survivalTime = useRef(time);
   const countDown = useRef();
@@ -45,7 +47,6 @@ const RunningScreen = ({ route, navigation }) => {
   const tracker = useRef();
   const locationHistory = useRef([]);
 
-  const { current: socket } = useRef(new Socket(BASE_URL));
   const { current: audioController } = useRef(new AudioController());
   const { current: gameController } = useRef(
     new GameController(
@@ -53,21 +54,19 @@ const RunningScreen = ({ route, navigation }) => {
       countDown.current,
       tracker.current,
       locationHistory.current,
-      audioController
-    )
+      audioController,
+    ),
   );
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
   const distanceGap = Math.ceil(userDistance - opponentDistance);
-
-  survivalTime.current = time;
 
   const startRunning = async () => {
     setHasGameStarted(true);
 
     gameController.controlGameSound(
       canHearingSoundEffect,
-      canHearingBackgroundMusic
+      canHearingBackgroundMusic,
     );
 
     const userLocation = await Location.watchPositionAsync(
@@ -78,7 +77,7 @@ const RunningScreen = ({ route, navigation }) => {
         const { coords } = location;
 
         if (mode === 'oneOnOne') {
-          socket.emit('game/userSpeed', coords.speed);
+          emitUserSpeed(coords.speed);
         }
 
         setUserDistance((preivousDistance) => {
@@ -88,7 +87,7 @@ const RunningScreen = ({ route, navigation }) => {
         });
 
         gameController.recordUserLocationHistory(coords);
-      }
+      },
     );
 
     gameController.locationObj = userLocation;
@@ -130,10 +129,8 @@ const RunningScreen = ({ route, navigation }) => {
       }
     }
 
-    if (passedTime === 0) {
-      if (role === 'human') {
-        setIsWinner(true);
-      }
+    if (passedTime === 0 && role === 'human') {
+      setIsWinner(true);
     } else {
       survivalTime.current -= passedTime;
     }
@@ -195,10 +192,13 @@ const RunningScreen = ({ route, navigation }) => {
     };
   }, [hasGameStarted]);
 
+  const gameId = useSelector((state) => state.game.id);
+  const { id } = useSelector((state) => state.user);
+
   useEffect(() => {
     const finishGame = () => {
       if (mode === 'oneOnOne' || mode === 'survival') {
-        socket.emit('user/leave');
+        emitFinishGame();
       }
 
       const kilometerDistance = Math.ceil(userDistance) / 1000;
@@ -206,7 +206,7 @@ const RunningScreen = ({ route, navigation }) => {
 
       gameController.resetGameSetup('timer');
       dispatch(
-        getGameResult({
+        getGameResult(gameId, {
           userId: id,
           locationHistory: gameController.locationRecord,
           isWinner,
@@ -215,7 +215,7 @@ const RunningScreen = ({ route, navigation }) => {
           speed: kilometerPerHour.toFixed(1),
           mode,
           role,
-        })
+        }),
       );
 
       navigation.navigate('Result');
