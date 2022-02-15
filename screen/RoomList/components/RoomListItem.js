@@ -80,6 +80,6 @@ RoomListItem.propTypes = {
     title: PropTypes.string.isRequired,
     time: PropTypes.number,
     speed: PropTypes.number,
-    participants: PropTypes.arrayOf(PropTypes.string),
+    participants: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
 };

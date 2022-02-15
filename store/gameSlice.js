@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import HttpClient from '../network/http';
 import GameService from '../service/game';
+import { createRoom } from './roomSlice';
 
 const httpClient = new HttpClient(BASE_URL);
 const gameService = new GameService(httpClient);
@@ -60,13 +61,6 @@ const gameSlice = createSlice({
     recentRecord: {},
     result: {},
   },
-  reducers: {
-    startGame: (state, action) => {
-      const { mode, role } = action.payload;
-      state.mode = mode;
-      state.role = role || 'human';
-    },
-  },
   extraReducers: {
     [getTotalRecord.fulfilled]: (state, action) => {
       const { time } = action.payload;
@@ -83,6 +77,9 @@ const gameSlice = createSlice({
     },
     [getGameResult.fulfilled]: (state, action) => {
       state.result = action.payload;
+    },
+    [createRoom.fulfilled]: (state, action) => {
+      state.mode = action.payload.mode;
     },
   },
 });

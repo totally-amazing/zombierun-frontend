@@ -8,7 +8,7 @@ import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
 import showErrorMessage from '../../common/utils/showErrorMessage';
-import { getRoomList } from '../../store/roomSlice';
+import { getRooms } from '../../store/roomSlice';
 
 const MainScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const MainScreen = ({ navigation }) => {
 
   const handleTogetherText = () => {
     navigation.navigate('RoomList');
-    dispatch(getRoomList());
+    dispatch(getRooms());
   };
 
   useEffect(() => {

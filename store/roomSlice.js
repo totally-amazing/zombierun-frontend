@@ -7,36 +7,53 @@ import RoomService from '../service/room';
 const httpClient = new HttpClient(BASE_URL);
 const roomService = new RoomService(httpClient);
 
-export const getRoomList = createAsyncThunk(
-  'room/getRoomListStatus',
-  async () => {
-    const roomList = await roomService.getRooms();
-    return roomList;
-  },
-);
+export const getRooms = createAsyncThunk('room/getRoomsStatus', async () => {
+  const roomList = await roomService.getRooms();
+  return roomList;
+});
 
 export const createRoom = createAsyncThunk(
   'room/createRoomStatus',
-  async (roomInfo) => {
-    const { id } = await roomService.createRoom(roomInfo);
-    return id;
+  async ({ room, user }) => {
+    const { id } = await roomService.createRoom(room);
+    return { room: { ...room, id }, user };
   },
 );
 
 const roomSlice = createSlice({
   name: 'room',
   initialState: {
-    list: [],
-    id: '',
+    allIds: [],
+    byId: {},
+    current: {},
+  },
+  reducers: {
+    enterRoom: (state, action) => {
+      const { room } = action.payload;
+      state.current = room;
+    },
+    leaveRoom: (state, action) => {
+      state.current = null;
+    },
   },
   extraReducers: {
-    [getRoomList.fulfilled]: (state, action) => {
-      state.list = action.payload;
+    [getRooms.fulfilled]: (state, action) => {
+      const rooms = action.payload;
+      const ids = rooms.map((room) => room.id);
+
+      state.allIds = ids;
+
+      for (const room of rooms) {
+        state.byId[room.id] = room;
+      }
     },
     [createRoom.fulfilled]: (state, action) => {
-      state.id = action.payload;
+      const { room } = action.payload;
+
+      state.current = room;
     },
   },
 });
 
+export const { leaveRoom, enterRoom } = roomSlice.actions;
 export default roomSlice.reducer;

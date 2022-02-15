@@ -11,7 +11,7 @@ import CustomButton from '../../common/components/CustomButton';
 import ArrowMainButton from '../../common/components/ArrowMainButton';
 
 const OneOnOneScreen = () => {
-  const { nickname } = useSelector((state) => state.user);
+  const { nickname, imageUrl } = useSelector((state) => state.user);
   const [isZombieRole, setIsZombieRole] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
@@ -31,7 +31,7 @@ const OneOnOneScreen = () => {
         onPress={handlePressToggleButton}
       />
       <View style={styles.profileContainer}>
-        <Profile size="medium" />
+        <Profile size="medium" imageUrl={imageUrl} />
         <Text style={styles.nickname}>{nickname}</Text>
         <Image
           source={require('../../assets/waiting.jpeg')}
