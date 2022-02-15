@@ -53,7 +53,9 @@ const Header = ({
           onFinish={onFinish}
         />
       )}
-      {mode === 'solo' && <ValueWithUnit value={speed} unit="km/h" />}
+      {mode === ('solo' || 'survival') && (
+        <ValueWithUnit value={speed} unit="km/h" />
+      )}
     </View>
   );
 };
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
 
 Header.propTypes = {
   speed: PropTypes.number.isRequired,
-  time: PropTypes.number.isRequired,
+  time: PropTypes.number,
   mode: PropTypes.string.isRequired,
   hasStarted: PropTypes.bool.isRequired,
   hasFinished: PropTypes.bool.isRequired,
@@ -97,4 +99,5 @@ Header.propTypes = {
 
 Header.defaultProps = {
   userCounts: '',
+  time: '',
 };

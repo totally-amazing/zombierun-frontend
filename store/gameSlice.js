@@ -61,6 +61,11 @@ const gameSlice = createSlice({
     recentRecord: {},
     result: {},
   },
+  reducers: {
+    startGame: (state, action) => {
+      state.mode = action.payload.mode;
+    },
+  },
   extraReducers: {
     [getTotalRecord.fulfilled]: (state, action) => {
       const { time } = action.payload;
