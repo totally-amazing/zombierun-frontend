@@ -33,7 +33,7 @@ const RunningScreen = ({ navigation }) => {
   );
 
   const [userDistance, setUserDistance] = useState(0);
-  const [opponentDistance, setOpponentDistance] = useState(-20);
+  const [opponentDistance, setOpponentDistance] = useState(-500);
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
