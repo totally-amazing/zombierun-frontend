@@ -4,8 +4,8 @@ class AudioController {
   constructor() {
     this.backgroundMusicSource = require('../../../assets/sounds/background.mp3');
     this.soundEffectSource = require('../../../assets/sounds/zombieSound.mp3');
-    this.backgroundAudio = new Audio.Sound();
-    this.soundEffectAudio = new Audio.Sound();
+    this.backgroundAudio = '';
+    this.soundEffectAudio = '';
   }
 
   resetAudio = async () => {
@@ -14,11 +14,23 @@ class AudioController {
   };
 
   loadAudio = async () => {
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      staysActiveInBackground: true,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DUCK_OTHERS,
+      playsInSilentModeIOS: true,
+      shouldDuckAndroid: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
+      playThroughEarpieceAndroid: false,
+    });
+
+    this.backgroundAudio = new Audio.Sound();
+    this.soundEffectAudio = new Audio.Sound();
+
     this.backgroundAudio.loadAsync(this.backgroundMusicSource, {
       isLooping: true,
       shouldPlay: false,
     });
-
     this.soundEffectAudio.loadAsync(this.soundEffectSource, {
       isLooping: true,
       shouldPlay: false,
