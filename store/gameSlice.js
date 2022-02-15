@@ -25,7 +25,7 @@ export const getRecentRecord = createAsyncThunk(
 );
 
 export const getGameResult = createAsyncThunk(
-  'game/getGameResultStatus',
+  'game/getResultStatus',
   async (result) => {
     const { userId, mode, isWinner, time, speed, distance, role } = result;
 
