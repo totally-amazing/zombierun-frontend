@@ -30,24 +30,30 @@ class GameService {
     return result;
   };
 
-  update = async (game) => {
-    this.httpClient.fetch({
-      url: '/game',
+  update = async (id, player) => {
+    await this.httpClient.fetch({
+      url: `/game/:${id}`,
       method: 'put',
-      data: game,
+      data: player,
     });
   };
 
   create = async (game) => {
-    this.httpClient.fetch({
+    const result = this.httpClient.fetch({
       url: '/game',
       method: 'post',
       data: game,
     });
+
+    return result;
   };
 
-  emitDie = () => {
-    this.socket.emit('user/die');
+  on = (event, callback) => {
+    return this.socket.on(`game/${event}`, callback);
+  };
+
+  emit = (event, ...args) => {
+    this.socket.emit(`game/${event}`, args);
   };
 }
 
