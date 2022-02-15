@@ -32,7 +32,7 @@ class GameService {
 
   update = async (id, player) => {
     await this.httpClient.fetch({
-      url: `/game/:${id}`,
+      url: `/game/${id}`,
       method: 'put',
       data: player,
     });
