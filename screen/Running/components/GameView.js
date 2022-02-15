@@ -2,12 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
+import GameController from '../controllers/gameController';
 import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
-import AudioController from '../audioController';
+import Socket from '../../../network/socket';
 
-const GameView = ({ hasStarted, audioController, distanceGap, onFinish }) => {
+const GameView = ({
+  role,
+  socket,
+  hasStarted,
+  gameController,
+  distanceGap,
+  onFinish,
+}) => {
   const [zombieSize, setZombieSize] = useState('far');
+  const opponentImage = () => {
+    if (role === 'zombie') {
+      return require('../../../assets/images/human.gif');
+    }
+
+    return require('../../../assets/images/zombie.gif');
+  };
 
   useEffect(() => {
     if (!hasStarted) {
@@ -16,20 +31,24 @@ const GameView = ({ hasStarted, audioController, distanceGap, onFinish }) => {
 
     if (distanceGap >= 400) {
       setZombieSize('far');
-      audioController.changeSoundEffectVolume(0.2);
+      gameController.controlSoundEffectVolume(0.2);
+      return;
     }
 
     if (distanceGap >= 200 && distanceGap < 400) {
       setZombieSize('middle');
-      audioController.changeSoundEffectVolume(0.5);
+      gameController.controlSoundEffectVolume(0.5);
+      return;
     }
 
     if (distanceGap >= 100 && distanceGap < 200) {
       setZombieSize('close');
-      audioController.changeSoundEffectVolume(1);
+      gameController.controlSoundEffectVolume(1);
+      return;
     }
 
     if (distanceGap <= 0) {
+      socket.emit('game/die');
       onFinish();
     }
   }, [distanceGap, hasStarted]);
@@ -37,10 +56,7 @@ const GameView = ({ hasStarted, audioController, distanceGap, onFinish }) => {
   return (
     <View style={styles.gameView}>
       <View style={styles.imageContainer}>
-        <Image
-          style={styles[zombieSize]}
-          source={require('../../../assets/images/zombie.gif')}
-        />
+        <Image style={styles[zombieSize]} source={opponentImage()} />
       </View>
       <View>
         <Text style={styles.distance}>Distance</Text>
@@ -92,8 +108,14 @@ const styles = StyleSheet.create({
 });
 
 GameView.propTypes = {
+  role: PropTypes.string.isRequired,
   hasStarted: PropTypes.bool.isRequired,
   distanceGap: PropTypes.number.isRequired,
   onFinish: PropTypes.func.isRequired,
-  audioController: PropTypes.instanceOf(AudioController).isRequired,
+  gameController: PropTypes.instanceOf(GameController).isRequired,
+  socket: PropTypes.instanceOf(Socket),
+};
+
+GameView.defaultProps = {
+  socket: '',
 };

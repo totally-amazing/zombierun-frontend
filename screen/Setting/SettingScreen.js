@@ -15,13 +15,13 @@ const SettingScreen = ({ onClose }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
+  const [hasExitCheck, setHasExitCheck] = useState(false);
   const hasSwitchSoundEffectOption = useSelector(
     (state) => state.ui.canHearingEffect,
   );
   const hasSwitchMusicOption = useSelector(
     (state) => state.ui.canHearingBGMusic,
   );
-  const [hasExitCheck, setHasExitCheck] = useState(false);
 
   const soundEffect = hasSwitchSoundEffectOption
     ? '효과음 끄기'

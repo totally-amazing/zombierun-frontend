@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
+import LineWithText from './components/LineWithText';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import Profile from '../../common/components/Profile';
@@ -9,7 +10,6 @@ import PROFILE from '../../common/constants/PROFILE';
 import TinyTitle from '../../common/components/TinyTitle';
 import ValueWithUnit from '../../common/components/ValueWithUnit';
 import TextChunk from '../../common/components/TextChunk';
-import LineWithText from './components/LineWithText';
 
 const MyPageScreen = () => {
   const record = useSelector((state) => state.game.totalRecord);
