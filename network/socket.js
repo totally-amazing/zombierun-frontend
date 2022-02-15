@@ -9,22 +9,25 @@ class Socket {
     });
   }
 
-  on(event, callback) {
+  on = (event, callback) => {
     if (!this.io.connected) {
       this.io.connect();
     }
 
     this.io.on(event, callback);
-    return () => this.io.off(event);
-  }
+    return () => {
+      console.log(`socket:::::off ${event}`);
+      this.io.off(event);
+    };
+  };
 
-  emit(event, args) {
+  emit = (event, args) => {
     if (!this.io.connected) {
       this.io.connect();
     }
 
     this.io.emit(event, ...args);
-  }
+  };
 }
 
 export default Socket;

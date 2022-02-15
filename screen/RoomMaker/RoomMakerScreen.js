@@ -12,7 +12,6 @@ import showErrorMessage from '../../common/utils/showErrorMessage';
 import StandardModal from '../../common/components/StandardModal';
 import CustomButton from '../../common/components/CustomButton';
 import { toggleModal } from '../../store/uiSlice';
-import { startGame } from '../../store/gameSlice';
 import { createRoom } from '../../store/roomSlice';
 
 const formReducer = (state, action) => {
@@ -86,6 +85,8 @@ const RoomMakerScreen = () => {
     handleCreateRoomButton(Number(inputValue), modeValue);
   };
 
+  const user = useSelector((state) => state.user);
+
   const handleCreateRoomButton = async (inputValue, modeValue) => {
     setTitle('');
     const speed = modeValue === 'survival' ? inputValue : null;
@@ -98,8 +99,6 @@ const RoomMakerScreen = () => {
       time,
     };
 
-    dispatch(createRoom(roomInfo));
-
     if (mode === 'oneOnOne') {
       navigation.navigate('OneOnOne');
     }
@@ -108,8 +107,8 @@ const RoomMakerScreen = () => {
       navigation.navigate('Survival');
     }
 
+    dispatch(createRoom({ room: roomInfo, user }));
     dispatch(toggleModal());
-    dispatch(startGame({ mode: modeValue }));
   };
 
   return (

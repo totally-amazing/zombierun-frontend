@@ -1,21 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Image, Pressable, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
 
 import PROFILE from '../constants/PROFILE';
 
-const Profile = ({ size, onPress }) => {
-  const imageUrl = useSelector((state) => state.user.imageUrl);
+const Profile = ({ size, onPress, imageUrl }) => {
+  const image = imageUrl
+    ? { uri: imageUrl }
+    : require('../../assets/avatar.jpeg');
 
   return (
     <Pressable onPress={onPress}>
-      <Image
-        source={
-          imageUrl ? { uri: imageUrl } : require('../../assets/avatar.jpeg')
-        }
-        style={styles[size]}
-      />
+      <Image source={image} style={styles[size]} />
     </Pressable>
   );
 };
@@ -41,10 +37,12 @@ const styles = StyleSheet.create({
 Profile.propTypes = {
   size: PropTypes.oneOf(['small', 'medium', 'large']).isRequired,
   onPress: PropTypes.func,
+  imageUrl: PropTypes.string,
 };
 
 Profile.defaultProps = {
   onPress: () => {},
+  imageUrl: null,
 };
 
 export default Profile;

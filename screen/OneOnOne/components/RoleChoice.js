@@ -6,17 +6,17 @@ import CustomButton from '../../../common/components/CustomButton';
 import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
 
-const RoleChoice = ({ isZombieRole, onPress }) => {
+const RoleChoice = ({ onPress, role }) => {
   return (
     <View>
       <CustomButton
-        message={isZombieRole ? 'ZOMBIE' : 'HUMAN'}
+        message={role === 'human' ? 'HUMAN' : 'ZOMBIE'}
         style={styles.switchButton}
         disabled={false}
         onPress={onPress}
       />
       <Text style={styles.role}>
-        {isZombieRole ? '좀비를 선택하셨습니다' : '인간을 선택하셨습니다'}
+        {role === 'human' ? '인간을 선택하셨습니다' : '좀비를 선택하셨습니다'}
       </Text>
     </View>
   );
@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
 });
 
 RoleChoice.propTypes = {
-  isZombieRole: PropTypes.bool.isRequired,
   onPress: PropTypes.func.isRequired,
+  role: PropTypes.string.isRequired,
 };
