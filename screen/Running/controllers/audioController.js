@@ -4,8 +4,8 @@ class AudioController {
   constructor() {
     this.backgroundMusicSource = require('../../../assets/sounds/background.mp3');
     this.soundEffectSource = require('../../../assets/sounds/zombieSound.mp3');
-    this.backgroundAudio = '';
-    this.soundEffectAudio = '';
+    this.backgroundAudio = null;
+    this.soundEffectAudio = null;
   }
 
   resetAudio = async () => {

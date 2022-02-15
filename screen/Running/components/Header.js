@@ -53,7 +53,7 @@ const Header = ({
           onFinish={onFinish}
         />
       )}
-      {mode === ('solo' || 'survival') && (
+      {(mode === 'solo' || mode === 'survival') && (
         <ValueWithUnit value={speed} unit="km/h" />
       )}
     </View>
