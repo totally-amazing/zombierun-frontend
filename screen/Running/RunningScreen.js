@@ -36,8 +36,9 @@ const RunningScreen = ({ route, navigation }) => {
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
   const [hasOptionClicked, setHasOptionClicked] = useState(false);
-  const [userCount, setUserCount] = useState(allPlayersId.length);
-
+  const [userCount, setUserCount] = useState(
+    mode === 'survival' ? allPlayersId.lenght : 0,
+  );
   const survivalTime = useRef(time);
   const countDown = useRef();
   const intervalId = useRef();
@@ -232,7 +233,7 @@ const RunningScreen = ({ route, navigation }) => {
           role={role}
           onPress={handlePressStartButton}
           hasOptionClicked={hasOptionClicked}
-          countDownStatus={countDown.current}
+          countDownStatus={gameController.timeoutId}
         />
       )}
       <Header
