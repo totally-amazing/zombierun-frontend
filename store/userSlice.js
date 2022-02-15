@@ -1,6 +1,5 @@
 import { BASE_URL } from '@env';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import HttpClient from '../network/http';
 import AuthService from '../service/auth';
@@ -10,8 +9,6 @@ const authService = new AuthService(httpClient);
 
 export const signIn = createAsyncThunk('user/signInStatus', async (idToken) => {
   const user = await authService.signIn(idToken);
-  await AsyncStorage.setItem('accessToken', user.token);
-
   return user;
 });
 

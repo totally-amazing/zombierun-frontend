@@ -13,7 +13,7 @@ import usePlayers, {
   emitLeave,
   emitReady,
   emitNotReady,
-  emitGmaeStart,
+  emitGameStart,
 } from '../../common/hooks/useSocket';
 import { markNotReady, markReady } from '../../store/playerSlice';
 import { createGameRecord } from '../../store/gameSlice';
@@ -46,7 +46,7 @@ const SurvivalScreen = ({ navigation }) => {
 
   const handlePressStartButton = () => {
     dispatch(createGameRecord({ mode: currentRoom.mode, userId: id }));
-    emitGmaeStart(currentRoom.mode);
+    emitGameStart(currentRoom.mode);
     navigation.navigate('Running');
   };
 

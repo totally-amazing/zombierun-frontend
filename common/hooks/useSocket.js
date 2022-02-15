@@ -86,7 +86,7 @@ export const emitNotReady = () => {
   roomService.emit('notReady');
 };
 
-export const emitGmaeStart = (mode) => {
+export const emitGameStart = (mode) => {
   gameService.emit('start', mode);
 };
 
