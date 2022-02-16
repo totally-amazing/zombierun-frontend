@@ -4,7 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
 import Timer from './Timer';
-import SurvivalCount from './SurvivalCount';
+import SurvivorCount from './SurvivorCount';
 import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
 import ValueWithUnit from '../../../common/components/ValueWithUnit';
@@ -39,7 +39,7 @@ const Header = ({
   return (
     <View style={styles[mode]}>
       {mode === 'survival' ? (
-        <SurvivalCount
+        <SurvivorCount
           hasStarted={hasStarted}
           hasFinished={hasFinished}
           onFinish={onFinishSurvival}

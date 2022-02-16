@@ -7,7 +7,7 @@ import FONT from '../../../common/constants/FONT';
 import COLORS from '../../../common/constants/COLORS';
 import { socket } from '../../../common/hooks/useSocket';
 
-const SurvivalCount = ({ hasStarted, hasFinished, onFinish }) => {
+const SurvivorCount = ({ hasStarted, hasFinished, onFinish }) => {
   const seconds = useRef(0);
   const stopWatchId = useRef();
   const numberOfPlayers = useSelector((state) => state.player.allIds).length;
@@ -53,7 +53,7 @@ const SurvivalCount = ({ hasStarted, hasFinished, onFinish }) => {
   );
 };
 
-export default SurvivalCount;
+export default SurvivorCount;
 
 const styles = StyleSheet.create({
   userCount: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
 });
 
-SurvivalCount.propTypes = {
+SurvivorCount.propTypes = {
   hasStarted: PropTypes.bool.isRequired,
   hasFinished: PropTypes.bool.isRequired,
   onFinish: PropTypes.func.isRequired,
