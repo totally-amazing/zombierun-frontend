@@ -44,16 +44,10 @@ const SurvivalScreen = ({ navigation }) => {
       emitReady();
     }
   };
-
-  useEffect(() => {
-    if (gameId) {
-      emitGameStart(currentRoom.mode);
-      navigation.navigate('Running');
-    }
-  }, [gameId]);
-
-  const handlePressStartButton = () => {
-    dispatch(createGameRecord({ mode: currentRoom.mode, userId }));
+  const handlePressStartButton = async () => {
+    await dispatch(createGameRecord({ mode: currentRoom.mode, userId }));
+    emitGameStart(currentRoom.mode);
+    navigation.navigate('Running');
   };
 
   const handleExitRoom = () => {
