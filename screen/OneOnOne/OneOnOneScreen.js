@@ -97,10 +97,7 @@ const OneOnOneScreen = ({ navigation }) => {
               </View>
               {!players[1] && (
                 <View style={styles.user}>
-                  <Profile
-                    size="medium"
-                    imageUrl={require('../../assets/waiting.jpeg')}
-                  />
+                  <Profile size="medium" />
                   <Text style={styles.nickname}>대기중</Text>
                 </View>
               )}
