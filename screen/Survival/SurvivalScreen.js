@@ -25,7 +25,6 @@ const SurvivalScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const currentRoom = useSelector((state) => state.room.current);
   const userId = useSelector((state) => state.user.id);
-  const gameId = useSelector((state) => state.game.id);
   const players = usePlayers();
 
   const handlePressReadyButton = () => {
@@ -45,8 +44,10 @@ const SurvivalScreen = ({ navigation }) => {
     }
   };
   const handlePressStartButton = async () => {
-    await dispatch(createGameRecord({ mode: currentRoom.mode, userId }));
-    emitGameStart(currentRoom.mode);
+    const gameId = await dispatch(
+      createGameRecord({ mode: currentRoom.mode, userId }),
+    ).unwrap();
+    emitGameStart(gameId);
     navigation.navigate('Running');
   };
 

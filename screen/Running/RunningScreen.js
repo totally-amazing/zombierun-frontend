@@ -198,7 +198,6 @@ const RunningScreen = ({ navigation }) => {
         distance: kilometerDistance,
         time: survivalTime.current,
         speed: kilometerPerHour.toFixed(1),
-        mode,
         role,
       };
 
@@ -207,7 +206,7 @@ const RunningScreen = ({ navigation }) => {
         emitGameDie();
         dispatch(updateGameRecord({ ...result, gameId }));
       } else {
-        dispatch(createGameResult(result));
+        dispatch(createGameResult({ ...result, mode }));
       }
 
       gameController.resetGameSetup('timer');

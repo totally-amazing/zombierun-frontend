@@ -88,8 +88,8 @@ export const emitNotReady = () => {
   roomService.emit('notReady');
 };
 
-export const emitGameStart = ({ gameId, mode }) => {
-  gameService.emit('start', { gameId, mode });
+export const emitGameStart = (gameId) => {
+  gameService.emit('start', gameId);
 };
 
 export const emitGameDie = () => {

@@ -101,6 +101,7 @@ const gameSlice = createSlice({
   },
   reducers: {
     startGame: (state, action) => {
+      state.id = action.payload.id;
       state.mode = action.payload.mode;
       state.speed = Number(action.payload.speed);
       state.time = Number(action.payload.time);
