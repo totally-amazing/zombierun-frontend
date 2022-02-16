@@ -30,7 +30,6 @@ const roomSlice = createSlice({
   reducers: {
     enterRoom: (state, action) => {
       const { room } = action.payload;
-
       state.current = room;
     },
     leaveRoom: (state, action) => {

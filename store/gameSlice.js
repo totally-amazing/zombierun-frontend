@@ -97,7 +97,6 @@ const gameSlice = createSlice({
       if (state.mode === 'oneOnOne') {
         state.role = 'zombie';
       }
-      state.mode = action.payload.mode;
     },
   },
 });
