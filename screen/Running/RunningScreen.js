@@ -14,6 +14,7 @@ import Header from './components/Header';
 import Socket from '../../network/socket';
 import COLORS from '../../common/constants/COLORS';
 import { getGameResult } from '../../store/gameSlice';
+import useDistance from '../../common/hooks/useTotalDistance';
 
 const RunningScreen = ({ route, navigation }) => {
   const { speed, time } = route.params.gameSetting;
@@ -30,8 +31,6 @@ const RunningScreen = ({ route, navigation }) => {
     (state) => state.ui.canHearingBGMusic,
   );
 
-  const [userDistance, setUserDistance] = useState(0);
-  const [opponentDistance, setOpponentDistance] = useState(-500);
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
@@ -39,6 +38,10 @@ const RunningScreen = ({ route, navigation }) => {
   const [userCount, setUserCount] = useState(
     mode === 'survival' ? allPlayersId.lenght : 0,
   );
+
+  const [userDistance, reduceUserDistance] = useDistance(0);
+  const [opponentDistance, reduceOpponentDistance] = useDistance(-300);
+
   const survivalTime = useRef(time);
   const countDown = useRef();
   const intervalId = useRef();
@@ -81,11 +84,7 @@ const RunningScreen = ({ route, navigation }) => {
           socket.emit('game/userSpeed', coords.speed);
         }
 
-        setUserDistance((preivousDistance) => {
-          const totalDistance = preivousDistance + coords.speed;
-
-          return totalDistance;
-        });
+        reduceUserDistance(coords.speed);
 
         gameController.recordUserLocationHistory(coords);
       },
@@ -121,7 +120,7 @@ const RunningScreen = ({ route, navigation }) => {
     setHasGameFinished(true);
   };
 
-  const handleFinishGame = (passedTime, survivorCount) => {
+  const handleFinishSurvival = (passedTime, survivorCount) => {
     if (mode === 'survival') {
       survivalTime.current = passedTime;
 
@@ -130,12 +129,16 @@ const RunningScreen = ({ route, navigation }) => {
       }
     }
 
-    if (passedTime === 0) {
+    setHasGameFinished(true);
+  };
+
+  const handleFinishGame = (remainingTime) => {
+    if (remainingTime === 0) {
       if (role === 'human') {
         setIsWinner(true);
       }
     } else {
-      survivalTime.current -= passedTime;
+      survivalTime.current -= remainingTime;
     }
 
     setHasGameFinished(true);
@@ -145,8 +148,10 @@ const RunningScreen = ({ route, navigation }) => {
     const initStartUp = () => {
       getCurrentLocation();
 
-      gameController.loadGameSound();
-      gameController.timeoutId = setTimeout(startRunning, 5000);
+      if (!gameController.timeoutId) {
+        gameController.loadGameSound();
+        gameController.timeoutId = setTimeout(startRunning, 5000);
+      }
     };
 
     initStartUp();
@@ -160,11 +165,7 @@ const RunningScreen = ({ route, navigation }) => {
     const startOpponentRunning = () => {
       if (mode === 'oneOnOne') {
         socket.on('game/opponentSpeed', (meterPerSecond) => {
-          setOpponentDistance((previousDistance) => {
-            const totalDistance = previousDistance + meterPerSecond;
-
-            return totalDistance;
-          });
+          reduceOpponentDistance(meterPerSecond);
         });
 
         return;
@@ -178,10 +179,7 @@ const RunningScreen = ({ route, navigation }) => {
 
       if (mode === 'solo' || mode === 'survival') {
         gameController.intervalId = setInterval(() => {
-          setOpponentDistance((previousDistance) => {
-            const totalDistance = previousDistance + speedMeterPerSecond;
-            return totalDistance;
-          });
+          reduceOpponentDistance(speedMeterPerSecond);
         }, 1000);
       }
     };
@@ -208,7 +206,7 @@ const RunningScreen = ({ route, navigation }) => {
       dispatch(
         getGameResult({
           userId: id,
-          locationHistory: gameController.locationRecord,
+          locationRecord: gameController.locationRecord,
           isWinner,
           distance: kilometerDistance,
           time: survivalTime.current,
@@ -217,7 +215,6 @@ const RunningScreen = ({ route, navigation }) => {
           role,
         }),
       );
-
       navigation.navigate('Result');
     };
 
@@ -245,6 +242,7 @@ const RunningScreen = ({ route, navigation }) => {
         hasStarted={hasGameStarted}
         hasFinished={hasGameFinished}
         onFinish={handleFinishGame}
+        onFinishSurvival={handleFinishSurvival}
         onPress={handlePressOptionButton}
       />
       <GameView

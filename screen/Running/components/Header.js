@@ -18,6 +18,7 @@ const Header = ({
   hasStarted,
   hasFinished,
   onFinish,
+  onFinishSurvival,
   onPress,
 }) => {
   const headerOptionButton = useCallback(() => {
@@ -43,7 +44,7 @@ const Header = ({
           userCounts={userCounts}
           hasStarted={hasStarted}
           hasFinished={hasFinished}
-          onFinish={onFinish}
+          onFinish={onFinishSurvival}
         />
       ) : (
         <Timer
@@ -91,7 +92,8 @@ Header.propTypes = {
   mode: PropTypes.string.isRequired,
   hasStarted: PropTypes.bool.isRequired,
   hasFinished: PropTypes.bool.isRequired,
-  onFinish: PropTypes.func.isRequired,
+  onFinish: PropTypes.func,
+  onFinishSurvival: PropTypes.func,
   onPress: PropTypes.func.isRequired,
   navigation: PropTypes.objectOf(PropTypes.func).isRequired,
   userCounts: PropTypes.number,
@@ -100,4 +102,6 @@ Header.propTypes = {
 Header.defaultProps = {
   userCounts: '',
   time: '',
+  onFinishSurvival: '',
+  onFinish: '',
 };
