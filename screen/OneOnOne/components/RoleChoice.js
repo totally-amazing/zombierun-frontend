@@ -10,7 +10,7 @@ const RoleChoice = ({ onPress, role }) => {
   return (
     <View>
       <CustomButton
-        message={role === 'human' ? 'HUMAN' : 'ZOMBIE'}
+        message={role}
         style={styles.switchButton}
         disabled={false}
         onPress={onPress}

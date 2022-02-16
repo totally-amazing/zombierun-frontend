@@ -39,11 +39,9 @@ const usePlayers = () => {
     const offLetPlayerOut = roomService.on('leave', (player) => {
       dispatch(onLeave(player));
     });
-
     const offChooseZombie = roomService.on('zombie', () => {
       dispatch(switchRole('human'));
     });
-
     const offChooseHuman = roomService.on('human', () => {
       dispatch(switchRole('zombie'));
     });
@@ -72,14 +70,6 @@ export const emitJoin = (room, user) => {
 
 export const emitLeave = async (room, players) => {
   if (players.length === 1) {
-    await roomService.deleteRoom(room.id);
-  }
-
-  roomService.emit('leave');
-};
-
-export const emitOneOnOneLeave = async (room, players) => {
-  if (players.length === 0) {
     await roomService.deleteRoom(room.id);
   }
 

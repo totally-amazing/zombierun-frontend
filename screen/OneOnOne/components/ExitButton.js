@@ -6,12 +6,10 @@ import COLORS from '../../../common/constants/COLORS';
 
 const ExitButton = ({ onPress, text }) => {
   return (
-    <View>
-      <Pressable style={styles.exit} onPress={onPress}>
-        <AntDesign name="arrowleft" size={20} color={COLORS.DEEP_RED} />
-        <Text style={styles.text}>{text}</Text>
-      </Pressable>
-    </View>
+    <Pressable style={styles.exit} onPress={onPress}>
+      <AntDesign name="arrowleft" size={20} color={COLORS.DEEP_RED} />
+      <Text style={styles.text}>{text}</Text>
+    </Pressable>
   );
 };
 

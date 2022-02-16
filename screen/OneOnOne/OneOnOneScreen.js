@@ -4,24 +4,25 @@ import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import RoleChoice from './components/RoleChoice';
+import ExitButton from './components/ExitButton';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import PROFILE from '../../common/constants/PROFILE';
 import CustomButton from '../../common/components/CustomButton';
 import usePlayers, {
-  emitOneOnOneLeave,
   emitNotReady,
   emitReady,
   emitHuman,
   emitZombie,
+  emitLeave,
 } from '../../common/hooks/usePlayers';
 import { markNotReady, markReady } from '../../store/playerSlice';
-import { startGame, switchRole } from '../../store/gameSlice';
-import ExitButton from './components/ExitButton';
+import { switchRole } from '../../store/gameSlice';
+import Profile from '../../common/components/Profile';
 
 const OneOnOneScreen = ({ navigation }) => {
   const [isReady, setIsReady] = useState(false);
-  const [shouldStart, setShouldStart] = useState(false);
+  const [canStart, setCanStart] = useState(false);
   const dispatch = useDispatch();
   const players = usePlayers();
   const currentRoom = useSelector((state) => state.room.current);
@@ -64,22 +65,21 @@ const OneOnOneScreen = ({ navigation }) => {
   };
 
   const handlePressStartButton = () => {
-    dispatch(startGame({ mode: 'oneOnOne' }));
     navigation.navigate('Running');
   };
 
   const handleExitRoom = () => {
+    emitLeave(currentRoom, players);
     navigation.navigate('RoomList');
-    emitOneOnOneLeave(currentRoom, players);
   };
 
   useEffect(() => {
     const isAllReady = players.every((player) => player.isReady);
 
     if (isAllReady) {
-      setShouldStart(true);
+      setCanStart(true);
     } else {
-      setShouldStart(false);
+      setCanStart(false);
     }
   }, [players]);
 
@@ -92,17 +92,14 @@ const OneOnOneScreen = ({ navigation }) => {
           return (
             <View style={styles.profile} key={player.id}>
               <View style={styles.user}>
-                <Image
-                  source={{ uri: player.imageUrl }}
-                  style={styles.medium}
-                />
+                <Profile size="medium" imageUrl={player.imageUrl} />
                 <Text style={styles.nickname}>{player.nickname}</Text>
               </View>
               {!players[1] && (
                 <View style={styles.user}>
-                  <Image
-                    source={require('../../assets/waiting.jpeg')}
-                    style={styles.medium}
+                  <Profile
+                    size="medium"
+                    imageUrl={require('../../assets/waiting.jpeg')}
                   />
                   <Text style={styles.nickname}>대기중</Text>
                 </View>
@@ -112,10 +109,10 @@ const OneOnOneScreen = ({ navigation }) => {
         })}
       </View>
       <CustomButton
-        message={shouldStart ? 'Start' : 'Ready'}
-        style={isReady && !shouldStart ? styles.start : styles.ready}
+        message={canStart ? 'Start' : 'Ready'}
+        style={isReady && !canStart ? styles.start : styles.ready}
         disabled={false}
-        onPress={shouldStart ? handlePressStartButton : handlePressReadyButton}
+        onPress={canStart ? handlePressStartButton : handlePressReadyButton}
       />
       <ExitButton onPress={handleExitRoom} text="exit" />
     </View>
