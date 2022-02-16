@@ -47,8 +47,10 @@ export default AuthScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    paddingBottom: 50,
+    backgroundColor: COLORS.BLACK,
   },
   title: {
     marginTop: 60,
