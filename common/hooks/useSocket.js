@@ -13,7 +13,7 @@ import {
   onJoinRoom,
 } from '../../store/playerSlice';
 import GameService from '../../service/game';
-import { startGame } from '../../store/gameSlice';
+import { startGame, switchRole } from '../../store/gameSlice';
 
 export const socket = new Socket(BASE_URL);
 const httpClient = new HttpClient(BASE_URL);
@@ -44,6 +44,12 @@ const usePlayers = () => {
     const offLeave = roomService.on('leave', (player) => {
       dispatch(onLeave(player));
     });
+    const offChooseZombie = roomService.on('zombie', () => {
+      dispatch(switchRole('human'));
+    });
+    const offChooseHuman = roomService.on('human', () => {
+      dispatch(switchRole('zombie'));
+    });
 
     const offStart = gameService.on('start', (id) => {
       dispatch(
@@ -58,6 +64,8 @@ const usePlayers = () => {
       offNotReady();
       offLeave();
       offStart();
+      offChooseZombie();
+      offChooseHuman();
     };
   }, [room]);
 
@@ -84,6 +92,7 @@ export const emitLeave = async (room, players) => {
 export const emitReady = () => {
   roomService.emit('ready');
 };
+
 export const emitNotReady = () => {
   roomService.emit('notReady');
 };
@@ -98,6 +107,14 @@ export const emitUserSpeed = (speed) => {
 
 export const emitFinishGame = () => {
   gameService.emit('finish');
+};
+
+export const emitZombie = () => {
+  roomService.emit('zombie');
+};
+
+export const emitHuman = () => {
+  roomService.emit('human');
 };
 
 export default usePlayers;

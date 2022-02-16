@@ -100,6 +100,9 @@ const gameSlice = createSlice({
     time: 0,
   },
   reducers: {
+    switchRole: (state, action) => {
+      state.role = action.payload;
+    },
     startGame: (state, action) => {
       state.id = action.payload.id;
       state.mode = action.payload.mode;
@@ -142,9 +145,14 @@ const gameSlice = createSlice({
       state.mode = room.mode;
       state.speed = room.speed;
       state.time = room.time;
+      state.mode = action.payload.room.mode;
+
+      if (state.mode === 'oneOnOne') {
+        state.role = 'zombie';
+      }
     },
   },
 });
 
-export const { startGame } = gameSlice.actions;
+export const { startGame, switchRole } = gameSlice.actions;
 export default gameSlice.reducer;

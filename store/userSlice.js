@@ -15,8 +15,8 @@ export const signIn = createAsyncThunk('user/signInStatus', async (idToken) => {
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    id: null,
     nickname: null,
+    id: null,
     imageUrl: null,
   },
   extraReducers: {
