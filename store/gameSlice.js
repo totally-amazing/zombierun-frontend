@@ -139,7 +139,6 @@ const gameSlice = createSlice({
     },
     [enterRoom]: (state, action) => {
       const { room } = action.payload;
-
       state.mode = room.mode;
       state.speed = room.speed;
       state.time = room.time;
