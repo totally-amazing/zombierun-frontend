@@ -24,7 +24,8 @@ const SurvivalScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
   const currentRoom = useSelector((state) => state.room.current);
-  const { id } = useSelector((state) => state.user);
+  const userId = useSelector((state) => state.user.id);
+  const gameId = useSelector((state) => state.game.id);
   const players = usePlayers();
 
   const handlePressReadyButton = () => {
@@ -36,18 +37,23 @@ const SurvivalScreen = ({ navigation }) => {
 
     // 이미 ready인 상태에선 ready 버튼을 클릭했을 때 emit notReady
     if (isReady) {
-      dispatch(markNotReady(id));
+      dispatch(markNotReady(userId));
       emitNotReady();
     } else {
-      dispatch(markReady(id));
+      dispatch(markReady(userId));
       emitReady();
     }
   };
 
+  useEffect(() => {
+    if (gameId) {
+      emitGameStart(currentRoom.mode);
+      navigation.navigate('Running');
+    }
+  }, [gameId]);
+
   const handlePressStartButton = () => {
-    dispatch(createGameRecord({ mode: currentRoom.mode, userId: id }));
-    emitGameStart(currentRoom.mode);
-    navigation.navigate('Running');
+    dispatch(createGameRecord({ mode: currentRoom.mode, userId }));
   };
 
   const handleExitRoom = () => {
