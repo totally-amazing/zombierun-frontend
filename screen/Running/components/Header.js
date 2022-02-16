@@ -4,7 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
 import Timer from './Timer';
-import SurvivalCount from './SurvivalCount';
+import SurvivorCount from './SurvivorCount';
 import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
 import ValueWithUnit from '../../../common/components/ValueWithUnit';
@@ -14,7 +14,6 @@ const Header = ({
   speed,
   time,
   mode,
-  userCounts,
   hasStarted,
   hasFinished,
   onFinish,
@@ -40,8 +39,7 @@ const Header = ({
   return (
     <View style={styles[mode]}>
       {mode === 'survival' ? (
-        <SurvivalCount
-          userCounts={userCounts}
+        <SurvivorCount
           hasStarted={hasStarted}
           hasFinished={hasFinished}
           onFinish={onFinishSurvival}
@@ -92,16 +90,12 @@ Header.propTypes = {
   mode: PropTypes.string.isRequired,
   hasStarted: PropTypes.bool.isRequired,
   hasFinished: PropTypes.bool.isRequired,
-  onFinish: PropTypes.func,
-  onFinishSurvival: PropTypes.func,
+  onFinish: PropTypes.func.isRequired,
+  onFinishSurvival: PropTypes.func.isRequired,
   onPress: PropTypes.func.isRequired,
   navigation: PropTypes.objectOf(PropTypes.func).isRequired,
-  userCounts: PropTypes.number,
 };
 
 Header.defaultProps = {
-  userCounts: '',
   time: '',
-  onFinishSurvival: '',
-  onFinish: '',
 };
