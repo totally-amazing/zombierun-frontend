@@ -11,6 +11,7 @@ import {
   markReady,
   onJoinRoom,
 } from '../../store/playerSlice';
+import { switchRole } from '../../store/gameSlice';
 
 const socket = new Socket(BASE_URL);
 const httpClient = new HttpClient(BASE_URL);
@@ -18,7 +19,6 @@ const roomService = new RoomService(httpClient, socket);
 
 const usePlayers = () => {
   const dispatch = useDispatch();
-
   const room = useSelector((state) => state.room.current);
   const user = useSelector((state) => state.user);
 
@@ -39,12 +39,20 @@ const usePlayers = () => {
     const offLetPlayerOut = roomService.on('leave', (player) => {
       dispatch(onLeave(player));
     });
+    const offChooseZombie = roomService.on('zombie', () => {
+      dispatch(switchRole('human'));
+    });
+    const offChooseHuman = roomService.on('human', () => {
+      dispatch(switchRole('zombie'));
+    });
 
     return () => {
       offJoin();
       offReady();
       offNotReady();
       offLetPlayerOut();
+      offChooseZombie();
+      offChooseHuman();
     };
   }, [room]);
 
@@ -71,8 +79,17 @@ export const emitLeave = async (room, players) => {
 export const emitReady = () => {
   roomService.emit('ready');
 };
+
 export const emitNotReady = () => {
   roomService.emit('notReady');
+};
+
+export const emitZombie = () => {
+  roomService.emit('zombie');
+};
+
+export const emitHuman = () => {
+  roomService.emit('human');
 };
 
 export default usePlayers;

@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import HttpClient from '../network/http';
 import GameService from '../service/game';
-import { createRoom } from './roomSlice';
+import { createRoom, enterRoom } from './roomSlice';
 
 const httpClient = new HttpClient(BASE_URL);
 const gameService = new GameService(httpClient);
@@ -62,6 +62,9 @@ const gameSlice = createSlice({
     result: {},
   },
   reducers: {
+    switchRole: (state, action) => {
+      state.role = action.payload;
+    },
     startGame: (state, action) => {
       state.mode = action.payload.mode;
     },
@@ -84,10 +87,19 @@ const gameSlice = createSlice({
       state.result = action.payload;
     },
     [createRoom.fulfilled]: (state, action) => {
-      state.mode = action.payload.mode;
+      state.mode = action.payload.room.mode;
+    },
+    [enterRoom]: (state, action) => {
+      const { room } = action.payload;
+
+      state.mode = room.mode;
+
+      if (state.mode === 'oneOnOne') {
+        state.role = 'zombie';
+      }
     },
   },
 });
 
-export const { startGame } = gameSlice.actions;
+export const { startGame, switchRole } = gameSlice.actions;
 export default gameSlice.reducer;

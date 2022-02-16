@@ -18,8 +18,8 @@ export const fetchUserByIdToken = createAsyncThunk(
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    id: null,
     nickname: null,
+    id: null,
     imageUrl: null,
   },
   extraReducers: {
