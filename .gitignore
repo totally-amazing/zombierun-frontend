@@ -1,5 +1,6 @@
 node_modules/
 .expo/
+.env
 dist/
 npm-debug.*
 *.jks
@@ -9,6 +10,10 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+__snapshots__
 
 # macOS
 .DS_Store
+
+# test
+coverage/

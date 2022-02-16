@@ -1,14 +1,47 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 
+import StandardModal from '../../common/components/StandardModal';
+import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
-import FONT_SIZE from '../../common/constants/FONT_SIZE';
+import TextChunk from '../../common/components/TextChunk';
+import getResultMessage from '../../common/utils/getResultMessage';
 
-const PreviousResultScreen = (props) => {
-  return (
-    <View style={styles.screen}>
-      <Text style={styles.text}>PreviousResultScreen</Text>
+const SPPED = 'km/h';
+const KILOMETER = 'km';
+const MINUTE = 'm';
+
+const PreviousResultScreen = () => {
+  const isLoading = useSelector((state) => state.ui.isLoading);
+  const record = useSelector((state) => state.game.recentRecord);
+
+  const previousResult = (
+    <View>
+      <View style={styles.main}>
+        <TextChunk title="최근 속도" value={record.speed || 0} unit={SPPED} />
+        <TextChunk
+          title="최근 러닝 타임"
+          value={record.time || 0}
+          unit={MINUTE}
+        />
+        <TextChunk
+          title="최근 거리"
+          value={record.distance || 0}
+          unit={KILOMETER}
+        />
+      </View>
+      <Text style={styles.result}>
+        {getResultMessage(record.mode, record.role, record.isWinner)}
+      </Text>
     </View>
+  );
+
+  return (
+    <StandardModal>
+      {isLoading && <ActivityIndicator size="large" color={COLORS.RED} />}
+      {!isLoading && previousResult}
+    </StandardModal>
   );
 };
 
@@ -16,13 +49,18 @@ export default PreviousResultScreen;
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
-    fontSize: FONT_SIZE.X_LARGE,
-    color: COLORS.DEEP_RED,
-    fontFamily: 'nosifer-regular',
+  main: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  result: {
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: FONT.LARGE,
+    fontFamily: FONT.BLOOD_FONT,
+    color: COLORS.WHITE,
   },
 });

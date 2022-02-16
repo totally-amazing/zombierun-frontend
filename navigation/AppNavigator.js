@@ -6,11 +6,12 @@ import MainNavigator from './MainNavigator';
 import AuthScreen from '../screen/Auth/AuthScreen';
 
 const AppNavigator = () => {
-  const isAuth = useSelector((state) => state.auth.isAuth);
+  const { id } = useSelector((state) => state.user);
 
   return (
     <NavigationContainer>
-      <MainNavigator />
+      {!id && <AuthScreen />}
+      {id && <MainNavigator />}
     </NavigationContainer>
   );
 };

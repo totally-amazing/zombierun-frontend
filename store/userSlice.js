@@ -1,10 +1,33 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { BASE_URL } from '@env';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+import HttpClient from '../network/http';
+import AuthService from '../service/auth';
+
+const httpClient = new HttpClient(BASE_URL);
+const authService = new AuthService(httpClient);
+
+export const signIn = createAsyncThunk('user/signInStatus', async (idToken) => {
+  const user = await authService.signIn(idToken);
+  return user;
+});
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: {},
-  reducers: {},
+  initialState: {
+    nickname: null,
+    id: null,
+    imageUrl: null,
+  },
+  extraReducers: {
+    [signIn.fulfilled]: (state, action) => {
+      const { id, imageUrl, nickname } = action.payload;
+
+      state.id = id;
+      state.imageUrl = imageUrl;
+      state.nickname = nickname;
+    },
+  },
 });
 
-export const userActions = userSlice.actions;
 export default userSlice.reducer;

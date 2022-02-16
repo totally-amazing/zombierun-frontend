@@ -1,27 +1,71 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import FONT_SIZE from '../../common/constants/FONT_SIZE';
-import COLORS from '../../common/constants/COLORS';
+import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import * as Location from 'expo-location';
 
-const MainScreen = (props) => {
+import FONT from '../../common/constants/FONT';
+import COLORS from '../../common/constants/COLORS';
+import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
+import showErrorMessage from '../../common/utils/showErrorMessage';
+import { getRooms } from '../../store/roomSlice';
+
+const MainScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
+  const handleSingleText = () => {
+    navigation.navigate('Solo');
+  };
+
+  const handleTogetherText = () => {
+    navigation.navigate('RoomList');
+    dispatch(getRooms());
+  };
+
+  useEffect(() => {
+    const getLocationPermission = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        showErrorMessage('권한이 허가 되지 않았습니다');
+      }
+    };
+    getLocationPermission();
+  }, []);
+
   return (
     <View style={styles.screen}>
-      <Text style={styles.text}>MainScreen</Text>
+      <Text style={styles.text} onPress={handleSingleText}>
+        Solo
+      </Text>
+      <Text style={styles.text} onPress={handleTogetherText}>
+        Together
+      </Text>
     </View>
   );
 };
 
 export default MainScreen;
 
+export const screenOption = getProfileHeaderOption();
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: COLORS.BLACK,
   },
   text: {
-    fontSize: FONT_SIZE.X_LARGE,
+    marginVertical: 30,
+    fontSize: FONT.X_LARGE,
     color: COLORS.DEEP_RED,
-    fontFamily: 'nosifer-regular',
+    fontFamily: FONT.BLOOD_FONT,
+  },
+  buttonContainer: {
+    marginLeft: 40,
   },
 });
+
+MainScreen.propTypes = {
+  navigation: PropTypes.objectOf(PropTypes.func).isRequired,
+};
