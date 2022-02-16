@@ -46,7 +46,9 @@ const usePlayers = () => {
     });
 
     const offStart = gameService.on('start', (id) => {
-      dispatch(startGame(id));
+      dispatch(
+        startGame({ mode: room.mode, speed: room.speed, time: room.time }),
+      );
       navigation.navigate('Running');
     });
 
