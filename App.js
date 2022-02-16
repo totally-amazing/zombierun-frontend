@@ -6,7 +6,6 @@ import * as Font from 'expo-font';
 
 import store from './store';
 import AppNavigator from './navigation/AppNavigator';
-import showErrorMessage from './common/utils/showErrorMessage';
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -24,7 +23,7 @@ const App = () => {
         onFinish={() => {
           setFontLoaded(true);
         }}
-        onError={showErrorMessage}
+        onError={(error) => console.log(error)}
       />
     );
   }
