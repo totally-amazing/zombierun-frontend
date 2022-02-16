@@ -7,7 +7,6 @@ import * as Location from 'expo-location';
 
 import {
   emitFinishGame,
-  emitGameDie,
   emitUserSpeed,
   socket,
 } from '../../common/hooks/useSocket';
@@ -203,7 +202,6 @@ const RunningScreen = ({ navigation }) => {
 
       if (mode === 'oneOnOne' || mode === 'survival') {
         emitFinishGame();
-        emitGameDie();
         dispatch(updateGameRecord({ ...result, gameId }));
       } else {
         dispatch(createGameResult({ ...result, mode }));

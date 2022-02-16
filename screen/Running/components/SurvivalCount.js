@@ -37,12 +37,12 @@ const SurvivalCount = ({ hasStarted, hasFinished, onFinish }) => {
   }, [userCount, hasFinished]);
 
   useEffect(() => {
-    const offGameDie = socket.on('game/die', () => {
+    const offGameFinish = socket.on('game/finish', () => {
       setUserCount((prev) => prev - 1);
     });
 
     return () => {
-      offGameDie();
+      offGameFinish();
     };
   }, []);
 

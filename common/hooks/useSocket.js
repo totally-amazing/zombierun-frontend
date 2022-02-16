@@ -92,10 +92,6 @@ export const emitGameStart = (gameId) => {
   gameService.emit('start', gameId);
 };
 
-export const emitGameDie = () => {
-  gameService.emit('die');
-};
-
 export const emitUserSpeed = (speed) => {
   gameService.emit('userSpeed', speed);
 };
