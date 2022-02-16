@@ -17,7 +17,7 @@ import GameController from './controllers/gameController';
 import GameView from './components/GameView';
 import Header from './components/Header';
 import COLORS from '../../common/constants/COLORS';
-import { getGameResult } from '../../store/gameSlice';
+import { updateGameResult } from '../../store/gameSlice';
 
 const RunningScreen = ({ navigation }) => {
   const { speed, time } = useSelector((state) => state.game);
@@ -157,7 +157,6 @@ const RunningScreen = ({ navigation }) => {
         socket.on('game/opponentSpeed', (meterPerSecond) => {
           setOpponentDistance((previousDistance) => {
             const totalDistance = previousDistance + meterPerSecond;
-
             return totalDistance;
           });
         });
@@ -199,7 +198,7 @@ const RunningScreen = ({ navigation }) => {
 
       gameController.resetGameSetup('timer');
       dispatch(
-        getGameResult({
+        updateGameResult({
           gameId,
           userId,
           locationHistory: gameController.locationRecord,

@@ -24,7 +24,7 @@ export const getRecentRecord = createAsyncThunk(
   },
 );
 
-export const getGameResult = createAsyncThunk(
+export const updateGameResult = createAsyncThunk(
   'game/getResultStatus',
   async (game) => {
     const { gameId, userId, mode, isWinner, time, speed, distance, role } =
@@ -105,8 +105,9 @@ const gameSlice = createSlice({
     [getRecentRecord.fulfilled]: (state, action) => {
       state.recentRecord = action.payload;
     },
-    [getGameResult.fulfilled]: (state, action) => {
+    [updateGameResult.fulfilled]: (state, action) => {
       state.result = action.payload;
+      state.id = '';
     },
     [createRoom.fulfilled]: (state, action) => {
       const { room } = action.payload;
