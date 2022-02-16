@@ -2,26 +2,27 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { BASE_URL } from '@env';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
 
+import {
+  emitFinishGame,
+  emitUserSpeed,
+  socket,
+} from '../../common/hooks/useSocket';
 import Pause from './components/Pause';
 import AudioController from './controllers/audioController';
 import GameController from './controllers/gameController';
 import GameView from './components/GameView';
 import Header from './components/Header';
-import Socket from '../../network/socket';
 import COLORS from '../../common/constants/COLORS';
-import { getGameResult } from '../../store/gameSlice';
+import { createGameResult, updateGameRecord } from '../../store/gameSlice';
 
-const RunningScreen = ({ route, navigation }) => {
-  const { speed, time } = route.params.gameSetting;
+const RunningScreen = ({ navigation }) => {
+  const { speed, time } = useSelector((state) => state.game);
   const conversionRate = 0.277778;
   const dispatch = useDispatch();
 
-  const { id } = useSelector((state) => state.user);
-  const { allPlayersId } = useSelector((state) => state.room);
   const { role, mode } = useSelector((state) => state.game);
   const canHearingSoundEffect = useSelector(
     (state) => state.ui.canHearingEffect,
@@ -36,16 +37,13 @@ const RunningScreen = ({ route, navigation }) => {
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
   const [hasOptionClicked, setHasOptionClicked] = useState(false);
-  const [userCount, setUserCount] = useState(
-    mode === 'survival' ? allPlayersId.lenght : 0,
-  );
+
   const survivalTime = useRef(time);
   const countDown = useRef();
   const intervalId = useRef();
   const tracker = useRef();
   const locationHistory = useRef([]);
 
-  const { current: socket } = useRef(new Socket(BASE_URL));
   const { current: audioController } = useRef(new AudioController());
   const { current: gameController } = useRef(
     new GameController(
@@ -59,8 +57,6 @@ const RunningScreen = ({ route, navigation }) => {
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
   const distanceGap = Math.ceil(userDistance - opponentDistance);
-
-  survivalTime.current = time;
 
   const startRunning = async () => {
     setHasGameStarted(true);
@@ -78,7 +74,7 @@ const RunningScreen = ({ route, navigation }) => {
         const { coords } = location;
 
         if (mode === 'oneOnOne') {
-          socket.emit('game/userSpeed', coords.speed);
+          emitUserSpeed(coords.speed);
         }
 
         setUserDistance((preivousDistance) => {
@@ -121,24 +117,22 @@ const RunningScreen = ({ route, navigation }) => {
     setHasGameFinished(true);
   };
 
-  const handleFinishGame = (passedTime, survivorCount) => {
-    if (mode === 'survival') {
-      survivalTime.current = passedTime;
-
-      if (survivorCount === 1) {
-        setIsWinner(true);
-      }
-    }
-
-    if (passedTime === 0) {
-      if (role === 'human') {
-        setIsWinner(true);
-      }
+  const handleFinishGame = (remainingTime) => {
+    if (remainingTime === 0 && role === 'human') {
+      setIsWinner(true);
     } else {
-      survivalTime.current -= passedTime;
+      survivalTime.current -= remainingTime;
     }
 
     setHasGameFinished(true);
+  };
+
+  const handleFinishSurvival = (passedTime, survivorCount) => {
+    survivalTime.current = passedTime;
+
+    if (survivorCount === 1) {
+      setIsWinner(true);
+    }
   };
 
   useEffect(() => {
@@ -162,18 +156,11 @@ const RunningScreen = ({ route, navigation }) => {
         socket.on('game/opponentSpeed', (meterPerSecond) => {
           setOpponentDistance((previousDistance) => {
             const totalDistance = previousDistance + meterPerSecond;
-
             return totalDistance;
           });
         });
 
         return;
-      }
-
-      if (mode === 'survival') {
-        socket.on('game/die', () => {
-          setUserCount((prev) => prev - 1);
-        });
       }
 
       if (mode === 'solo' || mode === 'survival') {
@@ -195,28 +182,32 @@ const RunningScreen = ({ route, navigation }) => {
     };
   }, [hasGameStarted]);
 
+  const gameId = useSelector((state) => state.game.id);
+  const userId = useSelector((state) => state.user.id);
+
   useEffect(() => {
     const finishGame = () => {
-      if (mode === 'oneOnOne' || mode === 'survival') {
-        socket.emit('user/leave');
-      }
-
       const kilometerDistance = Math.ceil(userDistance) / 1000;
       const kilometerPerHour = kilometerDistance / (survivalTime.current / 60);
 
+      const result = {
+        userId,
+        locationHistory: gameController.locationRecord,
+        isWinner,
+        distance: kilometerDistance,
+        time: survivalTime.current,
+        speed: kilometerPerHour.toFixed(1),
+        role,
+      };
+
+      if (mode === 'oneOnOne' || mode === 'survival') {
+        emitFinishGame();
+        dispatch(updateGameRecord({ ...result, gameId }));
+      } else {
+        dispatch(createGameResult({ ...result, mode }));
+      }
+
       gameController.resetGameSetup('timer');
-      dispatch(
-        getGameResult({
-          userId: id,
-          locationHistory: gameController.locationRecord,
-          isWinner,
-          distance: kilometerDistance,
-          time: survivalTime.current,
-          speed: kilometerPerHour.toFixed(1),
-          mode,
-          role,
-        }),
-      );
 
       navigation.navigate('Result');
     };
@@ -241,16 +232,15 @@ const RunningScreen = ({ route, navigation }) => {
         speed={speed}
         time={time}
         mode={mode}
-        userCounts={userCount}
         hasStarted={hasGameStarted}
         hasFinished={hasGameFinished}
         onFinish={handleFinishGame}
+        onFinishSurvival={handleFinishSurvival}
         onPress={handlePressOptionButton}
       />
       <GameView
         role={role}
         mode={mode}
-        socket={socket}
         distanceGap={distanceGap}
         hasStarted={hasGameStarted}
         gameController={gameController}

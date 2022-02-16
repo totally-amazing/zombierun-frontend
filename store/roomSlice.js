@@ -7,13 +7,13 @@ import RoomService from '../service/room';
 const httpClient = new HttpClient(BASE_URL);
 const roomService = new RoomService(httpClient);
 
-export const getRooms = createAsyncThunk('room/getRoomsStatus', async () => {
+export const getRooms = createAsyncThunk('room/getStatus', async () => {
   const roomList = await roomService.getRooms();
   return roomList;
 });
 
 export const createRoom = createAsyncThunk(
-  'room/createRoomStatus',
+  'room/createStatus',
   async ({ room, user }) => {
     const { id } = await roomService.createRoom(room);
     return { room: { ...room, id }, user };

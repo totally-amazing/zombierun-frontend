@@ -1,13 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
+import { useSelector } from 'react-redux';
 import FONT from '../../../common/constants/FONT';
 import COLORS from '../../../common/constants/COLORS';
+import { socket } from '../../../common/hooks/useSocket';
 
-const SurvivalCount = ({ userCounts, hasStarted, hasFinished, onFinish }) => {
+const SurvivorCount = ({ hasStarted, hasFinished, onFinish }) => {
   const seconds = useRef(0);
   const stopWatchId = useRef();
+  const numberOfPlayers = useSelector((state) => state.player.allIds).length;
+
+  const [userCount, setUserCount] = useState(numberOfPlayers);
 
   useEffect(() => {
     const setStopWatch = () => {
@@ -24,22 +29,31 @@ const SurvivalCount = ({ userCounts, hasStarted, hasFinished, onFinish }) => {
   }, [hasStarted]);
 
   useEffect(() => {
-    if (userCounts === 1 || hasFinished) {
-      const minutes = Math.floor(seconds.current / 60);
-
-      onFinish(minutes, userCounts);
+    if (userCount === 1 || hasFinished) {
+      const minutes = Math.ceil(seconds.current / 60);
+      onFinish(minutes, userCount);
       clearInterval(stopWatchId.current);
     }
-  }, [userCounts, hasFinished]);
+  }, [userCount, hasFinished]);
+
+  useEffect(() => {
+    const offGameFinish = socket.on('game/finish', () => {
+      setUserCount((prev) => prev - 1);
+    });
+
+    return () => {
+      offGameFinish();
+    };
+  }, []);
 
   return (
     <View>
-      <Text style={styles.userCount}>left: {userCounts}</Text>
+      <Text style={styles.userCount}>left: {userCount}</Text>
     </View>
   );
 };
 
-export default SurvivalCount;
+export default SurvivorCount;
 
 const styles = StyleSheet.create({
   userCount: {
@@ -49,8 +63,7 @@ const styles = StyleSheet.create({
   },
 });
 
-SurvivalCount.propTypes = {
-  userCounts: PropTypes.number.isRequired,
+SurvivorCount.propTypes = {
   hasStarted: PropTypes.bool.isRequired,
   hasFinished: PropTypes.bool.isRequired,
   onFinish: PropTypes.func.isRequired,

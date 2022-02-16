@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -15,7 +15,7 @@ import usePlayers, {
   emitHuman,
   emitZombie,
   emitLeave,
-} from '../../common/hooks/usePlayers';
+} from '../../common/hooks/useSocket';
 import { markNotReady, markReady } from '../../store/playerSlice';
 import { switchRole } from '../../store/gameSlice';
 import Profile from '../../common/components/Profile';

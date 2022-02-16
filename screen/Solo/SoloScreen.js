@@ -60,13 +60,14 @@ const SoloScreen = ({ navigation }) => {
       return;
     }
 
-    dispatch(startGame({ mode: 'solo' }));
-    navigation.navigate('Running', {
-      gameSetting: {
-        speed: Number(inputValues.speed),
-        time: Number(inputValues.time),
-      },
-    });
+    dispatch(
+      startGame({
+        mode: 'solo',
+        speed: inputValues.speed,
+        time: inputValues.time,
+      }),
+    );
+    navigation.navigate('Running');
   };
 
   const handleInputChange = useCallback(

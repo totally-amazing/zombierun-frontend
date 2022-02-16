@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BASE_URL } from '@env';
+import { useNavigation } from '@react-navigation/native';
 
 import Socket from '../../network/socket';
 import HttpClient from '../../network/http';
@@ -11,14 +12,18 @@ import {
   markReady,
   onJoinRoom,
 } from '../../store/playerSlice';
-import { switchRole } from '../../store/gameSlice';
+import GameService from '../../service/game';
+import { startGame, switchRole } from '../../store/gameSlice';
 
-const socket = new Socket(BASE_URL);
+export const socket = new Socket(BASE_URL);
 const httpClient = new HttpClient(BASE_URL);
 const roomService = new RoomService(httpClient, socket);
+const gameService = new GameService(httpClient, socket);
 
 const usePlayers = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+
   const room = useSelector((state) => state.room.current);
   const user = useSelector((state) => state.user);
 
@@ -36,7 +41,7 @@ const usePlayers = () => {
     const offNotReady = roomService.on('notReady', (player) => {
       dispatch(markNotReady(player));
     });
-    const offLetPlayerOut = roomService.on('leave', (player) => {
+    const offLeave = roomService.on('leave', (player) => {
       dispatch(onLeave(player));
     });
     const offChooseZombie = roomService.on('zombie', () => {
@@ -46,11 +51,19 @@ const usePlayers = () => {
       dispatch(switchRole('zombie'));
     });
 
+    const offStart = gameService.on('start', (id) => {
+      dispatch(
+        startGame({ id, mode: room.mode, speed: room.speed, time: room.time }),
+      );
+      navigation.navigate('Running');
+    });
+
     return () => {
       offJoin();
       offReady();
       offNotReady();
-      offLetPlayerOut();
+      offLeave();
+      offStart();
       offChooseZombie();
       offChooseHuman();
     };
@@ -82,6 +95,18 @@ export const emitReady = () => {
 
 export const emitNotReady = () => {
   roomService.emit('notReady');
+};
+
+export const emitGameStart = (gameId) => {
+  gameService.emit('start', gameId);
+};
+
+export const emitUserSpeed = (speed) => {
+  gameService.emit('userSpeed', speed);
+};
+
+export const emitFinishGame = () => {
+  gameService.emit('finish');
 };
 
 export const emitZombie = () => {

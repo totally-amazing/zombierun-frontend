@@ -9,7 +9,6 @@ import Socket from '../../../network/socket';
 
 const GameView = ({
   role,
-  socket,
   hasStarted,
   gameController,
   distanceGap,
@@ -48,7 +47,6 @@ const GameView = ({
     }
 
     if (distanceGap <= 0) {
-      socket.emit('game/die');
       onFinish();
     }
   }, [distanceGap, hasStarted]);
@@ -113,9 +111,4 @@ GameView.propTypes = {
   distanceGap: PropTypes.number.isRequired,
   onFinish: PropTypes.func.isRequired,
   gameController: PropTypes.instanceOf(GameController).isRequired,
-  socket: PropTypes.instanceOf(Socket),
-};
-
-GameView.defaultProps = {
-  socket: '',
 };

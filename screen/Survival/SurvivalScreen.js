@@ -13,8 +13,10 @@ import usePlayers, {
   emitLeave,
   emitReady,
   emitNotReady,
-} from '../../common/hooks/usePlayers';
+  emitGameStart,
+} from '../../common/hooks/useSocket';
 import { markNotReady, markReady } from '../../store/playerSlice';
+import { createGameRecord } from '../../store/gameSlice';
 
 const SurvivalScreen = ({ navigation }) => {
   const [canStart, setCanStart] = useState(false);
@@ -22,7 +24,7 @@ const SurvivalScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
   const currentRoom = useSelector((state) => state.room.current);
-  const { id } = useSelector((state) => state.user);
+  const userId = useSelector((state) => state.user.id);
   const players = usePlayers();
 
   const handlePressReadyButton = () => {
@@ -34,15 +36,18 @@ const SurvivalScreen = ({ navigation }) => {
 
     // 이미 ready인 상태에선 ready 버튼을 클릭했을 때 emit notReady
     if (isReady) {
-      dispatch(markNotReady(id));
+      dispatch(markNotReady(userId));
       emitNotReady();
     } else {
-      dispatch(markReady(id));
+      dispatch(markReady(userId));
       emitReady();
     }
   };
-
-  const handlePressStartButton = () => {
+  const handlePressStartButton = async () => {
+    const gameId = await dispatch(
+      createGameRecord({ mode: currentRoom.mode, userId }),
+    ).unwrap();
+    emitGameStart(gameId);
     navigation.navigate('Running');
   };
 
