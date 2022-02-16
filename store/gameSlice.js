@@ -48,7 +48,7 @@ export const createGameResult = createAsyncThunk(
 );
 
 export const updateGameRecord = createAsyncThunk(
-  'game/updateGameRecordStatus',
+  'game/updateRecordStatus',
   async (game) => {
     const { gameId, userId, isWinner, time, speed, distance, role } = game;
 
@@ -68,7 +68,7 @@ export const updateGameRecord = createAsyncThunk(
 );
 
 export const createGameRecord = createAsyncThunk(
-  'game/createRecord',
+  'game/createRecordStatus',
   async (game) => {
     const { mode, userId } = game;
     const id = await gameService.create({
