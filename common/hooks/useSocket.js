@@ -47,7 +47,7 @@ const usePlayers = () => {
 
     const offStart = gameService.on('start', (id) => {
       dispatch(
-        startGame({ mode: room.mode, speed: room.speed, time: room.time }),
+        startGame({ id, mode: room.mode, speed: room.speed, time: room.time }),
       );
       navigation.navigate('Running');
     });
@@ -88,8 +88,8 @@ export const emitNotReady = () => {
   roomService.emit('notReady');
 };
 
-export const emitGameStart = (mode) => {
-  gameService.emit('start', mode);
+export const emitGameStart = ({ gameId, mode }) => {
+  gameService.emit('start', { gameId, mode });
 };
 
 export const emitGameDie = () => {

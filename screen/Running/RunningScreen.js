@@ -17,7 +17,7 @@ import GameController from './controllers/gameController';
 import GameView from './components/GameView';
 import Header from './components/Header';
 import COLORS from '../../common/constants/COLORS';
-import { updateGameResult } from '../../store/gameSlice';
+import { createGameResult, updateGameRecord } from '../../store/gameSlice';
 
 const RunningScreen = ({ navigation }) => {
   const { speed, time } = useSelector((state) => state.game);
@@ -188,28 +188,29 @@ const RunningScreen = ({ navigation }) => {
 
   useEffect(() => {
     const finishGame = () => {
-      if (mode === 'oneOnOne' || mode === 'survival') {
-        emitFinishGame();
-        emitGameDie();
-      }
-
       const kilometerDistance = Math.ceil(userDistance) / 1000;
       const kilometerPerHour = kilometerDistance / (survivalTime.current / 60);
 
+      const result = {
+        userId,
+        locationHistory: gameController.locationRecord,
+        isWinner,
+        distance: kilometerDistance,
+        time: survivalTime.current,
+        speed: kilometerPerHour.toFixed(1),
+        mode,
+        role,
+      };
+
+      if (mode === 'oneOnOne' || mode === 'survival') {
+        emitFinishGame();
+        emitGameDie();
+        dispatch(updateGameRecord({ ...result, gameId }));
+      } else {
+        dispatch(createGameResult(result));
+      }
+
       gameController.resetGameSetup('timer');
-      dispatch(
-        updateGameResult({
-          gameId,
-          userId,
-          locationHistory: gameController.locationRecord,
-          isWinner,
-          distance: kilometerDistance,
-          time: survivalTime.current,
-          speed: kilometerPerHour.toFixed(1),
-          mode,
-          role,
-        }),
-      );
 
       navigation.navigate('Result');
     };

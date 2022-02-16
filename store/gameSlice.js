@@ -24,11 +24,10 @@ export const getRecentRecord = createAsyncThunk(
   },
 );
 
-export const updateGameResult = createAsyncThunk(
-  'game/getResultStatus',
+export const createGameResult = createAsyncThunk(
+  'game/createResultStatus',
   async (game) => {
-    const { gameId, userId, mode, isWinner, time, speed, distance, role } =
-      game;
+    const { userId, mode, isWinner, time, speed, distance, role } = game;
 
     const mappedResult = {
       mode,
@@ -42,11 +41,27 @@ export const updateGameResult = createAsyncThunk(
       },
     };
 
-    if (mode === 'solo') {
-      await gameService.create(mappedResult);
-    } else {
-      await gameService.update(gameId, mappedResult.player);
-    }
+    await gameService.create(mappedResult);
+
+    return game;
+  },
+);
+
+export const updateGameRecord = createAsyncThunk(
+  'game/updateGameRecordStatus',
+  async (game) => {
+    const { gameId, userId, isWinner, time, speed, distance, role } = game;
+
+    const player = {
+      isWinner,
+      time: Number(time),
+      speed: Number(speed),
+      distance,
+      role,
+      id: userId,
+    };
+
+    await gameService.update(gameId, player);
 
     return game;
   },
@@ -105,9 +120,12 @@ const gameSlice = createSlice({
     [getRecentRecord.fulfilled]: (state, action) => {
       state.recentRecord = action.payload;
     },
-    [updateGameResult.fulfilled]: (state, action) => {
+    [updateGameRecord.fulfilled]: (state, action) => {
       state.result = action.payload;
       state.id = '';
+    },
+    [createGameResult.fulfilled]: (state, action) => {
+      state.result = action.payload;
     },
     [createRoom.fulfilled]: (state, action) => {
       const { room } = action.payload;
