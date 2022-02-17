@@ -4,19 +4,17 @@ import propType from 'prop-types';
 
 import COLORS from '../constants/COLORS';
 import FONT from '../constants/FONT';
-
-const INPUT_CHANGE = 'INPUT_CHANGE';
-const INPUT_BLUR = 'INPUT_BLUR';
+import { ERROR, EVENT } from '../constants/MESSAGE';
 
 const inputReducer = (state, action) => {
   switch (action.type) {
-    case INPUT_CHANGE:
+    case EVENT.INPUT_CHANGE:
       return {
         ...state,
         value: action.value,
         inputIsValid: action.inputIsValid,
       };
-    case INPUT_BLUR:
+    case EVENT.INPUT_BLUR:
       return {
         ...state,
         isTouched: true,
@@ -57,7 +55,7 @@ const Input = ({
 
       if (Number.isNaN(valueNum)) {
         inputIsValid = false;
-        setErrorMessage('잘못된 입력 값 입니다');
+        setErrorMessage(ERROR.WRONG_INPUT_VALUE);
       }
 
       if (min && Number(value) < min) {
@@ -73,7 +71,7 @@ const Input = ({
       if (value.includes('.')) {
         if (value.indexOf('.') + 2 < value.length) {
           inputIsValid = false;
-          setErrorMessage(`소수점은 한 자리까지만 가능합니다`);
+          setErrorMessage(ERROR.DECIMAL_POINT_ONE_DIGIT);
         }
       }
     }
@@ -83,7 +81,7 @@ const Input = ({
 
       if (!trimedString) {
         inputIsValid = false;
-        setErrorMessage('잘못된 입력 값 입니다');
+        setErrorMessage(EVENT.WRONG_INPUT_VALUE);
       }
 
       if (minLength && trimedString < minLength) {
@@ -97,11 +95,11 @@ const Input = ({
       }
     }
 
-    dispatch({ type: INPUT_CHANGE, value, inputIsValid });
+    dispatch({ type: EVENT.INPUT_CHANGE, value, inputIsValid });
   };
 
   const handleLostFocus = () => {
-    dispatch({ type: INPUT_BLUR });
+    dispatch({ type: EVENT.INPUT_BLUR });
   };
 
   useEffect(() => {
@@ -138,7 +136,7 @@ export default Input;
 const style = StyleSheet.create({
   inputControl: {
     flexDirection: 'column',
-    marginVertical: 20,
+    marginVertical: 10,
     alignItems: 'center',
   },
   inputContainer: {
@@ -149,10 +147,11 @@ const style = StyleSheet.create({
     color: COLORS.WHITE,
     paddingVertical: 5,
     borderBottomColor: COLORS.WHITE,
+    paddingBottom: 0,
+    marginBottom: 5,
     borderBottomWidth: 1,
   },
   unit: {
-    paddingHorizontal: 7,
     paddingTop: 10,
     color: COLORS.WHITE,
   },

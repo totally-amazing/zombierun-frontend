@@ -7,10 +7,7 @@ import FONT from '../../common/constants/FONT';
 import COLORS from '../../common/constants/COLORS';
 import TextChunk from '../../common/components/TextChunk';
 import getResultMessage from '../../common/utils/getResultMessage';
-
-const SPPED = 'km/h';
-const KILOMETER = 'km';
-const MINUTE = 'm';
+import { UNIT } from '../../common/constants/MESSAGE';
 
 const PreviousResultScreen = () => {
   const isLoading = useSelector((state) => state.ui.isLoading);
@@ -19,16 +16,20 @@ const PreviousResultScreen = () => {
   const previousResult = (
     <View>
       <View style={styles.main}>
-        <TextChunk title="최근 속도" value={record.speed || 0} unit={SPPED} />
+        <TextChunk
+          title="최근 속도"
+          value={record.speed || 0}
+          unit={UNIT.SPEED}
+        />
         <TextChunk
           title="최근 러닝 타임"
           value={record.time || 0}
-          unit={MINUTE}
+          unit={UNIT.MINUTE}
         />
         <TextChunk
           title="최근 거리"
           value={record.distance || 0}
-          unit={KILOMETER}
+          unit={UNIT.KILOMETER}
         />
       </View>
       <Text style={styles.result}>
