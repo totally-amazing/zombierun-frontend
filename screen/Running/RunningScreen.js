@@ -209,7 +209,10 @@ const RunningScreen = ({ navigation }) => {
 
       gameController.resetGameSetup('timer');
 
-      navigation.navigate('Result');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Result' }],
+      });
     };
 
     if (isWinner || hasGameFinished) {

@@ -138,7 +138,7 @@ export default Input;
 const style = StyleSheet.create({
   inputControl: {
     flexDirection: 'column',
-    marginVertical: 20,
+    marginVertical: 10,
     alignItems: 'center',
   },
   inputContainer: {
@@ -149,10 +149,11 @@ const style = StyleSheet.create({
     color: COLORS.WHITE,
     paddingVertical: 5,
     borderBottomColor: COLORS.WHITE,
+    paddingBottom: 0,
+    marginBottom: 5,
     borderBottomWidth: 1,
   },
   unit: {
-    paddingHorizontal: 7,
     paddingTop: 10,
     color: COLORS.WHITE,
   },

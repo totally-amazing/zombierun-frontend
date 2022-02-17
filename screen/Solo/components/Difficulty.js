@@ -28,7 +28,7 @@ const Difficulty = ({ speed }) => {
 
     if (convertedSpeed >= 10) {
       setDiffcultyTitle('Hard');
-      setMessage('이 좀비는 좀 다릅니다.!!!');
+      setMessage('이 좀비는 좀 다릅니다!!');
     }
   }, [convertedSpeed]);
 
