@@ -1,8 +1,8 @@
 {
   "expo": {
-    "scheme": "zombierun",
     "name": "zombierun",
     "slug": "zombierun",
+    "scheme": "com.zombierun.app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +17,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ZOMBIERUN.app",
+      "bundleIdentifier": "com.zombierun.app",
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.400433043656-q160t4h4cdm1prrid1inn2pm7rvcq7l0"
@@ -29,7 +29,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.ZOMBIERUN.app"
+      "package": "com.zombierun.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"

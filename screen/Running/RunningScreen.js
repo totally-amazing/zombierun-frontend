@@ -201,6 +201,7 @@ const RunningScreen = ({ navigation }) => {
       }
 
       gameController.resetGameSetup('timer');
+
       navigation.navigate('Result');
     };
 
