@@ -6,6 +6,7 @@ module.exports = {
     '**/*.jsx',
     '!**/node_modules/**',
     '!**/coverage/**',
+    '!**/.history/**',
   ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
