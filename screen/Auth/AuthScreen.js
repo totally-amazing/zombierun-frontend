@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { useAuthRequest } from 'expo-auth-session/providers/google';
+import { useIdTokenAuthRequest } from 'expo-auth-session/providers/google';
 import { useDispatch } from 'react-redux';
 import {
   GOOGLE_EXPO_CLIENT_ID,
@@ -17,7 +17,7 @@ import CustomButton from '../../common/components/CustomButton';
 const AuthScreen = () => {
   const dispatch = useDispatch();
 
-  const [request, response, promptAsync] = useAuthRequest({
+  const [request, response, promptAsync] = useIdTokenAuthRequest({
     expoClientId: GOOGLE_EXPO_CLIENT_ID,
     iosClientId: GOOGLE_IOS_CLIENT_ID,
     androidClientId: GOOGLE_ANDROID_CLIENT_ID,

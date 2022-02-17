@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import GameController from '../controllers/gameController';
 import COLORS from '../../../common/constants/COLORS';
 import FONT from '../../../common/constants/FONT';
-import Socket from '../../../network/socket';
 
 const GameView = ({
   role,
@@ -28,19 +27,19 @@ const GameView = ({
       return;
     }
 
-    if (distanceGap >= 400) {
+    if (distanceGap >= 250) {
       setZombieSize('far');
       gameController.controlSoundEffectVolume(0.2);
       return;
     }
 
-    if (distanceGap >= 200 && distanceGap < 400) {
+    if (distanceGap >= 100 && distanceGap < 250) {
       setZombieSize('middle');
       gameController.controlSoundEffectVolume(0.5);
       return;
     }
 
-    if (distanceGap >= 100 && distanceGap < 200) {
+    if (distanceGap >= 50 && distanceGap < 100) {
       setZombieSize('close');
       gameController.controlSoundEffectVolume(1);
       return;
