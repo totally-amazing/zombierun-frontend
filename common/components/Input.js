@@ -4,7 +4,7 @@ import propType from 'prop-types';
 
 import COLORS from '../constants/COLORS';
 import FONT from '../constants/FONT';
-import { ERROR_MESSAGE, EVENT } from '../constants/MESSAGE';
+import { ERROR, EVENT } from '../constants/MESSAGE';
 
 const inputReducer = (state, action) => {
   switch (action.type) {
@@ -55,7 +55,7 @@ const Input = ({
 
       if (Number.isNaN(valueNum)) {
         inputIsValid = false;
-        setErrorMessage(ERROR_MESSAGE.WRONG_INPUT_VALUE);
+        setErrorMessage(ERROR.WRONG_INPUT_VALUE);
       }
 
       if (min && Number(value) < min) {
@@ -71,7 +71,7 @@ const Input = ({
       if (value.includes('.')) {
         if (value.indexOf('.') + 2 < value.length) {
           inputIsValid = false;
-          setErrorMessage(ERROR_MESSAGE.DECIMAL_POINT_ONE_DIGIT);
+          setErrorMessage(ERROR.DECIMAL_POINT_ONE_DIGIT);
         }
       }
     }

@@ -13,7 +13,7 @@ import StandardModal from '../../common/components/StandardModal';
 import CustomButton from '../../common/components/CustomButton';
 import { toggleModal } from '../../store/uiSlice';
 import { createRoom } from '../../store/roomSlice';
-import { EVENT, ERROR_MESSAGE } from '../../common/constants/MESSAGE';
+import { EVENT, ERROR } from '../../common/constants/MESSAGE';
 
 const formReducer = (state, action) => {
   if (action.type === EVENT.INPUT_CHANGE) {
@@ -74,12 +74,12 @@ const RoomMakerScreen = () => {
     const { modeValue, inputValue, isValid } = formState;
 
     if (title.trim().length > 20 || title.trim().length === 0) {
-      showErrorMessage(ERROR_MESSAGE.INPUT_TWENTY_ROOM_NAME);
+      showErrorMessage(ERROR.INPUT_TWENTY_ROOM_NAME);
       return;
     }
 
     if (!isValid) {
-      showErrorMessage(ERROR_MESSAGE.WRONG_INPUT_VALUE);
+      showErrorMessage(ERROR.WRONG_INPUT_VALUE);
       return;
     }
 

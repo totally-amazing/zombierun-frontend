@@ -1,4 +1,4 @@
-import { ERROR_MESSAGE } from '../common/constants/MESSAGE';
+import { ERROR } from '../common/constants/MESSAGE';
 
 class GameService {
   constructor(httpClient, socket) {
@@ -13,7 +13,7 @@ class GameService {
     });
 
     if (!result) {
-      throw new Error(ERROR_MESSAGE.NO_TOTAL_RECORD);
+      throw new Error(ERROR.NO_TOTAL_RECORD);
     }
 
     return result;
@@ -26,7 +26,7 @@ class GameService {
     });
 
     if (!result) {
-      throw new Error(ERROR_MESSAGE.NO_RECENT_RECORD);
+      throw new Error(ERROR.NO_RECENT_RECORD);
     }
 
     return result;

@@ -1,4 +1,4 @@
-import { ERROR_MESSAGE } from '../common/constants/MESSAGE';
+import { ERROR } from '../common/constants/MESSAGE';
 
 class RoomService {
   constructor(httpClient, socket) {
@@ -13,7 +13,7 @@ class RoomService {
     });
 
     if (!result) {
-      throw new Error(ERROR_MESSAGE.NO_ROOM_LIST);
+      throw new Error(ERROR.NO_ROOM_LIST);
     }
 
     return result;
@@ -27,7 +27,7 @@ class RoomService {
     });
 
     if (!result) {
-      throw new Error(ERROR_MESSAGE.NO_ROOM_ID);
+      throw new Error(ERROR.NO_ROOM_ID);
     }
 
     return result;

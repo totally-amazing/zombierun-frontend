@@ -24,7 +24,7 @@ exports.RESULT = {
   ONEONONE_ZOMBIE_LOSE: 'You missed food',
 };
 
-exports.ERROR_MESSAGE = {
+exports.ERROR = {
   NO_ROOM_LIST: '서버에서 room list를 받아오지 못했습니다',
   NO_ROOM_ID: 'room id가 없습니다',
   NO_TOTAL_RECORD: '서버에서 total record를 받아오지 못했습니다',
