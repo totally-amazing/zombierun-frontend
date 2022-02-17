@@ -1,3 +1,5 @@
+import { ERROR_MESSAGE } from '../common/constants/MESSAGE';
+
 class GameService {
   constructor(httpClient, socket) {
     this.httpClient = httpClient;
@@ -11,7 +13,7 @@ class GameService {
     });
 
     if (!result) {
-      throw new Error('서버에서 total record를 받아오지 못했습니다');
+      throw new Error(ERROR_MESSAGE.NO_TOTAL_RECORD);
     }
 
     return result;
@@ -24,7 +26,7 @@ class GameService {
     });
 
     if (!result) {
-      throw new Error('서버에서 recent record를 받아오지 못했습니다');
+      throw new Error(ERROR_MESSAGE.NO_RECENT_RECORD);
     }
 
     return result;

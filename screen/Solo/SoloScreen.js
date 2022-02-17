@@ -14,12 +14,10 @@ import ArrowMainButton from '../../common/components/ArrowMainButton';
 import { getRecentRecord, startGame } from '../../store/gameSlice';
 import { toggleModal } from '../../store/uiSlice';
 import Difficulty from './components/Difficulty';
-
-const INVALID_FORM_ERROR_MESSAGE = '잘못된 입력값이 존재합니다';
-const FORM_UPDATE = 'FORM_UPDATE';
+import { EVENT, ERROR_MESSAGE } from '../../common/constants/MESSAGE';
 
 const formReducer = (state, action) => {
-  if (action.type === FORM_UPDATE) {
+  if (action.type === EVENT.FORM_UPDATE) {
     const updatedValues = {
       ...state.inputValues,
       [action.input]: action.value,
@@ -56,7 +54,7 @@ const SoloScreen = ({ navigation }) => {
   const handlePressStartButton = () => {
     const { inputValues, formIsValid } = formState;
     if (!formIsValid) {
-      showErrorMessage(INVALID_FORM_ERROR_MESSAGE);
+      showErrorMessage(ERROR_MESSAGE.WRONG_INPUT_VALUE);
       return;
     }
 
@@ -73,7 +71,7 @@ const SoloScreen = ({ navigation }) => {
   const handleInputChange = useCallback(
     (inputIdentifier, inputValue, inputValidation) => {
       dispatchForm({
-        type: FORM_UPDATE,
+        type: EVENT.FORM_UPDATE,
         value: inputValue,
         hasValidInput: inputValidation,
         input: inputIdentifier,

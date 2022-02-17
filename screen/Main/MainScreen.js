@@ -9,6 +9,7 @@ import COLORS from '../../common/constants/COLORS';
 import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
 import showErrorMessage from '../../common/utils/showErrorMessage';
 import { getRooms } from '../../store/roomSlice';
+import { ERROR_MESSAGE } from '../../common/constants/MESSAGE';
 
 const MainScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const MainScreen = ({ navigation }) => {
     const getLocationPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        showErrorMessage('권한이 허가 되지 않았습니다');
+        showErrorMessage(ERROR_MESSAGE.NO_AUTHORIZED);
       }
     };
     getLocationPermission();

@@ -1,3 +1,5 @@
+import { ERROR_MESSAGE } from '../common/constants/MESSAGE';
+
 class RoomService {
   constructor(httpClient, socket) {
     this.httpClient = httpClient;
@@ -11,7 +13,7 @@ class RoomService {
     });
 
     if (!result) {
-      throw new Error('서버에서 room list를 받아오지 못했습니다');
+      throw new Error(ERROR_MESSAGE.NO_ROOM_LIST);
     }
 
     return result;
@@ -25,7 +27,7 @@ class RoomService {
     });
 
     if (!result) {
-      throw new Error('room id가 없습니다');
+      throw new Error(ERROR_MESSAGE.NO_ROOM_ID);
     }
 
     return result;
