@@ -9,7 +9,8 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "prepare": "husky install",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "test": "jest --watchAll --verbose"
   },
   "lint-staged": {
     "**/*.{js,jsx}": [
@@ -63,6 +64,8 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-react-native": "^4.0.0",
     "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "jest-expo": "^44.0.1",
     "lint-staged": "^12.3.3",
     "prettier": "^2.5.1",
     "react-test-renderer": "^17.0.2"
