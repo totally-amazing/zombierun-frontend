@@ -70,7 +70,7 @@ export const updateGameRecord = createAsyncThunk(
 export const createGameRecord = createAsyncThunk(
   'game/createRecordStatus',
   async (game) => {
-    const { mode, userId } = game;
+    const { mode, userId, role = 'human' } = game;
     const id = await gameService.create({
       mode,
       player: {
@@ -78,7 +78,7 @@ export const createGameRecord = createAsyncThunk(
         time: 0,
         speed: 0,
         distance: 0,
-        role: 'human',
+        role,
         id: userId,
       },
     });
