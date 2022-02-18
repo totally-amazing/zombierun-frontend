@@ -12,6 +12,14 @@ export const signIn = createAsyncThunk('user/signInStatus', async (idToken) => {
   return user;
 });
 
+export const fetchUserByToken = createAsyncThunk(
+  'user/fetchByTokenStatus',
+  async () => {
+    const user = await authService.me();
+    return user;
+  },
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -23,6 +31,12 @@ const userSlice = createSlice({
     [signIn.fulfilled]: (state, action) => {
       const { id, imageUrl, nickname } = action.payload;
 
+      state.id = id;
+      state.imageUrl = imageUrl;
+      state.nickname = nickname;
+    },
+    [fetchUserByToken.fulfilled]: (state, action) => {
+      const { id, imageUrl, nickname } = action.payload;
       state.id = id;
       state.imageUrl = imageUrl;
       state.nickname = nickname;

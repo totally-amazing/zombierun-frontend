@@ -1,4 +1,5 @@
 import { ERROR } from '../common/constants/MESSAGE';
+import getAuthorizationHeader from '../common/utils/getAuthorizationHeader';
 
 class RoomService {
   constructor(httpClient, socket) {
@@ -10,6 +11,7 @@ class RoomService {
     const result = await this.httpClient.fetch({
       url: '/room',
       method: 'get',
+      headers: getAuthorizationHeader(),
     });
 
     if (!result) {
@@ -24,6 +26,7 @@ class RoomService {
       url: '/room',
       method: 'post',
       data: room,
+      headers: getAuthorizationHeader(),
     });
 
     if (!result) {
@@ -37,6 +40,7 @@ class RoomService {
     await this.httpClient.fetch({
       url: `/room/${roomId}`,
       method: 'delete',
+      headers: getAuthorizationHeader(),
     });
   };
 
