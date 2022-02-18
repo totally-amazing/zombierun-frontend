@@ -56,7 +56,7 @@ export const updateGameRecord = createAsyncThunk(
       isWinner,
       time: Number(time),
       speed: Number(speed),
-      distance,
+      distance: Number(distance),
       role,
       id: userId,
     };
