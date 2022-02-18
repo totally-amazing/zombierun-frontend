@@ -8,10 +8,12 @@ class GameService {
   }
 
   getTotalRecord = async (userId) => {
+    const authHeader = await getAuthorizationHeader();
+
     const result = await this.httpClient.fetch({
       url: `/game/total/?userId=${userId}`,
       method: 'get',
-      headers: getAuthorizationHeader(),
+      headers: authHeader,
     });
 
     if (!result) {
@@ -22,10 +24,12 @@ class GameService {
   };
 
   getRecentRecord = async (userId) => {
+    const authHeader = await getAuthorizationHeader();
+
     const result = await this.httpClient.fetch({
       url: `/game/recent/?userId=${userId}`,
       method: 'get',
-      headers: getAuthorizationHeader(),
+      headers: authHeader,
     });
 
     if (!result) {
@@ -36,20 +40,24 @@ class GameService {
   };
 
   update = async (id, player) => {
+    const authHeader = await getAuthorizationHeader();
+
     await this.httpClient.fetch({
       url: `/game/${id}`,
       method: 'put',
       data: player,
-      headers: getAuthorizationHeader(),
+      headers: authHeader,
     });
   };
 
   create = async (game) => {
+    const authHeader = await getAuthorizationHeader();
+
     const result = this.httpClient.fetch({
       url: '/game',
       method: 'post',
       data: game,
-      headers: getAuthorizationHeader(),
+      headers: authHeader,
     });
 
     return result;
