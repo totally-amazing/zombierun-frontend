@@ -1,4 +1,5 @@
 import { ERROR } from '../common/constants/MESSAGE';
+import getAuthorizationHeader from '../common/utils/getAuthorizationHeader';
 
 class GameService {
   constructor(httpClient, socket) {
@@ -10,6 +11,7 @@ class GameService {
     const result = await this.httpClient.fetch({
       url: `/game/total/?userId=${userId}`,
       method: 'get',
+      headers: getAuthorizationHeader(),
     });
 
     if (!result) {
@@ -23,6 +25,7 @@ class GameService {
     const result = await this.httpClient.fetch({
       url: `/game/recent/?userId=${userId}`,
       method: 'get',
+      headers: getAuthorizationHeader(),
     });
 
     if (!result) {
@@ -37,6 +40,7 @@ class GameService {
       url: `/game/${id}`,
       method: 'put',
       data: player,
+      headers: getAuthorizationHeader(),
     });
   };
 
@@ -45,6 +49,7 @@ class GameService {
       url: '/game',
       method: 'post',
       data: game,
+      headers: getAuthorizationHeader(),
     });
 
     return result;
