@@ -32,7 +32,9 @@ const RunningScreen = ({ navigation }) => {
   );
 
   const [userDistance, setUserDistance] = useState(0);
-  const [opponentDistance, setOpponentDistance] = useState(-200);
+  const [opponentDistance, setOpponentDistance] = useState(
+    role === 'zombie' ? 200 : -200,
+  );
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
@@ -56,7 +58,7 @@ const RunningScreen = ({ navigation }) => {
   );
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
-  const distanceGap = Math.ceil(userDistance - opponentDistance);
+  const distanceGap = Math.ceil(Math.abs(userDistance - opponentDistance));
 
   const startRunning = async () => {
     setHasGameStarted(true);
@@ -120,10 +122,13 @@ const RunningScreen = ({ navigation }) => {
   const handleFinishGame = (remainingTime) => {
     if (remainingTime === 0 && role === 'human') {
       setIsWinner(true);
-    } else {
-      survivalTime.current -= remainingTime;
     }
 
+    if (remainingTime && role === 'zombie') {
+      setIsWinner(true);
+    }
+
+    survivalTime.current -= remainingTime;
     setHasGameFinished(true);
   };
 
