@@ -58,7 +58,13 @@ const RunningScreen = ({ navigation }) => {
   );
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
-  const distanceGap = Math.ceil(Math.abs(userDistance - opponentDistance));
+  const calculateDistance = () => {
+    if (role === 'human') {
+      return Math.ceil(userDistance - opponentDistance);
+    }
+
+    return Math.ceil(opponentDistance - userDistance);
+  };
 
   const startRunning = async () => {
     setHasGameStarted(true);
@@ -199,7 +205,7 @@ const RunningScreen = ({ navigation }) => {
         userId,
         locationHistory: gameController.locationRecord,
         isWinner,
-        distance: kilometerDistance,
+        distance: kilometerDistance.toFixed(1),
         time: survivalTime.current,
         speed: kilometerPerHour.toFixed(1),
         role,
@@ -249,7 +255,7 @@ const RunningScreen = ({ navigation }) => {
       <GameView
         role={role}
         mode={mode}
-        distanceGap={distanceGap}
+        distanceGap={calculateDistance()}
         hasStarted={hasGameStarted}
         gameController={gameController}
         onFinish={handleFinishDistanceResult}
