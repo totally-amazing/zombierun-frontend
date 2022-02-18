@@ -8,10 +8,12 @@ class RoomService {
   }
 
   getRooms = async () => {
+    const authHeader = await getAuthorizationHeader();
+
     const result = await this.httpClient.fetch({
       url: '/room',
       method: 'get',
-      headers: getAuthorizationHeader(),
+      headers: authHeader,
     });
 
     if (!result) {
@@ -22,11 +24,13 @@ class RoomService {
   };
 
   createRoom = async (room) => {
+    const authHeader = await getAuthorizationHeader();
+
     const result = await this.httpClient.fetch({
       url: '/room',
       method: 'post',
       data: room,
-      headers: getAuthorizationHeader(),
+      headers: authHeader,
     });
 
     if (!result) {
@@ -37,10 +41,12 @@ class RoomService {
   };
 
   deleteRoom = async (roomId) => {
+    const authHeader = await getAuthorizationHeader();
+
     await this.httpClient.fetch({
       url: `/room/${roomId}`,
       method: 'delete',
-      headers: getAuthorizationHeader(),
+      headers: authHeader,
     });
   };
 
