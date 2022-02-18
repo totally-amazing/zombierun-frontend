@@ -58,7 +58,6 @@ const RunningScreen = ({ navigation }) => {
   );
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
-
   const calculateDistance = () => {
     if (role === 'human') {
       return Math.ceil(userDistance - opponentDistance);
