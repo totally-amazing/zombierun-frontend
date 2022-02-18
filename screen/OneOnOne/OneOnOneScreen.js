@@ -68,7 +68,7 @@ const OneOnOneScreen = ({ navigation }) => {
   const handlePressStartButton = async () => {
     const gameId = await dispatch(
       createGameRecord({ mode: currentRoom.mode, userId, role }),
-    );
+    ).unwrap();
     emitGameStart(gameId);
     navigation.navigate('Running');
   };

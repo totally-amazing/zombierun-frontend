@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
 });
 
 Header.propTypes = {
-  speed: PropTypes.number.isRequired,
+  speed: PropTypes.number,
   time: PropTypes.number,
   mode: PropTypes.string.isRequired,
   hasStarted: PropTypes.bool.isRequired,
@@ -98,4 +98,5 @@ Header.propTypes = {
 
 Header.defaultProps = {
   time: '',
+  speed: '',
 };
