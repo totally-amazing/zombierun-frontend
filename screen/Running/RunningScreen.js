@@ -205,7 +205,7 @@ const RunningScreen = ({ navigation }) => {
         userId,
         locationHistory: gameController.locationRecord,
         isWinner,
-        distance: kilometerDistance.toFixed(3),
+        distance: kilometerDistance.toFixed(1),
         time: survivalTime.current,
         speed: kilometerPerHour.toFixed(1),
         role,
