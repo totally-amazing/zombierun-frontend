@@ -144,8 +144,6 @@ const RunningScreen = ({ navigation }) => {
     if (survivorCount === 1) {
       setIsWinner(true);
     }
-
-    setHasGameFinished(true);
   };
 
   useEffect(() => {
