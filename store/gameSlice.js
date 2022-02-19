@@ -109,6 +109,16 @@ const gameSlice = createSlice({
       state.speed = Number(action.payload.speed);
       state.time = Number(action.payload.time);
     },
+    initGame: (state, action) => {
+      state.id = '';
+      state.mode = '';
+      state.role = 'human';
+      state.totalRecord = {};
+      state.recentRecord = {};
+      state.result = {};
+      state.speed = 0;
+      state.time = 0;
+    },
   },
   extraReducers: {
     [getTotalRecord.fulfilled]: (state, action) => {
@@ -154,5 +164,5 @@ const gameSlice = createSlice({
   },
 });
 
-export const { startGame, switchRole } = gameSlice.actions;
+export const { startGame, switchRole, initGame } = gameSlice.actions;
 export default gameSlice.reducer;
