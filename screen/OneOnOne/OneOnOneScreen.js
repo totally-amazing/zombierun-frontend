@@ -15,9 +15,10 @@ import usePlayers, {
   emitHuman,
   emitZombie,
   emitLeave,
+  emitGameStart,
 } from '../../common/hooks/useSocket';
 import { markNotReady, markReady } from '../../store/playerSlice';
-import { switchRole } from '../../store/gameSlice';
+import { createGameRecord, switchRole } from '../../store/gameSlice';
 import Profile from '../../common/components/Profile';
 
 const OneOnOneScreen = ({ navigation }) => {
@@ -26,7 +27,7 @@ const OneOnOneScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const players = usePlayers();
   const currentRoom = useSelector((state) => state.room.current);
-  const { id } = useSelector((state) => state.user);
+  const userId = useSelector((state) => state.user.id);
   const { role } = useSelector((state) => state.game);
 
   useEffect(() => {
@@ -56,15 +57,19 @@ const OneOnOneScreen = ({ navigation }) => {
     setIsReady((prev) => !prev);
 
     if (isReady) {
-      dispatch(markNotReady(id));
+      dispatch(markNotReady(userId));
       emitNotReady();
     } else {
-      dispatch(markReady(id));
+      dispatch(markReady(userId));
       emitReady();
     }
   };
 
-  const handlePressStartButton = () => {
+  const handlePressStartButton = async () => {
+    const gameId = await dispatch(
+      createGameRecord({ mode: currentRoom.mode, userId, role }),
+    ).unwrap();
+    emitGameStart(gameId);
     navigation.navigate('Running');
   };
 

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Map from './components/Map';
 import CustomButton from '../../common/components/CustomButton';
@@ -10,10 +10,18 @@ import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import getProfileHeaderOption from '../../common/utils/getProfileHeaderOption';
 import getResultMessage from '../../common/utils/getResultMessage';
+import { initGame } from '../../store/gameSlice';
 
 const ResultScreen = ({ navigation }) => {
   const { mode, isWinner, time, speed, distance, role, locationHistory } =
     useSelector((state) => state.game.result);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(initGame());
+    };
+  }, []);
 
   const handlePressButton = () => {
     navigation.navigate('Main');

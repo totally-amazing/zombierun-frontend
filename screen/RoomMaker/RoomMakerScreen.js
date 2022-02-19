@@ -13,9 +13,10 @@ import StandardModal from '../../common/components/StandardModal';
 import CustomButton from '../../common/components/CustomButton';
 import { toggleModal } from '../../store/uiSlice';
 import { createRoom } from '../../store/roomSlice';
+import { EVENT, ERROR } from '../../common/constants/MESSAGE';
 
 const formReducer = (state, action) => {
-  if (action.type === 'INPUT_CHANGE') {
+  if (action.type === EVENT.INPUT_CHANGE) {
     const { gameMode } = action;
     const updatedValue = action.input;
     const updatedValidation = action.isValidValue;
@@ -60,7 +61,7 @@ const RoomMakerScreen = () => {
   const handleInputChange = useCallback(
     (modeValue, inputValue, isValid) => {
       dispatchForm({
-        type: 'INPUT_CHANGE',
+        type: EVENT.INPUT_CHANGE,
         gameMode: modeValue,
         input: inputValue,
         isValidValue: isValid,
@@ -73,12 +74,12 @@ const RoomMakerScreen = () => {
     const { modeValue, inputValue, isValid } = formState;
 
     if (title.trim().length > 20 || title.trim().length === 0) {
-      showErrorMessage('방 제목은 20글자 아래로 입력해주세요');
+      showErrorMessage(ERROR.INPUT_TWENTY_ROOM_NAME);
       return;
     }
 
     if (!isValid) {
-      showErrorMessage('잘못된 입력값이 존재합니다');
+      showErrorMessage(ERROR.WRONG_INPUT_VALUE);
       return;
     }
 

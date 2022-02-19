@@ -32,7 +32,9 @@ const RunningScreen = ({ navigation }) => {
   );
 
   const [userDistance, setUserDistance] = useState(0);
-  const [opponentDistance, setOpponentDistance] = useState(-500);
+  const [opponentDistance, setOpponentDistance] = useState(
+    role === 'zombie' ? 200 : -200,
+  );
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [hasGameFinished, setHasGameFinished] = useState(false);
@@ -56,7 +58,13 @@ const RunningScreen = ({ navigation }) => {
   );
 
   const speedMeterPerSecond = Math.ceil(conversionRate * speed);
-  const distanceGap = Math.ceil(userDistance - opponentDistance);
+  const calculateDistance = () => {
+    if (role === 'human') {
+      return Math.ceil(userDistance - opponentDistance);
+    }
+
+    return Math.ceil(opponentDistance - userDistance);
+  };
 
   const startRunning = async () => {
     setHasGameStarted(true);
@@ -120,10 +128,13 @@ const RunningScreen = ({ navigation }) => {
   const handleFinishGame = (remainingTime) => {
     if (remainingTime === 0 && role === 'human') {
       setIsWinner(true);
-    } else {
-      survivalTime.current -= remainingTime;
     }
 
+    if (remainingTime && role === 'zombie') {
+      setIsWinner(true);
+    }
+
+    survivalTime.current -= remainingTime;
     setHasGameFinished(true);
   };
 
@@ -194,7 +205,8 @@ const RunningScreen = ({ navigation }) => {
         userId,
         locationHistory: gameController.locationRecord,
         isWinner,
-        distance: kilometerDistance,
+        mode,
+        distance: kilometerDistance.toFixed(1),
         time: survivalTime.current,
         speed: kilometerPerHour.toFixed(1),
         role,
@@ -209,7 +221,10 @@ const RunningScreen = ({ navigation }) => {
 
       gameController.resetGameSetup('timer');
 
-      navigation.navigate('Result');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Result' }],
+      });
     };
 
     if (isWinner || hasGameFinished) {
@@ -241,7 +256,7 @@ const RunningScreen = ({ navigation }) => {
       <GameView
         role={role}
         mode={mode}
-        distanceGap={distanceGap}
+        distanceGap={calculateDistance()}
         hasStarted={hasGameStarted}
         gameController={gameController}
         onFinish={handleFinishDistanceResult}

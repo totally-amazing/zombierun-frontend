@@ -1,3 +1,6 @@
+import { ERROR } from '../common/constants/MESSAGE';
+import getAuthorizationHeader from '../common/utils/getAuthorizationHeader';
+
 class RoomService {
   constructor(httpClient, socket) {
     this.httpClient = httpClient;
@@ -5,36 +8,45 @@ class RoomService {
   }
 
   getRooms = async () => {
+    const authHeader = await getAuthorizationHeader();
+
     const result = await this.httpClient.fetch({
       url: '/room',
       method: 'get',
+      headers: authHeader,
     });
 
     if (!result) {
-      throw new Error('서버에서 room list를 받아오지 못했습니다');
+      throw new Error(ERROR.NO_ROOM_LIST);
     }
 
     return result;
   };
 
   createRoom = async (room) => {
+    const authHeader = await getAuthorizationHeader();
+
     const result = await this.httpClient.fetch({
       url: '/room',
       method: 'post',
       data: room,
+      headers: authHeader,
     });
 
     if (!result) {
-      throw new Error('room id가 없습니다');
+      throw new Error(ERROR.NO_ROOM_ID);
     }
 
     return result;
   };
 
   deleteRoom = async (roomId) => {
+    const authHeader = await getAuthorizationHeader();
+
     await this.httpClient.fetch({
       url: `/room/${roomId}`,
       method: 'delete',
+      headers: authHeader,
     });
   };
 

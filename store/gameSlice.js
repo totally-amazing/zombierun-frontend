@@ -56,7 +56,7 @@ export const updateGameRecord = createAsyncThunk(
       isWinner,
       time: Number(time),
       speed: Number(speed),
-      distance,
+      distance: Number(distance),
       role,
       id: userId,
     };
@@ -70,7 +70,7 @@ export const updateGameRecord = createAsyncThunk(
 export const createGameRecord = createAsyncThunk(
   'game/createRecordStatus',
   async (game) => {
-    const { mode, userId } = game;
+    const { mode, userId, role = 'human' } = game;
     const id = await gameService.create({
       mode,
       player: {
@@ -78,7 +78,7 @@ export const createGameRecord = createAsyncThunk(
         time: 0,
         speed: 0,
         distance: 0,
-        role: 'human',
+        role,
         id: userId,
       },
     });
@@ -108,6 +108,16 @@ const gameSlice = createSlice({
       state.mode = action.payload.mode;
       state.speed = Number(action.payload.speed);
       state.time = Number(action.payload.time);
+    },
+    initGame: (state, action) => {
+      state.id = '';
+      state.mode = '';
+      state.role = 'human';
+      state.totalRecord = {};
+      state.recentRecord = {};
+      state.result = {};
+      state.speed = 0;
+      state.time = 0;
     },
   },
   extraReducers: {
@@ -154,5 +164,5 @@ const gameSlice = createSlice({
   },
 });
 
-export const { startGame, switchRole } = gameSlice.actions;
+export const { startGame, switchRole, initGame } = gameSlice.actions;
 export default gameSlice.reducer;
