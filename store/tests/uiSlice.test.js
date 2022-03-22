@@ -1,6 +1,8 @@
 import reducer, { toggleEffect, toggleModal, toggleSound } from '../uiSlice';
 import { getRecentRecord } from '../gameSlice';
 
+jest.mock('@react-native-async-storage/async-storage');
+
 describe('uiSlice', () => {
   let initialState;
   beforeEach(() => {
