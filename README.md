@@ -203,7 +203,9 @@ Husky, Eslint, Prettier, Git
 
 # 에러와 함께
 
-### Redux reducer에서 socket.io를 사용해서 마주쳤던 immer 에러
+### Redux reducer에서 socket.io를 사용해서 마주쳤던 Proxy 에러
+
+리덕스 리듀서 내부에서 socket 통신에 반응하여 state를 변경하는 로직을 작성하다가 `proxy has already been revoked. no more operations are allowed to be performed on it`라는 에러를 마주쳤다. immer로 인해 발생된 에러였다. Redux Toolkit은 리듀서에 자체적으로 immer를 적용시킨다. immer는 사용자가 state를 변경할 때, 원본 객체의 proxy 객체인 draft에 변경 사항을 적용하는 방식으로 원본 데이터의 불변성을 유지시켜준다. immer의 소스 코드를 보니 immer는 draft가 업데이트 되면 proxy를 revoke하는 함수를 호출했다. state가 한차례 업데이트 되어 proxy가 revoke 됐음에도, 리듀서 함수 내부에서 연결된 socket으로 state를 변경하는 코드가 다시 실행되어 에러가 발생한 것이었다.
 
 ### 잘못된 디버깅 추론 (공식 문서를 잘 읽자)
 
