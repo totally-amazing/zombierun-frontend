@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import createTestStore from '../../common/utils/testStore';
 import MainScreen from './MainScreen';
 
+jest.mock('@react-native-async-storage/async-storage');
+
 const navigation = {
   foo: jest.fn(),
 };
