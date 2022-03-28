@@ -8,7 +8,7 @@
 
 # 📖contents
 
-[About Zombierun](#about-zombierun)  
+[About Zombierun](#about-zombierun)
 [기술스택](#기술스택)  
 [파일구조](#파일구조)  
 [동기](#동기)  
@@ -16,19 +16,30 @@
 [파일](#파일)  
 [에러와 함께](#에러와-함께)  
 [이런 것에 관심을 갖게 되었습니다](#이런-것에-관심을-갖게-되었습니다)  
-[리뷰](#리뷰)  
+[리뷰](#리뷰)
 
 <br />
 
 # About Zombierun
 
-### General
+<details>
+<summary>General</summary>
+<div markdown="1">
 
 - 구글 oAuth 로그인
 - 이전 러닝의 결과 기록 열람
 - 종합 러닝 기록 열람
 
-### Running
+<img width="345" alt="스크린샷 2022-03-28 15 20 49" src="https://user-images.githubusercontent.com/80472881/160341676-35438477-12b5-46ba-bb08-8e1f913d6b7a.png">
+<img width="345" alt="스크린샷 2022-03-28 15 43 08" src="https://user-images.githubusercontent.com/80472881/160341811-68d27cf1-98dc-44c1-ba7d-598e0d78f7fd.png">
+<img width="345" alt="스크린샷 2022-03-28 15 43 22" src="https://user-images.githubusercontent.com/80472881/160341844-db9e3170-bd6b-459b-bf14-880471e75aa0.png">
+</div>
+</details>
+<br />
+
+<details>
+<summary>Running</summary>
+<div markdown="1">
 
 - 러닝 시간, 좀비 속도 입력 가능
 - 5초의 카운트 다운 후 200m의 거리 차이를 두고 게임 시작
@@ -36,7 +47,15 @@
 - 거리에 따라 좀비의 이미지 확대 축소 및 음량 변동
 - 결과 화면에서 메시지와 러닝 관련 정보 표시 (속도, 거리, 시간, 이동경로)
 
-### Solo Mode
+<img width="345" alt="스크린샷 2022-03-28 15 43 46" src="https://user-images.githubusercontent.com/80472881/160342075-387fe60f-d485-4f26-b2da-1011819883bf.png">
+<img width="345" alt="스크린샷 2022-03-28 15 46 11" src="https://user-images.githubusercontent.com/80472881/160342166-25db7c7c-4efa-4132-b7d0-2653b1079e52.png">
+</div>
+</details>
+<br />
+
+<details>
+<summary>Solo Mode</summary>
+<div markdown="1">
 
 - 러닝 시간, 좀비 속도 선택 가능
 - 우상단에 옵션 버튼 클릭 시 배경음, 효과음 끄고 켜기 및 러닝 종료 가능
@@ -44,7 +63,13 @@
 - 좀비와의 거리가 0 이하가 되면 게임 실패로 러닝 종료
 - 좀비에게 잡히지 않은 채 러닝 시간이 끝나면 게임 승리로 러닝 종료
 
-### 1:1 Mode
+</div>
+</details>
+<br />
+
+<details>
+<summary>1:1 Mode</summary>
+<div markdown="1">
 
 - 1:1 모드 선택 시 인간, 좀비 중 역할 선택 가능
 - 플레이어 모두 Ready 버튼을 누르면 Start 버튼으로 전환
@@ -52,13 +77,23 @@
 - 인간 역할일 시 좀비에게 잡히지 않고 러닝이 종료되면 승리
 - 좀비 역할일 시 인간을 따라 잡으면 승리
 
-### Survival Mode
+<img width="345" alt="스크린샷 2022-03-28 15 46 49" src="https://user-images.githubusercontent.com/80472881/160342307-582e3183-c009-4de3-805c-48b428c8c96a.png">
+</div>
+</details>
+<br />
+
+<details>
+<summary>Survival Mode</summary>
+<div markdown="1">
 
 - 2명 이상의 다수 인원 방에 참여 가능
 - 플레이어 모두 Ready 버튼을 누르면 Start 버튼으로 전환
 - 러닝 스크린에서 살아남은 플레이어 수 좌상단에 표시
 - 좌상단의 숫자가 1이 될 시에 승리
 
+<img width="345" alt="스크린샷 2022-03-28 15 47 07" src="https://user-images.githubusercontent.com/80472881/160342442-ec1e6bed-2c17-416f-83dd-3fa02c2527b5.png">
+</div>
+</details>
 <br />
 
 # 기술스택
@@ -71,106 +106,103 @@ Husky, Eslint, Prettier, Git
 
   <details>
   <summary>Expo</summary>
-  <div markdown="1">  
+  <div markdown="1">
 
-  - Expo - av: 사운드 관련 파일 사용을 위해 Expo에서 공식 지원하는 라이브러리
+- Expo - av: 사운드 관련 파일 사용을 위해 Expo에서 공식 지원하는 라이브러리
   </div>
   </details>
 
-  <details>
-  <summary>React-Native</summary>
-  <div markdown="1">  
+    <details>
+    <summary>React-Native</summary>
+    <div markdown="1">
 
-  - React-navigation V6: 스크린 전환 및 UI 헤더
+- React-navigation V6: 스크린 전환 및 UI 헤더
   </div>
   </details>
 
-  <details>
-  <summary>Redux</summary>
-  <div markdown="1">  
+    <details>
+    <summary>Redux</summary>
+    <div markdown="1">
 
-  - Redux Tool Kit
-  - Redux Thunk
+- Redux Tool Kit
+- Redux Thunk
   </div>
   </details>
 
-  <details>
-  <summary>Network</summary>
-  <div markdown="1">  
+    <details>
+    <summary>Network</summary>
+    <div markdown="1">
 
-  - axios  
-  - socket.io-client
+- axios
+- socket.io-client
   </div>
   </details>
 
-  <details>
-  <summary>Test</summary>
-  <div markdown="1">  
+    <details>
+    <summary>Test</summary>
+    <div markdown="1">
 
-  - Jest  
-  - TestingLibrary
+- Jest
+- TestingLibrary
   </div>
   </details>
 
-  <details>
-  <summary>Geolocation api</summary>
-  <div markdown="1">  
+    <details>
+    <summary>Geolocation api</summary>
+    <div markdown="1">
 
-  - Expo Location  
-  - Google Map API
-  </div>
-  </details>
+- Expo Location
+- Google Map API
+</div>
+</details>
 
 ### Back-End
 
   <details>
   <summary>MongoDB</summary>
-  <div markdown="1">  
-
-  - Mongoose  
-  - Atlas(Database Management)
-  </div>
-  </details>
-
-  <details>
-  <summary>Node.js</summary>
   <div markdown="1">
-  </div>
-  </details>
- 
-  <details>
-  <summary>Express</summary>
-  <div markdown="1">
-  - express-async-errors: 비동기 에러 핸들링
-  </div>
-  </details>
- 
-  <details>
-  <summary>Socket.io</summary>
-  <div markdown="1">
+
+- Mongoose
+- Atlas(Database Management)
   </div>
   </details>
 
-  <details>
-  <summary>Test</summary>
-  <div markdown="1">  
+    <details>
+    <summary>Node.js</summary>
+    <div markdown="1">
+    </div>
+    </details>
+   
+    <details>
+    <summary>Express</summary>
+    <div markdown="1">
+    - express-async-errors: 비동기 에러 핸들링
+    </div>
+    </details>
+   
+    <details>
+    <summary>Socket.io</summary>
+    <div markdown="1">
+    </div>
+    </details>
 
-  - jest  
-  - http-node-mocks
-  </div>
-  </details>  
-  <details>
-  <summary>JWT</summary>
-  <div markdown="1">  
-  </div>
-  </details>  
+    <details>
+    <summary>Test</summary>
+    <div markdown="1">
 
-
+- jest
+- http-node-mocks
+</div>
+</details>  
+<details>
+<summary>JWT</summary>
+<div markdown="1">  
+</div>
+</details>
 
 # 파일구조
 
 ![파일 구조](https://user-images.githubusercontent.com/80461702/154829278-43b00953-5ecd-4956-9804-0bdbd55577a5.png)
-
 
 # 동기
 
@@ -224,9 +256,11 @@ Husky, Eslint, Prettier, Git
 개발을 시작한 후 첫번째 협업으로 저희는 지금까지 만든 앱 중 가장 규모가 큰 앱을 만들게 되었습니다. 새로운 경험을 통해 저희는 이런 것에 대해 더 관심을 갖게 되었습니다.
 
 ### 함수형 프로그래밍
+
 앱의 기능이 하나씩 늘어날수록 코드의 복잡도가 기하급수적으로 늘어나는 것을 느꼈다. 특히 리액트 컴포넌트, 리덕스 리듀서, 소켓으로 데이터가 전달되는 과정에서 함수에서 어떤 데이터가 어떻게 가공되는지 추적이 어려워 작은 버그에도 디버깅 시간이 매우 길어졌다. 함수형 프로그래밍에 더 알아보고 코드에도 적용시켜 다음 프로젝트에서는 좀 더 예측 가능하고 디버깅이 용이한 앱을 만들어보고 싶어졌다.
 
 ### 객체 지향 프로그래밍
+
 이번 프로젝트에서 es6의 클래스 문법으로 로직을 분리하여 객체 지향을 구현하려 해보았지만 아쉬움이 많이 남았다. 클래스들이 각자 맡은 책임에 대해 강한 응집력을 가지고 있는지, 모듈끼리의 디커플링은 잘 되었는지 좀 더 고심해볼 수 있는 좋은 계기가 된 것 같다. 다음에는 더 발전된 객체 지향 코드를 구현해서 유지보수하기 좋은 앱을 만들어보고 싶다.
 
 ### Geolocation API
@@ -236,7 +270,6 @@ Geolocation API는 이번 프로젝트의 핵심 기능과 관련이 깊다. 단
 ### 상태관리
 
 앱의 기능이 커지고 props drilling이 깊어지다보니, 지역 상태를 다른 컴포넌트에서 활용할 때 발생하는 리렌더링으로 버그가 생겨 불편해졌다. 그래서 리덕스 스토어에서 전역 상태로 관리를 하기 시작했다. 그 결과, 코드가 깔끔해졌다. 또한 다른 컴포넌트에서도 해당 상태를 사용할 수 있기 때문에 때문에 관리가 훨씬 편해졌다. 부트캠프에서 상태관리에 대한 중요성을 많이 들었을때는 크게 와닿지 않았었는데, 이번 팀 프로젝트를 통해 상태관리 중요성을 많이 느꼈다. 리액트와 리덕스의 차이와 리덕스의 장점 및 상태관리에 대한 부분을 같이 알아보면서 깊게 생각 할 수 있었던 시간이였다.
-
 
 <br />
 
