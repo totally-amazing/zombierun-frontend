@@ -1,6 +1,7 @@
 import reducer, { startGame, switchRole } from '../gameSlice';
 
 jest.mock('../../service/game');
+jest.mock('@react-native-async-storage/async-storage');
 
 describe('gameReducer', () => {
   let initialState;
