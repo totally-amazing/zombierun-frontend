@@ -9,7 +9,7 @@ import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
 import PROFILE from '../../common/constants/PROFILE';
 import CustomButton from '../../common/components/CustomButton';
-import usePlayers, {
+import useSocket, {
   emitNotReady,
   emitReady,
   emitHuman,
@@ -20,6 +20,7 @@ import usePlayers, {
 import { markNotReady, markReady } from '../../store/playerSlice';
 import { createGameRecord, switchRole } from '../../store/gameSlice';
 import Profile from '../../common/components/Profile';
+import usePlayers from '../../common/hooks/usePlayers';
 
 const OneOnOneScreen = ({ navigation }) => {
   const [isReady, setIsReady] = useState(false);
@@ -29,6 +30,8 @@ const OneOnOneScreen = ({ navigation }) => {
   const currentRoom = useSelector((state) => state.room.current);
   const userId = useSelector((state) => state.user.id);
   const { role } = useSelector((state) => state.game);
+
+  useSocket();
 
   useEffect(() => {
     if (players.length === 1) {
