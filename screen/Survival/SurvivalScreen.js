@@ -9,7 +9,7 @@ import CustomButton from '../../common/components/CustomButton';
 import TextChunk from '../../common/components/TextChunk';
 import COLORS from '../../common/constants/COLORS';
 import FONT from '../../common/constants/FONT';
-import usePlayers, {
+import useSocket, {
   emitLeave,
   emitReady,
   emitNotReady,
@@ -17,6 +17,7 @@ import usePlayers, {
 } from '../../common/hooks/useSocket';
 import { markNotReady, markReady } from '../../store/playerSlice';
 import { createGameRecord } from '../../store/gameSlice';
+import usePlayers from '../../common/hooks/usePlayers';
 
 const SurvivalScreen = ({ navigation }) => {
   const [canStart, setCanStart] = useState(false);
@@ -43,6 +44,7 @@ const SurvivalScreen = ({ navigation }) => {
       emitReady();
     }
   };
+
   const handlePressStartButton = async () => {
     const gameId = await dispatch(
       createGameRecord({ mode: currentRoom.mode, userId }),
@@ -55,6 +57,8 @@ const SurvivalScreen = ({ navigation }) => {
     navigation.navigate('RoomList');
     emitLeave(currentRoom, players);
   };
+
+  useSocket();
 
   useEffect(() => {
     const isAllReady = players.every((player) => player.isReady);

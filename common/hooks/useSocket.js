@@ -20,7 +20,7 @@ const httpClient = new HttpClient(BASE_URL);
 const roomService = new RoomService(httpClient, socket);
 const gameService = new GameService(httpClient, socket);
 
-const usePlayers = () => {
+const useSocket = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -68,12 +68,6 @@ const usePlayers = () => {
       offChooseHuman();
     };
   }, [room]);
-
-  const allPlayerIds = useSelector((state) => state.player.allIds);
-  const playersById = useSelector((state) => state.player.byId);
-  const players = allPlayerIds.map((id) => playersById[id]);
-
-  return players;
 };
 
 export const emitJoin = (room, user) => {
@@ -117,4 +111,4 @@ export const emitHuman = () => {
   roomService.emit('human');
 };
 
-export default usePlayers;
+export default useSocket;
