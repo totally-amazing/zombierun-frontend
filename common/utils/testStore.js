@@ -6,7 +6,7 @@ import roomReducer from '../../store/roomSlice';
 import uiReducer from '../../store/uiSlice';
 import userReducer from '../../store/userSlice';
 
-export default function createTestStore() {
+const createTestStore = () => {
   const store = createStore(
     combineReducers({
       user: userReducer,
@@ -18,4 +18,6 @@ export default function createTestStore() {
   );
 
   return store;
-}
+};
+
+export default createTestStore;
