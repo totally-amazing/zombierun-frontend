@@ -116,7 +116,8 @@ Husky, Eslint, Prettier, Git
     <summary>React-Native</summary>
     <div markdown="1">
 
-- React-navigation V6: 스크린 전환 및 UI 헤더
+  - React-navigation V6: 스크린 전환 및 UI 헤더
+
   </div>
   </details>
 
@@ -124,8 +125,8 @@ Husky, Eslint, Prettier, Git
     <summary>Redux</summary>
     <div markdown="1">
 
-- Redux Tool Kit
-- Redux Thunk
+  - Redux Tool Kit
+  - Redux Thunk
   </div>
   </details>
 
@@ -133,8 +134,8 @@ Husky, Eslint, Prettier, Git
     <summary>Network</summary>
     <div markdown="1">
 
-- axios
-- socket.io-client
+  - axios
+  - socket.io-client
   </div>
   </details>
 
@@ -142,8 +143,8 @@ Husky, Eslint, Prettier, Git
     <summary>Test</summary>
     <div markdown="1">
 
-- Jest
-- TestingLibrary
+  - Jest
+  - TestingLibrary
   </div>
   </details>
 
@@ -162,7 +163,7 @@ Husky, Eslint, Prettier, Git
   <summary>MongoDB</summary>
   <div markdown="1">
 
-- Mongoose
+  - Mongoose
 - Atlas(Database Management)
   </div>
   </details>
@@ -176,6 +177,7 @@ Husky, Eslint, Prettier, Git
     <details>
     <summary>Express</summary>
     <div markdown="1">
+
     - express-async-errors: 비동기 에러 핸들링
     </div>
     </details>
@@ -190,8 +192,8 @@ Husky, Eslint, Prettier, Git
     <summary>Test</summary>
     <div markdown="1">
 
-- jest
-- http-node-mocks
+  - jest
+  - http-node-mocks
 </div>
 </details>  
 <details>
