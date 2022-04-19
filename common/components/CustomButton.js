@@ -10,7 +10,7 @@ const BUTTON_HEIGHT = 60;
 const BUTTON_ROUND = 24;
 
 const CustomButton = ({ message, disabled, onPress, style }) => {
-  const handlePressdbutton = () => {
+  const handlePressButton = () => {
     onPress();
   };
 
@@ -18,7 +18,7 @@ const CustomButton = ({ message, disabled, onPress, style }) => {
     <TouchableOpacity
       activeOpacity={0.8}
       disabled={disabled}
-      onPress={handlePressdbutton}
+      onPress={handlePressButton}
     >
       <Text style={{ ...styles.loginButton, ...style }}>{message}</Text>
     </TouchableOpacity>
